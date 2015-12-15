@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <ImageView
+        android:id="@+id/img_thuonghieu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/avatar"
+        android:foregroundGravity="center"
+        android:scaleType="fitXY"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <LinearLayout
+        android:id="@+id/layout_thuonghieu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#99000000"
+        android:gravity="center"
+        android:layout_alignBottom="@+id/img_thuonghieu"
+        android:layout_alignRight="@+id/img_thuonghieu"
+        android:layout_alignEnd="@+id/img_thuonghieu"
+        android:weightSum="1"
+        android:layout_alignLeft="@+id/img_thuonghieu"
+        android:layout_alignStart="@+id/img_thuonghieu">
+
+    <TextView
+        android:id="@+id/txtv_tenthuonghieu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+      android:gravity="center"
+        android:textSize="15sp"
+        android:text="Hung"
+        android:layout_alignBottom="@+id/img_thuonghieu"
+        android:layout_toStartOf="@+id/layout_thuonghieu"
+        android:layout_toLeftOf="@+id/layout_thuonghieu"
+        android:layout_weight="0.49" />
+    </LinearLayout>
+    <TextView
+        android:id="@+id/txtv_idthuonghieu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+
+</RelativeLayout>

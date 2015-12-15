@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.hung.ofastapp.Register"
+    android:id="@+id/linearLayout_register"
+    android:background="@drawable/ofast_background_login_register">
+    <ImageButton
+
+        android:layout_marginTop="20px"
+        android:layout_marginLeft="15px"
+        android:layout_gravity="left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#0000"
+        android:src="@drawable/back"
+        android:id="@+id/imgbtn_back" />
+    <LinearLayout
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/linearLayout">
+        <Button
+            android:layout_marginTop="10px"
+            android:layout_marginBottom="10px"
+            android:background="@drawable/custom_button_login_register_actionbar"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đăng nhập"
+            android:textColor="#FFFF"
+            android:id="@+id/btn_login"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/login_register_line"
+            />
+
+        <Button
+            android:layout_marginTop="10px"
+            android:layout_marginBottom="10px"
+            android:background="@drawable/custom_button_login_register_actionbar"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đăng ký"
+            android:textColor="#FFFF"
+
+            android:id="@+id/btn_register"/>
+    </LinearLayout>
+    <LinearLayout
+        android:background="@drawable/custom_layout_login_register"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayout"
+        android:layout_marginTop="30px"
+        android:layout_marginLeft="20px"
+        android:layout_marginBottom="20px"
+        android:layout_marginRight="20px"
+        android:id="@+id/linear_registerbox">
+        <TextView
+            android:id="@+id/txtv_title"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ñaêng kyù taøi khoaûn Ofast"
+            android:textColor="#B8B8B8"
+            android:textSize="08pt"/>
+        <EditText
+            android:gravity="center"
+            android:id="@+id/edt_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12pt"
+            android:textColor="#1e7411"
+            android:singleLine="true"
+            android:hint="@string/username"
+
+           />
+        <EditText
+            android:gravity="center"
+            android:id="@+id/edt_numberphone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12pt"
+            android:textColor="#1e7411"
+            android:singleLine="true"
+            android:inputType="number"
+            android:hint="@string/numberphone"/>
+        <EditText
+            android:gravity="center"
+            android:id="@+id/edt_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12pt"
+            android:hint="@string/password"
+            android:textColor="#1e7411"
+            android:singleLine="true"
+            android:inputType="textPassword"
+            android:digits="abcdefghijklmnopqrstuvwxyz0123456789"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20px"
+            android:layout_marginRight="20px"
+            android:layout_marginTop="20px"
+            android:layout_marginBottom="20px"
+            android:text="Ñaêng kyù"
+            android:textColor="#FFFFFF"
+            android:id="@+id/btn_register_box"
+            android:background="@drawable/custom_button_login_register"/>
+
+    </LinearLayout>
+
+
+</RelativeLayout>
