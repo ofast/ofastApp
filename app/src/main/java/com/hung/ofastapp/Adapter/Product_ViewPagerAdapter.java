@@ -1,16 +1,18 @@
 package com.hung.ofastapp.Adapter;
 
 import android.content.Context;
+import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
-import android.util.Log;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.hung.ofastapp.Objects.Product;
 import com.hung.ofastapp.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -19,74 +21,56 @@ import java.util.ArrayList;
  */
 public class Product_ViewPagerAdapter extends PagerAdapter{
 
-    ArrayList<String> arrayList = new ArrayList<>();
-
-    private Context context;
-    LayoutInflater inflater;
-    String[] aaa ;
+    private  Context context;
+    private ArrayList<com.hung.ofastapp.Objects.Product> arrayList = new ArrayList<>();
 
 
-
-
-    public Product_ViewPagerAdapter(Context context, String[] aaa ){
+    public Product_ViewPagerAdapter(Context context, ArrayList<com.hung.ofastapp.Objects.Product> arrayList) {
+        this.arrayList = arrayList;
         this.context = context;
-        this.aaa = aaa;
-
     }
+
     @Override
     public int getCount() {
-
-        return aaa.length;
+        return arrayList.size();
     }
 
+    @Override
+    public void destroyItem(View arg0, int arg1, Object arg2) {
+        ((ViewPager) arg0).removeView((View) arg2);
+    }
 
     @Override
     public boolean isViewFromObject(View view, Object object) {
-         return (view == (LinearLayout)object);
+        return view == ((LinearLayout) object);
     }
 
 
-
-    public Object instantiateItem(ViewGroup container, final int position) {
-        inflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View itemView = inflater.inflate(R.layout.hahaha, container,
-                false);
-
-
-
-
-        Log.d("hahahahahhahaha", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-
-
-
-        ImageView img_product = (ImageView) itemView.findViewById(R.id.img_product);
-        TextView txtv_tensanpham = (TextView) itemView.findViewById(R.id.txtv_aaa);
-        TextView txtv_giasanpham = (TextView) itemView.findViewById(R.id.txtv_giasanpham);
-//        ListView lv_thongtinsanpham = (ListView) convertView.findViewById(R.id.lv_thongtinsanpham);
-//        Button btn_tru = (Button) convertView.findViewById(R.id.btn_tru);
-//        TextView txtv_soluongsanpham = (TextView) convertView.findViewById(R.id.txtv_soluongsanpham);
-//        Button btn_cong = (Button) convertView.findViewById(R.id.btn_cong);
-//        Button btn_addtocart = (Button) convertView.findViewById(R.id.btn_addtocart);
-        txtv_tensanpham.setText(aaa[position]);
-        Log.d("akjshdkjhasdasd", aaa.toString());
-//       Product product = arrayList.get(position);
-//
-//        txtv_giasanpham.setText(product.price_product);
-//        Picasso.with(this.context)
-//                .load(product.img_product)
-//                .placeholder(R.drawable.avatar)
-//                .into(img_product);
-        container.addView(itemView);
-
-        return itemView;
-    }
     @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView((LinearLayout) object);
+    public Parcelable saveState() {
+        return null;
     }
 
 
+    @Override
+    public Object instantiateItem(View collection, int position) {
+        LayoutInflater inflater = (LayoutInflater) collection.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.product_content,null);
+        ((ViewPager) collection).addView(view);
+        final ImageView img_product = (ImageView) view.findViewById(R.id.img_product);
+        TextView txtv_tensanpham = (TextView) view.findViewById(R.id.txtv_tensanpham);
+        TextView txtv_giasanpham = (TextView) view.findViewById(R.id.txtv_giasanpham);
 
+        Product product = arrayList.get(position);
+        Picasso.with(context)
+                .load(product.img_product)
+                .placeholder(R.drawable.avatar)
+                .centerCrop()
+                .fit()
+                .into(img_product);
+        txtv_tensanpham.setText(product.name_product);
+        txtv_giasanpham.setText(product.price_product);
+        return view;
+    }
 
 }

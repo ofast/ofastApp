@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
@@ -285,25 +284,26 @@ public class Home extends ActionBarActivity
      ------------------Set màu sắc cho Tab và Thanh Toolbar khi tab nào được chọn ------------------
      -----------------------------------------------------------------------------------------------*/
     public void setTabColor(TabHost tabhost) {
-        tabhost.getTabWidget().setDividerDrawable(null);
-        tabhost.getTabWidget().getChildAt(tabHost.getCurrentTab()).getBackground().setColorFilter(Color.RED, PorterDuff.Mode.MULTIPLY);
+//        tabhost.getTabWidget().setDividerDrawable();
+//        tabhost.getTabWidget().getChildAt(tabHost.getCurrentTab()).getBackground().setColorFilter(Color.RED, PorterDuff.Mode.MULTIPLY);
         for (int i = 0; i < tabhost.getTabWidget().getChildCount(); i++) {
             tabhost.getTabWidget().getChildAt(i).setBackgroundColor(Color.WHITE); //unselected
             /*-----------Tab1 - Thương HIệu được chọn----------*/
             if (tabhost.getCurrentTab() == 0) {
-               tabhost.getTabWidget().getChildAt(tabhost.getCurrentTab()).setBackgroundColor(Color.parseColor("#e27070"));
+               //tabhost.getTabWidget().getChildAt(tabhost.getCurrentTab()).setBackgroundColor(Color.parseColor("#e27070"));
                 toolbar.setBackgroundColor(Color.parseColor("#e27070"));
 
             }
             /*-----------Tab2 - Loại được chọn----------*/
             else if (tabhost.getCurrentTab() == 1) {
-                tabhost.getTabWidget().getChildAt(tabhost.getCurrentTab()).setBackgroundColor(Color.parseColor("#4FC3F7"));
+                //tabhost.getTabWidget().getChildAt(tabhost.getCurrentTab()).setBackgroundColor(Color.parseColor("#4FC3F7"));
                 toolbar.setBackgroundColor(Color.parseColor("#4FC3F7"));
 
             }
             /*-----------Tab3 - Giảm giá được chọn----------*/
             else if (tabhost.getCurrentTab() == 2) {
-                 tabhost.getTabWidget().getChildAt(tabhost.getCurrentTab()).setBackgroundColor(Color.parseColor("#00E676"));
+
+               //  tabhost.getTabWidget().getChildAt(tabhost.getCurrentTab()).setBackgroundColor(Color.parseColor("#00E676"));
                 toolbar.setBackgroundColor(Color.parseColor("#00E676"));
             }
         }
@@ -313,14 +313,26 @@ public class Home extends ActionBarActivity
      ------------------Set màu sắc cho Text khi Tab đó được chọn------------------------------------
      -----------------------------------------------------------------------------------------------*/
     public void setTextOfTabColor(TabHost tabhost) {
+
          /*--------Set màu #0000000 cho tất cả các tab---------------------------*/
         for (int i = 0; i < tabhost.getTabWidget().getChildCount(); i++) {
             TextView tv = (TextView) tabhost.getTabWidget().getChildAt(i).findViewById(android.R.id.title); //Unselected Tabs
             tv.setTextColor(Color.parseColor("#E0E0E0"));
+            TextView tv1 = (TextView) tabHost.getCurrentTabView().findViewById(android.R.id.title);
+            if (tabhost.getCurrentTab() == 0) {
+
+                tv1.setTextColor(Color.parseColor("#e27070"));
+            }
+            else if (tabhost.getCurrentTab() == 1) {
+                tv1.setTextColor(Color.parseColor("#4FC3F7"));
+            }
+            else if (tabhost.getCurrentTab() == 2) {
+                tv1.setTextColor(Color.parseColor("#00E676"));
+            }
         }
          /*--------Set màu #FFFFFF cho tab được chọn---------------------------*/
-        TextView tv = (TextView) tabHost.getCurrentTabView().findViewById(android.R.id.title); //for Selected Tab
-        tv.setTextColor(Color.parseColor("#FFFFFF"));
+//        TextView tv = (TextView) tabHost.getCurrentTabView().findViewById(android.R.id.title); //for Selected Tab
+//        tv.setTextColor(Color.parseColor("#FFFFFF"));
     }
     //----------------------------------------------------------------------------------------------
     //------------------------------Hàm ẩn Keyboard cho 1 Activity----------------------------------

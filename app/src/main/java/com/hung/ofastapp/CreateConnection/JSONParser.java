@@ -225,14 +225,14 @@ public class JSONParser{
     }
 
     //get Product
-    public ArrayList<String> getImageProduct(String json){
+    public ArrayList<Product> getImageProduct(String json){
 
         try {
             Product product;
             ArrayList<Product> arrayList= new ArrayList<>();
             List<String> link_images = new ArrayList<>();
             List<String> images = new ArrayList<>();
-            ArrayList<String> name = new ArrayList<>();
+            List<String> name = new ArrayList<>();
             List<String> price = new ArrayList<>();
              JSONArray jsonArray = new JSONArray(json);
 
@@ -242,37 +242,42 @@ public class JSONParser{
                 JSONObject jb = jsonArray.getJSONObject(i);
                 jb.getString("images");
                 link_images.add(jb.getString("images"));
-            }
-            //Get tên ảnh
-            for(int i=0; i<link_images.size();i++)
-            {
-                JSONObject jb = jsonArray.getJSONObject(i);
                 jb.getString("title");
                 name.add(jb.getString("title"));
-            }
-            //get Gia
-            for(int i=0; i<link_images.size();i++)
-            {
-                JSONObject jb = jsonArray.getJSONObject(i);
                 jb.getString("price");
                 price.add(jb.getString("price"));
             }
+//            //Get tên ảnh
+//            for(int i=0; i<link_images.size();i++)
+//            {
+//                JSONObject jb = jsonArray.getJSONObject(i);
+//                jb.getString("title");
+//                name.add(jb.getString("title"));
+//            }
+//            //get Gia
+//            for(int i=0; i<ar.size();i++)
+//            {
+//                JSONObject jb = jsonArray.getJSONObject(i);
+//                jb.getString("price");
+//                price.add(jb.getString("price"));
+//            }
 
             //Get product
             for(int i = 0; i<link_images.size(); i++)
             {
                 String a = ("http://o-fast.esy.es/frontend/web/images/" + link_images.get(i));
                 images.add(a);
-                product = new Product(images.get(i),name.get(i),null);
+                product = new Product(images.get(i),name.get(i),price.get(i));
                 arrayList.add(product);
-
+                Log.d("aaaaaaaaaaaaaaaaaaaa", price.toString());
             }
-            return name;
+            return arrayList;
         } catch (JSONException e) {
             e.printStackTrace();
             return null;
         }
     }
+
 //Hàm tạo kết nối tới Server
     public static String getData(String stringUrl) {
         BufferedReader reader = null;

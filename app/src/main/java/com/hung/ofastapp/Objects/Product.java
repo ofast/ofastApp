@@ -4,14 +4,15 @@ package com.hung.ofastapp.Objects;
  * Created by Hung on 12/14/2015.
  */
 public class Product {
-    public String img_product;
-    public String name_product;
+     public String img_product;
+     public String name_product;
     public String price_product;
 
     public Product(String img_product, String name_product, String price_product) {
         this.img_product = img_product;
         this.name_product = name_product;
         this.price_product = price_product;
+
     }
 
     public String getImg_product() {

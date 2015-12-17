@@ -6,6 +6,7 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -49,7 +50,6 @@ public class Register extends Activity implements LoaderManager.LoaderCallbacks<
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         setContentView(R.layout.register);
         //------------------------------------------------------------------------------------------
         //---------------------------Animation for Box Register-------------------------------------
@@ -79,6 +79,12 @@ public class Register extends Activity implements LoaderManager.LoaderCallbacks<
         edt_numberphone.setTypeface(tf1);
         txtv_title.setTypeface(tf2);
         btn_register_box.setTypeface(tf2);
+        //------------------------------------------------------------------------------------------
+        //----------------------------Bỏ gạch chân cho EditText-------------------------------------
+        //------------------------------------------------------------------------------------------
+        edt_username.setBackgroundColor(Color.TRANSPARENT);
+        edt_password.setBackgroundColor(Color.TRANSPARENT);
+        edt_numberphone.setBackgroundColor(Color.TRANSPARENT);
         //------------------------------------------------------------------------------------------
         //-----------------------------Set Event for ImageButton------------------------------------
         //------------------------------------------------------------------------------------------

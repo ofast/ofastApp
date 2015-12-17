@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -94,6 +95,11 @@ public class Login extends Activity implements LoaderManager.LoaderCallbacks<Cur
         txtv_forgot_password = (TextView)findViewById(R.id.txtv_forgot_password);
         pb_login = (ProgressBar)findViewById(R.id.pb_login);
         layout_login = (LinearLayout)findViewById(R.id.layout_login);
+        //------------------------------------------------------------------------------------------
+        //----------------------------Bỏ gạch chân cho EditText-------------------------------------
+        //------------------------------------------------------------------------------------------
+        edt_username.setBackgroundColor(Color.TRANSPARENT);
+        edt_password.setBackgroundColor(Color.TRANSPARENT);
         //------------------------------------------------------------------------------------------
         //---------------------Kiểm tra nếu Đăng ký thành công thì set giá trị ---------------------
         //--------------------------------cho Username và Password----------------------------------

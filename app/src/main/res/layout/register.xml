@@ -77,8 +77,11 @@
             android:textColor="#1e7411"
             android:singleLine="true"
             android:hint="@string/username"
-
            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#9E9E9E"/>
         <EditText
             android:gravity="center"
             android:id="@+id/edt_numberphone"
@@ -89,6 +92,10 @@
             android:singleLine="true"
             android:inputType="number"
             android:hint="@string/numberphone"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#9E9E9E"/>
         <EditText
             android:gravity="center"
             android:id="@+id/edt_password"
@@ -98,8 +105,11 @@
             android:hint="@string/password"
             android:textColor="#1e7411"
             android:singleLine="true"
-            android:inputType="textPassword"
-            android:digits="abcdefghijklmnopqrstuvwxyz0123456789"/>
+            android:inputType="textPassword" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#9E9E9E"/>
 
         <Button
             android:layout_width="match_parent"

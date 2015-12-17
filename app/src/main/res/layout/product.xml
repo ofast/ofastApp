@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.hung.ofastapp.Product">
     <android.support.v7.widget.Toolbar
@@ -12,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
+        app:theme="@style/ToolBar"
         app:popupTheme="@style/AppTheme.PopupOverlay">
         <LinearLayout
             android:weightSum="100"
@@ -36,16 +38,89 @@
     </android.support.v7.widget.Toolbar>
 
     <LinearLayout
-        android:layout_marginTop="100px"
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <android.support.v4.view.ViewPager
 
-            android:layout_height="200px"
-            android:layout_width="wrap_content"
+        android:weightSum="100"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <android.support.v4.view.ViewPager
+            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            android:layout_weight="60"
             android:id="@+id/view_pager"
             />
+        <TextView
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Chi tiết"/>
+        <View
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#9E9E9E"/>
+        <ListView
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="7dp"
+            android:id="@+id/lv_thongtinsanpham"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="30">
+        </ListView>
+        <LinearLayout
+            android:background="#E0E0E0"
+            android:layout_marginTop="3dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:layout_weight="11"
+            android:layout_gravity="center"
+            android:weightSum="100">
+
+            <Button
+                android:text="-"
+                android:textSize="30sp"
+                android:id="@+id/btn_tru"
+                android:gravity="center"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="15"/>
+            <TextView
+                android:layout_weight="15"
+                android:id="@+id/txtv_soluongsanpham"
+                android:text="12 "
+                android:textColor="#ca4c4a"
+                android:textSize="30dp"
+                android:gravity="center"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+            <Button
+                android:text="+"
+                android:textSize="30sp"
+                android:layout_weight="15"
+                android:id="@+id/btn_cong"
+                android:layout_gravity="center"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="15"
+                android:layout_height="match_parent"/>
+            <Button
+                android:background="@color/colorPrimary"
+                android:textColor="#FFFFFF"
+                android:id="@+id/btn_addtocart"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="40"
+                android:text="Add to CART"
+                android:gravity="center"
+                android:layout_gravity="center"/>
+        </LinearLayout>
+
+
     </LinearLayout>
 
 
