@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public class Product_ViewPagerAdapter extends PagerAdapter{
 
     private  Context context;
-    private ArrayList<com.hung.ofastapp.Objects.Product> arrayList = new ArrayList<>();
+    private ArrayList<com.hung.ofastapp.Objects.Product> arrayList = new ArrayList<Product>();
 
 
     public Product_ViewPagerAdapter(Context context, ArrayList<com.hung.ofastapp.Objects.Product> arrayList) {

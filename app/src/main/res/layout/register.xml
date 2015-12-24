@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context="com.hung.ofastapp.Register"
     android:id="@+id/linearLayout_register"
-    android:background="@drawable/ofast_background_login_register">
+    android:background="@drawable/background">
     <ImageButton
 
         android:layout_marginTop="20px"
@@ -55,10 +55,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/linearLayout"
-        android:layout_marginTop="30px"
-        android:layout_marginLeft="20px"
-        android:layout_marginBottom="20px"
-        android:layout_marginRight="20px"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"
         android:id="@+id/linear_registerbox">
         <TextView
             android:id="@+id/txtv_title"
@@ -67,13 +67,13 @@
             android:layout_height="wrap_content"
             android:text="Ñaêng kyù taøi khoaûn Ofast"
             android:textColor="#B8B8B8"
-            android:textSize="08pt"/>
+            android:textSize="19dp"/>
         <EditText
             android:gravity="center"
             android:id="@+id/edt_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="12pt"
+            android:textSize="26dp"
             android:textColor="#1e7411"
             android:singleLine="true"
             android:hint="@string/username"
@@ -87,7 +87,7 @@
             android:id="@+id/edt_numberphone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="12pt"
+            android:textSize="26dp"
             android:textColor="#1e7411"
             android:singleLine="true"
             android:inputType="number"
@@ -101,7 +101,7 @@
             android:id="@+id/edt_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="12pt"
+            android:textSize="26dp"
             android:hint="@string/password"
             android:textColor="#1e7411"
             android:singleLine="true"

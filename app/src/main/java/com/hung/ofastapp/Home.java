@@ -1,12 +1,10 @@
 package com.hung.ofastapp;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
@@ -50,7 +48,7 @@ public class Home extends ActionBarActivity
     ViewPager viewPager;
     TabHost tabHost;
 
-        @TargetApi(Build.VERSION_CODES.M)
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -197,7 +195,7 @@ public class Home extends ActionBarActivity
     -----------------------------------------------------------------------------------------------*/
     private void initViewPager() {
 
-        List<Fragment> listFragments = new ArrayList<>();
+        List<Fragment> listFragments = new ArrayList<Fragment>();
         listFragments.add(new Home_fragment_thuonghieu());
         listFragments.add(new Home_fragment_loai());
         listFragments.add(new Home_fragment_giamgia());

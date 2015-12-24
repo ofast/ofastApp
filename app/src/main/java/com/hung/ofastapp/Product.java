@@ -7,18 +7,20 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.Button;
 
 import com.hung.ofastapp.Adapter.Product_ViewPagerAdapter;
 import com.hung.ofastapp.CreateConnection.JSONParser;
 
 import java.util.ArrayList;
 
-public class Product extends ActionBarActivity {
+public class Product extends ActionBarActivity  {
     ViewPager viewPager;
     Product_ViewPagerAdapter adapter;
-    ArrayList<com.hung.ofastapp.Objects.Product> arrayList = new ArrayList<>();
+    ArrayList<com.hung.ofastapp.Objects.Product> arrayList = new ArrayList<com.hung.ofastapp.Objects.Product>();
     JSONParser image_par = new JSONParser();
     getInfo getInfo;
+    Button btn_addtocart;
 
 
     @Override
@@ -34,11 +36,12 @@ public class Product extends ActionBarActivity {
 
         //Khai báo viewPager
         viewPager =(ViewPager)findViewById(R.id.view_pager);
+        btn_addtocart = (Button) findViewById(R.id.btn_addtocart);
 
         getInfo = new getInfo();
         getInfo.execute("http://o-fast.esy.es/frontend/web/index.php?r=catalog%2Fapplist");
-
     }
+
     public boolean onOptionsItemSelected(MenuItem item){
         Intent myIntent = new Intent(getApplicationContext(), Home.class);
         startActivityForResult(myIntent, 0);

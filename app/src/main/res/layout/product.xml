@@ -109,13 +109,14 @@
                 android:layout_weight="15"
                 android:layout_height="match_parent"/>
             <Button
-                android:background="@color/colorPrimary"
+                android:background="@drawable/custom_button_login_register"
                 android:textColor="#FFFFFF"
                 android:id="@+id/btn_addtocart"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="40"
                 android:text="Add to CART"
+                android:visibility="visible"
                 android:gravity="center"
                 android:layout_gravity="center"/>
         </LinearLayout>

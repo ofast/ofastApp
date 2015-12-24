@@ -42,7 +42,7 @@ public class JSONParser{
     String paramsString;
 
     static int currentOffset = 0;
-    static ArrayList<Integer> arrayList = new ArrayList<>();
+    static ArrayList<Integer> arrayList = new ArrayList<Integer>();
 
     public JSONObject makeHttpRequest(String url, String method,
                                       HashMap<String, String> params) {
@@ -180,9 +180,9 @@ public class JSONParser{
             JSONArray jsonArray = new JSONArray(json);
             List<String> tenthuonghieu = new ArrayList<String>();
             List<String> linkImage = new ArrayList<String>();
-            List<String> img = new ArrayList<>();
-            ArrayList<ThuongHieu> arrayList = new ArrayList<>();
-            ArrayList<ThuongHieu> brraylist = new ArrayList<>();
+            List<String> img = new ArrayList<String>();
+            ArrayList<ThuongHieu> arrayList = new ArrayList<ThuongHieu>();
+            ArrayList<ThuongHieu> brraylist = new ArrayList<ThuongHieu>();
             List<String> id_thuonghieu = new ArrayList<String>();
 
             //Hàm lấy một dãy trong 1 mảng để show
@@ -229,12 +229,12 @@ public class JSONParser{
 
         try {
             Product product;
-            ArrayList<Product> arrayList= new ArrayList<>();
-            List<String> link_images = new ArrayList<>();
-            List<String> images = new ArrayList<>();
-            List<String> name = new ArrayList<>();
-            List<String> price = new ArrayList<>();
-             JSONArray jsonArray = new JSONArray(json);
+            ArrayList<Product> arrayList= new ArrayList<Product>();
+            List<String> link_images = new ArrayList<String>();
+            List<String> images = new ArrayList<String>();
+            List<String> name = new ArrayList<String>();
+            List<String> price = new ArrayList<String>();
+            JSONArray jsonArray = new JSONArray(json);
 
             //Get Link ảnh
             for(int i=0; i<jsonArray.length();i++)
@@ -247,20 +247,6 @@ public class JSONParser{
                 jb.getString("price");
                 price.add(jb.getString("price"));
             }
-//            //Get tên ảnh
-//            for(int i=0; i<link_images.size();i++)
-//            {
-//                JSONObject jb = jsonArray.getJSONObject(i);
-//                jb.getString("title");
-//                name.add(jb.getString("title"));
-//            }
-//            //get Gia
-//            for(int i=0; i<ar.size();i++)
-//            {
-//                JSONObject jb = jsonArray.getJSONObject(i);
-//                jb.getString("price");
-//                price.add(jb.getString("price"));
-//            }
 
             //Get product
             for(int i = 0; i<link_images.size(); i++)
@@ -311,7 +297,7 @@ public class JSONParser{
     }
     //Hàm lấy từ vị trí offset tới vị trí number + offset!
     public List<String> loadImageName(JSONArray jsonArray, int offset, int number) throws JSONException {
-        List<String> linkImage = new ArrayList<>();
+        List<String> linkImage = new ArrayList<String>();
         for (int i = offset; i < offset + number; i++) {
             if(i<jsonArray.length()){
                 JSONObject jb = jsonArray.getJSONObject(i);

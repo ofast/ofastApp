@@ -1,6 +1,5 @@
 package com.hung.ofastapp;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
@@ -14,7 +13,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.InputType;
@@ -95,6 +93,7 @@ public class Login extends Activity implements LoaderManager.LoaderCallbacks<Cur
         txtv_forgot_password = (TextView)findViewById(R.id.txtv_forgot_password);
         pb_login = (ProgressBar)findViewById(R.id.pb_login);
         layout_login = (LinearLayout)findViewById(R.id.layout_login);
+
         //------------------------------------------------------------------------------------------
         //----------------------------Bỏ gạch chân cho EditText-------------------------------------
         //------------------------------------------------------------------------------------------
@@ -189,7 +188,6 @@ public class Login extends Activity implements LoaderManager.LoaderCallbacks<Cur
         //------------------------------------------------------------------------------------------
         //--------------------------Set Event for Button Login in Box-------------------------------
         //------------------------------------------------------------------------------------------
-
         btn_login_box.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -206,6 +204,12 @@ public class Login extends Activity implements LoaderManager.LoaderCallbacks<Cur
             }
         });
     }
+
+
+
+
+
+
     //----------------------------------------------------------------------------------------------
     //------------------------Kiểm tra dữ liệu đầu vào từ App đã hợp lệ chưa------------------------
     //----------------------------------------------------------------------------------------------
@@ -298,7 +302,7 @@ public class Login extends Activity implements LoaderManager.LoaderCallbacks<Cur
     //----------------------------------------------------------------------------------------------
     //------------------------Hàm chạy Screen Laucher khi đợi kết quả từ Server------------------------
     //----------------------------------------------------------------------------------------------
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+//    @TargetApi(Build.VERSION_CODES.)
     private void showProgress(final boolean show) {
 
             if (show == true) {
@@ -341,7 +345,7 @@ public class Login extends Activity implements LoaderManager.LoaderCallbacks<Cur
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        List<String> emails = new ArrayList<>();
+        List<String> emails = new ArrayList<String>();
         data.moveToFirst();
         while (!data.isAfterLast()) {
             emails.add(data.getString(ProfileQuery.ADDRESS));
@@ -390,7 +394,7 @@ public class Login extends Activity implements LoaderManager.LoaderCallbacks<Cur
         protected JSONObject doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
             try {
-                HashMap<String, String> data = new HashMap<>();
+                HashMap<String, String> data = new HashMap<String, String>();
                 data.put("AppLoginForm[username]", mUsername);
                 data.put("AppLoginForm[password]", mPassword);
                 data.put("AppLoginForm[rememberMe]", "1");

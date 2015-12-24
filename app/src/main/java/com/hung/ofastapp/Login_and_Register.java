@@ -52,8 +52,11 @@ public class Login_and_Register extends Activity {
         //--------------------------Đã Login -> Trang Main--------------------------------------
         //--------------------------------------------------------------------------------------
         if (pf_username != null) {
-            hasLogin = new LoginOneTimeTask(pf_username, pf_password);
-            hasLogin.execute((Void) null);
+            {
+                hasLogin = new LoginOneTimeTask(pf_username, pf_password);
+                hasLogin.execute((Void) null);
+
+            }
         }
         //--------------------------------------------------------------------------------------
         //--------------------------Chưa Login -> Show Giao diện -------------------------------
@@ -71,9 +74,15 @@ public class Login_and_Register extends Activity {
             //--------------------------------------------------------------------------------------
             //----------------------------------Set Animation Fly In--------------------------------
             //--------------------------------------------------------------------------------------
-            LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linearlayout_forwarding);
-            Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.flyin);
-            linearLayout.setAnimation(animation);
+
+            new Thread(new Runnable() {
+                public void run() {
+                    LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linearlayout_forwarding);
+                    Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.flyin);
+                    linearLayout.setAnimation(animation);
+                }
+            }).start();
+
 
             //--------------------------------------------------------------------------------------
             //-----------------------------Set Event for Button Login-------------------------------
@@ -82,8 +91,8 @@ public class Login_and_Register extends Activity {
             btn_login.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(Login_and_Register.this, Login.class);
-                    startActivity(intent);
+                            Intent intent = new Intent(Login_and_Register.this, Login.class);
+                            startActivity(intent);
                 }
             });
             //--------------------------------------------------------------------------------------
@@ -115,6 +124,7 @@ public class Login_and_Register extends Activity {
             });
 
         }
+
 
     }
     //----------------------------------------------------------------------------------------------
@@ -200,7 +210,8 @@ public class Login_and_Register extends Activity {
         protected JSONObject doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
             try {
-                HashMap<String, String> data = new HashMap<>();
+
+                HashMap<String, String> data = new HashMap<String, String>();
                 data.put("AppLoginForm[username]", mUsername);
                 data.put("AppLoginForm[password]", mPassword);
                 data.put("AppLoginForm[rememberMe]", "1");
@@ -225,6 +236,7 @@ public class Login_and_Register extends Activity {
 //            Toast.makeText(getApplicationContext(), result.toString(), Toast.LENGTH_LONG).show();
             if (result != null) {
                 try {
+
                     String success = result.getString(TAG_SUCCESS);
                     String message = result.getString(TAG_MESSAGE);
                     String error = result.getString(TAG_ERROR);
@@ -254,13 +266,6 @@ public class Login_and_Register extends Activity {
             hasLogin = null;
         }
     }
-
-
-
-
-
-
-
     /*Kiểm tra kết nối mạng*/
     public boolean isConnected() {
         ConnectivityManager cm =
@@ -268,6 +273,26 @@ public class Login_and_Register extends Activity {
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
+    public Runnable aaa = new Runnable()
+    {
+        @Override
+        public void run()
+        {
+            while (true)
+            {
+                // TODO add code to refresh in background
+                try
+                {
 
+                    Thread.sleep(1000);// sleeps 1 second
+
+                } catch (InterruptedException e){
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+
+        }
+    };
 
 }

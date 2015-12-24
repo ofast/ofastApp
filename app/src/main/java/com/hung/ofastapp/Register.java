@@ -162,13 +162,13 @@ public class Register extends Activity implements LoaderManager.LoaderCallbacks<
             cancel = true;
         }
         // Kiểm tra Độ dài Username
-        if (CheckLenght(username)==false) {
+        if (CheckLenght(username)==true) {
             edt_username.setError(getString(R.string.error_lenght));
             focusView = edt_username;
             cancel = true;
         }
         // Kiểm tra Độ dài Password
-        if (CheckLenght(password)==false) {
+        if (CheckLenght(password)==true) {
             edt_password.setError(getString(R.string.error_lenght));
             focusView = edt_username;
             cancel = true;
@@ -199,7 +199,7 @@ public class Register extends Activity implements LoaderManager.LoaderCallbacks<
     //----------------------------------------------------------------------------------------------
     public static boolean CheckLenght(String string)
     {
-       return string.length()>5;
+       return (string.length()>0&&string.length()<6);
     }
     //----------------------------------------------------------------------------------------------
     //----------------------------Kiểm tra kiểu dữ liệu nhập vào------------------------------------
@@ -240,7 +240,7 @@ public class Register extends Activity implements LoaderManager.LoaderCallbacks<
     }
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        List<String> emails = new ArrayList<>();
+        List<String> emails = new ArrayList<String>();
         data.moveToFirst();
         while (!data.isAfterLast()) {
             emails.add(data.getString(ProfileQuery.ADDRESS));
@@ -291,7 +291,7 @@ public class Register extends Activity implements LoaderManager.LoaderCallbacks<
         protected JSONObject doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
             try {
-                HashMap<String, String> data = new HashMap<>();
+                HashMap<String, String> data = new HashMap<String, String>();
                 data.put("AppSignupForm[username]", mUsername);
                 data.put("AppSignupForm[password]", mPassword);
                 data.put("AppSignupForm[phone]",mNumberphone);

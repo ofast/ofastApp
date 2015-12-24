@@ -6,7 +6,7 @@
     tools:context="com.hung.ofastapp.Login"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:background="@drawable/ofast_background_login_register"
+    android:background="@drawable/background"
     android:layout_height="match_parent">
 <ProgressBar
     android:id="@+id/pb_login"
@@ -136,7 +136,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Queân maät khaåu"
-        android:textSize="9pt"
+        android:textSize="16dp"
         android:layout_marginBottom="13dp"
         android:textColor="#FFFFFF"
         android:gravity="bottom"
