@@ -27,7 +27,6 @@
                     android:background="@drawable/custom_home_search"
                     android:layout_weight="83"
                     android:id="@+id/sv_findproduct"
-
                     android:layout_width="0px"
                     android:layout_height="match_parent"
                     android:queryHint="@string/search_view_hint">

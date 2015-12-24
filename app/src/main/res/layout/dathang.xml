@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.hung.ofastapp.Order">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:theme="@style/ToolBar"
+        app:popupTheme="@style/AppTheme.PopupOverlay">
+    </android.support.v7.widget.Toolbar>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/txtv_info"
+            android:text="Chi tiết đặt hàng"
+            android:layout_gravity="right"
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="9"/>
+
+        <ListView
+            android:id="@+id/lv_dathang"
+            android:layout_width="match_parent"
+            android:layout_weight="80"
+            android:layout_height="0dp">
+        </ListView>
+        <LinearLayout
+            android:background="#E0E0E0"
+            android:layout_width="match_parent"
+            android:layout_weight="10"
+            android:layout_height="0dp"
+            android:weightSum="100"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_weight="20"
+                android:src="@drawable/order_smile"
+                android:layout_height="match_parent" />
+            <TextView
+                android:id="@+id/txtv_tongtien"
+                android:text="Tổng tiền"
+                android:gravity="center"
+                android:layout_width="0dp"
+                android:layout_weight="40"
+                android:layout_height="match_parent" />
+            <Button
+                android:background="@drawable/custom_order_button"
+                android:id="@+id/btn_dathang"
+                android:layout_width="0dp"
+                android:textColor="#FFFFFF"
+                android:layout_weight="40"
+                android:text="Đặt Hàng"
+                android:layout_height="match_parent" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
+
+

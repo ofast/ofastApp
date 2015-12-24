@@ -7,6 +7,7 @@ public class Product {
      public String img_product;
      public String name_product;
     public String price_product;
+    public boolean picked;
 
     public Product(String img_product, String name_product, String price_product) {
         this.img_product = img_product;
@@ -37,5 +38,13 @@ public class Product {
 
     public void setPrice_product(String price_product) {
         this.price_product = price_product;
+    }
+
+    public boolean isPicked() {
+        return picked;
+    }
+
+    public void setPicked(boolean picked) {
+        this.picked = picked;
     }
 }
