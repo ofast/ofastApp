@@ -61,14 +61,8 @@
                 android:layout_weight="40"
                 android:text="Đặt Hàng"
                 android:layout_height="match_parent" />
-
-
         </LinearLayout>
-
     </LinearLayout>
-
-
-
 </LinearLayout>
 
 

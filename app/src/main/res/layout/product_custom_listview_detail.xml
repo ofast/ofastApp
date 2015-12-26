@@ -5,19 +5,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <ImageView
-        android:id="@+id/img_image_detail"
-        android:layout_weight="25"
+        android:id="@+id/img_image_product"
+        android:layout_weight="20"
         android:layout_width="0dp"
         android:layout_height="match_parent" />
     <TextView
-        android:id="@+id/txtv_name_detail"
+        android:id="@+id/txtv_name_product"
         android:layout_width="0dp"
-        android:layout_weight="45"
+        android:layout_weight="40"
         android:layout_height="match_parent" />
     <TextView
-        android:id="@+id/txtv_price_detail"
+        android:id="@+id/txtv_soluong_product"
+        android:layout_weight="20"
         android:layout_width="0dp"
-        android:layout_weight="30"
+        android:layout_height="match_parent" />
+    <TextView
+        android:id="@+id/txtv_price_product"
+        android:layout_width="0dp"
+        android:layout_weight="20"
         android:layout_height="match_parent" />
 
 
