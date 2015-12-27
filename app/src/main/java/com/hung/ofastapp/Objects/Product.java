@@ -7,15 +7,19 @@ public class Product {
      public String img_product;
      public String name_product;
     public String price_product;
-    public boolean picked;
-    public int soluong_product;
+    public boolean picked = false;
+    public int num_order = 1;
 
-    public Product(String img_product, String name_product, String price_product, int soluong_product) {
+    public Product(String img_product, String name_product, String price_product) {
         this.img_product = img_product;
         this.name_product = name_product;
         this.price_product = price_product;
-        this.soluong_product = soluong_product;
-
+    }
+    public Product(String img_product, String name_product, int num_order, String price_product) {
+        this.img_product = img_product;
+        this.name_product = name_product;
+        this.price_product = price_product;
+        this.num_order = num_order;
     }
 
     public String getImg_product() {
@@ -50,11 +54,19 @@ public class Product {
         this.picked = picked;
     }
 
-    public int getSoluong_product() {
-        return soluong_product;
+    public int getNum_order() {
+        return num_order;
     }
 
-    public void setSoluong_product(int soluong_product) {
-        this.soluong_product = soluong_product;
+    public void setNum_order(int num_order) {
+        this.num_order = num_order;
+    }
+
+    public void addOrder(){
+        this.num_order ++;
+    }
+
+    public void subOrder(){
+        this.num_order --;
     }
 }

@@ -52,7 +52,6 @@ public class Home extends ActionBarActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Toast.makeText(getApplicationContext(),"douma", Toast.LENGTH_SHORT).show();
         setContentView(R.layout.home);
         /*------------------------------------------------------------------------------------------
         //------------------------------------------------------------------------------------------

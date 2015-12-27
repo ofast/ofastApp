@@ -22,13 +22,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="Tao Tên Hưng"
+        android:text="Username"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tên của tao ở trên!!"
+        android:text="Thông tin user"
         android:id="@+id/textView" />
 
 </LinearLayout>

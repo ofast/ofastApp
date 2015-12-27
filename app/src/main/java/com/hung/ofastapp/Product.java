@@ -11,23 +11,25 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.hung.ofastapp.Adapter.Product_ViewPagerAdapter;
 import com.hung.ofastapp.CreateConnection.JSONParser;
 
 import java.util.ArrayList;
 
-public class Product extends ActionBarActivity implements ViewPager.OnPageChangeListener {
+public class Product extends ActionBarActivity  {
     ViewPager viewPager;
     Product_ViewPagerAdapter adapter;
     ArrayList<com.hung.ofastapp.Objects.Product> arrayList = new ArrayList<com.hung.ofastapp.Objects.Product>();
     ArrayList<com.hung.ofastapp.Objects.Product> lProdcutPicked = new ArrayList<com.hung.ofastapp.Objects.Product>();
-    ArrayList<com.hung.ofastapp.Objects.Product> intentPro = new ArrayList<>();
     JSONParser image_par = new JSONParser();
     getInfo getInfo;
-    public int pPostion = 1;
-    com.hung.ofastapp.Objects.Product mproduct;
+    public int pPostion = 0;
+    ArrayList<String> image = new ArrayList<String>();
+    ArrayList<String> name = new ArrayList<String>();
+    ArrayList<String> price = new ArrayList<String>();
+    ArrayList<Integer> number = new ArrayList<>();
+
 
 
     LinearLayout lnlo_giohang;
@@ -36,9 +38,7 @@ public class Product extends ActionBarActivity implements ViewPager.OnPageChange
     Button btn_cong;
     TextView txtv_soluongsanpham;
     TextView txtv_soluong;
-    int soluongsanpham = 0;
-    int tongsoluongsanpham =0;
-
+    int cartOrder =0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,13 +52,38 @@ public class Product extends ActionBarActivity implements ViewPager.OnPageChange
         btn_tru = (Button) findViewById(R.id.btn_tru);
         txtv_soluongsanpham = (TextView) findViewById(R.id.txtv_soluongsanpham);
         txtv_soluong = (TextView) findViewById(R.id.txtv_soluong);
+        //------------------------------------------------------------------------------------------
+        //---------------Set Sự kiện khi ấn vào nút Cộng trừ các thứ--------------------------------
+        //------------------------------------------------------------------------------------------
+        btn_cong.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                com.hung.ofastapp.Objects.Product curProduct = getProduct(pPostion);
+                curProduct.addOrder();
+                txtv_soluongsanpham.setText(String.valueOf(curProduct.getNum_order()));
+                if (getProduct(pPostion).getNum_order() != 1) {
+                    btn_tru.setEnabled(true);
+                }
 
+            }
+        });
+        btn_tru.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getProduct(pPostion).getNum_order() == 1) {
+                    btn_tru.setEnabled(false);
+                } else {
+                    com.hung.ofastapp.Objects.Product curProduct = getProduct(pPostion);
+                    curProduct.subOrder();
+                    txtv_soluongsanpham.setText(String.valueOf(curProduct.getNum_order()));
+                }
 
-
+            }
+        });
         //------------------------------------------------------------------------------------------
         //----------------------------Tạo Toolbar cho Giao diện----------------------------------------
         //------------------------------------------------------------------------------------------
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -66,148 +91,111 @@ public class Product extends ActionBarActivity implements ViewPager.OnPageChange
         //------------------------------------------------------------------------------------------
         //----------------------------Khai báo viewPager----------------------------------------
         //------------------------------------------------------------------------------------------
-        viewPager = (ViewPager) findViewById(R.id.view_pager);
+        viewPager =(ViewPager)findViewById(R.id.view_pager);
 
         //------------------------------------------------------------------------------------------
         //-------------------Kết nối tới server, lấy dữ liệu rồi trả về Viewpager-------------------
         //------------------------------------------------------------------------------------------
         getInfo = new getInfo();
         getInfo.execute("http://o-fast.esy.es/frontend/web/index.php?r=catalog%2Fapplist");
-        viewPager.setOffscreenPageLimit(arrayList.size() - 1);
-        viewPager.setOnPageChangeListener(this);
+        viewPager.setOffscreenPageLimit(arrayList.size()-1);
         //------------------------------------------------------------------------------------------
         //----------------------------Sự kiện khi nhấn giỏ hàng----------------------------------------
         //------------------------------------------------------------------------------------------
+
+
+
         lnlo_giohang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(Product.this, Order.class);
-//                intent.putExtra("key",  arrayList);
-//                startActivity(intent);
-            }
-        });
+                com.hung.ofastapp.Objects.Product prod = new com.hung.ofastapp.Objects.Product("","","");
 
-
-        //------------------------------------------------------------------------------------------
-        //---------------Set Sự kiện khi ấn vào nút Cộng trừ các thứ--------------------------------
-        //------------------------------------------------------------------------------------------
-
-        btn_cong.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                soluongsanpham = Integer.parseInt(txtv_soluongsanpham.getText().toString());
-                soluongsanpham = soluongsanpham + 1;
-                txtv_soluongsanpham.setText(String.valueOf(soluongsanpham));
-            }
-        });
-        btn_tru.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                soluongsanpham = Integer.parseInt(txtv_soluongsanpham.getText().toString());
-                if (soluongsanpham == 0) {
-                    Toast.makeText(getApplicationContext(), "Số lượng tối thiểu, không thể trừ!", Toast.LENGTH_SHORT).show();
-                } else {
-                    soluongsanpham = soluongsanpham - 1;
-                    txtv_soluongsanpham.setText(String.valueOf(soluongsanpham));
-
+                    for(int i=0; i<arrayList.size();i++)
+                    {
+                        prod = arrayList.get(i);
+                        if(prod.isPicked())
+                        {
+                            image.add(i,prod.getImg_product());
+                            name.add(i,prod.getName_product());
+                            price.add(i,prod.getPrice_product());
+                            number.add(i,prod.getNum_order());
+                        }
+                    }
+                    Intent intent = new Intent(Product.this, Order.class);
+                    intent.putExtra("names",name);
+                    intent.putExtra("prices",price);
+                    intent.putExtra("images",image);
+                    intent.putExtra("numbers",number);
+                    startActivity(intent);
                 }
-
-            }
         });
 
         //------------------------------------------------------------------------------------------
         //----------------------------Sự kiện khi nhấn AddtoCart--------------------------------------
         //------------------------------------------------------------------------------------------
+
         btn_addtocart = (Button) findViewById(R.id.btn_addtocart);
         btn_addtocart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mproduct = getProduct(pPostion);
+                com.hung.ofastapp.Objects.Product mproduct = getProduct(pPostion);
                 txtv_soluong.setVisibility(View.VISIBLE);
 
 
                 //Add sản phẩm
-                if (btn_addtocart.getText() == "Add to CART" && !mproduct.isPicked()) {
-
-                    tongsoluongsanpham =  mproduct.getSoluong_product() +soluongsanpham;
-                    txtv_soluong.setText(String.valueOf(tongsoluongsanpham));
-                    mproduct.setSoluong_product(soluongsanpham);
-
-
-                    Toast.makeText(getApplicationContext(),String.valueOf(mproduct.getSoluong_product()),Toast.LENGTH_SHORT).show();
-
-                    mproduct.setPicked(true);
+                if(!mproduct.isPicked()){
+                    cartOrder += getProduct(pPostion).getNum_order();
                     btn_addtocart.setText("Cancel");
-                    btn_cong.setEnabled(false);
+                    mproduct.setPicked(true);
+                    txtv_soluong.setText(String.valueOf(cartOrder));
                     btn_tru.setEnabled(false);
+                    btn_cong.setEnabled(false);
 
-
-                } else  {
-                    tongsoluongsanpham = mproduct.getSoluong_product() - soluongsanpham;
-                    txtv_soluong.setText(String.valueOf(tongsoluongsanpham));
-                    mproduct.setSoluong_product(soluongsanpham);
-
-
+                }else{
+                    //hủy sản phẩm
+                    cartOrder -= getProduct(pPostion).getNum_order();
                     mproduct.setPicked(false);
                     btn_addtocart.setText("Add to CART");
-                    btn_cong.setEnabled(true);
+                    txtv_soluong.setText(String.valueOf(cartOrder));
                     btn_tru.setEnabled(true);
+                    btn_cong.setEnabled(true);
                 }
             }
         });
 
-
-
-
-
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+            @Override
+            public void onPageSelected(int position) {
+                viewPager.getChildAt(position);
+                pPostion = position;
+                if(getProduct(position).isPicked()){
+                    btn_addtocart.setText("Cancel");
+                    btn_tru.setEnabled(false);
+                    btn_cong.setEnabled(false);
+                }else{
+                    btn_addtocart.setText("Add to CART");
+                    btn_tru.setEnabled(true);
+                    btn_cong.setEnabled(true);
+                }
+                txtv_soluongsanpham.setText(String.valueOf(getProduct(pPostion).getNum_order()));
+            }
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
     }
-    //----------------------------------------------------------------------------------------------
-    //--------------------------Sự kiện của Viewpager --------------------------------
-    //----------------------------------------------------------------------------------------------
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-    }
-    @Override
-    public void onPageSelected(int position) {
-        this.viewPager.setCurrentItem(position);
 
 
-        pPostion = position;
-        if(getProduct(position).isPicked()){
-
-            btn_addtocart.setText("Cancel");
-            btn_cong.setEnabled(false);
-            btn_tru.setEnabled(false);
-
-        }else{
-            btn_addtocart.setText("Add to CART");
-            btn_cong.setEnabled(true);
-            btn_tru.setEnabled(true);
-
-        }
-    }
-    @Override
-    public void onPageScrollStateChanged(int state) {
-    }
-    //----------------------------------------------------------------------------------------------
-    //---------------Sự kiện khi ấn nut Back trên thanh Toolbar-------------------------------------
-    //----------------------------------------------------------------------------------------------
     public boolean onOptionsItemSelected(MenuItem item){
         Intent myIntent = new Intent(getApplicationContext(), Home.class);
         startActivityForResult(myIntent, 0);
         return true;
 
     }
-    //----------------------------------------------------------------------------------------------
-    //---------------Lấy đối tượng ProJect từ 1 vị trí cụ thể---------------------------------------
-    //----------------------------------------------------------------------------------------------
-    public com.hung.ofastapp.Objects.Product getProduct(int position) {
-        return arrayList.get(position);
-    }
 
-    //----------------------------------------------------------------------------------------------
-    //--------------------------Lấy thông tin từ trên Server trả về --------------------------------
-    //----------------------------------------------------------------------------------------------
     private class getInfo extends AsyncTask<String,String,String> {
         @Override
         protected String doInBackground(String... params) {
@@ -223,4 +211,9 @@ public class Product extends ActionBarActivity implements ViewPager.OnPageChange
         }
 
     }
+
+        public com.hung.ofastapp.Objects.Product getProduct(int position) {
+            return arrayList.get(position);
+        }
+
 }

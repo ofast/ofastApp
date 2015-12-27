@@ -57,7 +57,7 @@ public class Home_CustomGridviewAdapter extends ArrayAdapter<ThuongHieu> {
         Picasso.with(this.context)
                 .load(thuongHieu.img)
                 .resize(155, 155)
-                .placeholder(R.drawable.avatar)
+                .placeholder(R.drawable.logo)
                 .into(holder.img_anhthuonghieu);
         return convertView;
     }

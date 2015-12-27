@@ -12,7 +12,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.hung.ofastapp.Adapter.Home_CustomGridviewAdapter;
 import com.hung.ofastapp.CreateConnection.JSONParser;
@@ -45,8 +44,6 @@ public class Home_fragment_thuonghieu extends Fragment{
         grv_thuonghieu = (GridView) rootView.findViewById(R.id.grv_thuonghieu);
         arrayList = new ArrayList<ThuongHieu>();
 
-        Toast.makeText(getContext(),"ajksdhkjahsd",Toast.LENGTH_SHORT).show();
-
             fetcher = new Fetcher();
             fetcher.execute("http://o-fast.esy.es/frontend/web/index.php?r=provider%2Findex");
             parser = new JSONParser();
@@ -66,7 +63,7 @@ public class Home_fragment_thuonghieu extends Fragment{
         grv_thuonghieu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Toast.makeText(getContext(),arrayList.get(position).id,Toast.LENGTH_SHORT).show();
+
                 Intent intent = new Intent(getActivity().getApplicationContext(), Product.class);
                 startActivity(intent);
             }
@@ -98,9 +95,7 @@ public class Home_fragment_thuonghieu extends Fragment{
             grv_thuonghieu.setAdapter(adapter);
             serverData = s;
             showProgress(false);
-
         }
-
     }
     ///Hàm ẩn hiện Progress load ảnh và
     private void showProgress(final boolean show) {

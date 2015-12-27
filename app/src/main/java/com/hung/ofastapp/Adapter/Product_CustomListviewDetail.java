@@ -1,6 +1,7 @@
 package com.hung.ofastapp.Adapter;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ public class Product_CustomListviewDetail extends ArrayAdapter<Product> {
     int LayoutID;
     ArrayList<Product> arrayList;
     ViewHolder holder;
+    Typeface tf1;
     public Product_CustomListviewDetail(Context context, int LayoutID, ArrayList<Product> arrayList) {
         super(context, LayoutID, arrayList);
         this.context = context;
@@ -43,7 +45,7 @@ public class Product_CustomListviewDetail extends ArrayAdapter<Product> {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.home_content_custom_gridview,null);
+            convertView = inflater.inflate(R.layout.product_custom_listview_detail,null);
             holder = new ViewHolder();
             holder.img_image_product = (ImageView) convertView.findViewById(R.id.img_image_product);
             holder.txtv_name_product = (TextView) convertView.findViewById(R.id.txtv_name_product);
@@ -56,12 +58,15 @@ public class Product_CustomListviewDetail extends ArrayAdapter<Product> {
         Product product = arrayList.get(position);
         holder.txtv_name_product.setText(product.name_product);
         holder.txtv_price_product.setText(product.price_product);
-        holder.txtv_soluong_product.setText(product.soluong_product);
+
+        tf1 = Typeface.createFromAsset(convertView.getContext().getAssets(),"VKORIN.TTF");
+        holder.txtv_price_product.setTypeface(tf1);
+        holder.txtv_soluong_product.setText(String.valueOf(product.num_order));
 
         Picasso.with(this.context)
                 .load(product.img_product)
                 .resize(155, 155)
-                .placeholder(R.drawable.avatar)
+                .placeholder(R.drawable.logo)
                 .into(holder.img_image_product);
         return convertView;
     }

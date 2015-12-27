@@ -21,11 +21,30 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="10"/>
+
         <TextView
             android:text="Giá hơi đắt"
             android:gravity="center"
             android:textSize="15sp"
             android:id="@+id/txtv_giasanpham"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10"/>
+
+        <TextView
+            android:text="Giá hơi đắt"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:id="@+id/txtv_picked"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10"/>
+
+        <TextView
+            android:text="Giá hơi đắt"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:id="@+id/txtv_numorder"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="10"/>

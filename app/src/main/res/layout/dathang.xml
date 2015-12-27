@@ -21,13 +21,20 @@
         android:layout_height="match_parent">
         <TextView
             android:id="@+id/txtv_info"
-            android:text="Chi tiết đặt hàng"
+            android:text="Chi tieát ñaët haøng"
+            android:textSize="17dp"
+            android:textColor="#633636"
+            android:textStyle="bold"
+            android:layout_marginRight="20dp"
             android:layout_gravity="right"
             android:gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="9"/>
-
+<View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="#8f6c6c"/>
         <ListView
             android:id="@+id/lv_dathang"
             android:layout_width="match_parent"
@@ -64,5 +71,6 @@
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
+
 
 

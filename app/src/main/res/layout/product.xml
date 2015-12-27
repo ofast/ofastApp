@@ -30,7 +30,7 @@
                android:weightSum="100"
                android:layout_weight="15"
                android:layout_width="0dp"
-               android:background="@drawable/nav_giohang"
+               android:background="@drawable/nav_cart"
                android:layout_height="match_parent">
               <View
                   android:layout_width="match_parent"

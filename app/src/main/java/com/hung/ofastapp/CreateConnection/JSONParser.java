@@ -253,7 +253,7 @@ public class JSONParser{
             {
                 String a = ("http://o-fast.esy.es/frontend/web/images/" + link_images.get(i));
                 images.add(a);
-                product = new Product(images.get(i),name.get(i),price.get(i),0);
+                product = new Product(images.get(i),name.get(i),price.get(i));
                 arrayList.add(product);
                 Log.d("aaaaaaaaaaaaaaaaaaaa", price.toString());
             }

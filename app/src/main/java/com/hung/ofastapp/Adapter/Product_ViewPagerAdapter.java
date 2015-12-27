@@ -60,16 +60,25 @@ public class Product_ViewPagerAdapter extends PagerAdapter{
         final ImageView img_product = (ImageView) view.findViewById(R.id.img_product);
         TextView txtv_tensanpham = (TextView) view.findViewById(R.id.txtv_tensanpham);
         TextView txtv_giasanpham = (TextView) view.findViewById(R.id.txtv_giasanpham);
+        TextView txtv_picked = (TextView) view.findViewById(R.id.txtv_picked);
+        TextView txtv_number = (TextView) view.findViewById(R.id.txtv_numorder);
+
+
 
         Product product = arrayList.get(position);
         Picasso.with(context)
                 .load(product.img_product)
-                .placeholder(R.drawable.avatar)
-                .centerCrop()
-                .fit()
+                .placeholder(R.drawable.logo)
+                .resize(150,150)
                 .into(img_product);
         txtv_tensanpham.setText(product.name_product);
         txtv_giasanpham.setText(product.price_product);
+        txtv_number.setText(String.valueOf(product.num_order));
+        if(product.picked) {
+            txtv_picked.setText("Picked true");
+        }else{
+            txtv_picked.setText("Picked false");
+        }
         return view;
     }
 
