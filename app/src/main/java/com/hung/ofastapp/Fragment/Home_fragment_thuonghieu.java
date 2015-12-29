@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 
 import com.hung.ofastapp.Adapter.Home_CustomGridviewAdapter;
 import com.hung.ofastapp.CreateConnection.JSONParser;
+import com.hung.ofastapp.CreateConnection.ofastURL;
 import com.hung.ofastapp.Objects.ThuongHieu;
 import com.hung.ofastapp.Product;
 import com.hung.ofastapp.R;
@@ -45,7 +46,7 @@ public class Home_fragment_thuonghieu extends Fragment{
         arrayList = new ArrayList<ThuongHieu>();
 
             fetcher = new Fetcher();
-            fetcher.execute("http://o-fast.esy.es/frontend/web/index.php?r=provider%2Findex");
+            fetcher.execute(ofastURL.brand);
             parser = new JSONParser();
             btn_loadmore.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -65,6 +66,7 @@ public class Home_fragment_thuonghieu extends Fragment{
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Intent intent = new Intent(getActivity().getApplicationContext(), Product.class);
+                intent.putExtra("brand_id",arrayList.get(position).getId());
                 startActivity(intent);
             }
         });

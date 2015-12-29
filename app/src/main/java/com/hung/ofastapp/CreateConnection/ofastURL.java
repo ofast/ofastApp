@@ -6,5 +6,7 @@ package com.hung.ofastapp.CreateConnection;
 public class ofastURL {
     public static String login = "http://o-fast.esy.es/frontend/web/index.php?r=app%2Flogin";
     public static String register = "http://o-fast.esy.es/frontend/web/index.php?r=app%2Fsignup";
-    public static String home_getImage ="http://o-fast.esy.es/frontend/web/index.php?r=provider%2Findex";
+    public static String brand_product ="http://o-fast.esy.es/frontend/web/index.php?r=catalog%2Fapplist";
+    public static String brand = "http://o-fast.esy.es/frontend/web/index.php?r=provider%2Findex";
+    public static String brand_image = "http://o-fast.esy.es/backend/web/uploads/";
 }

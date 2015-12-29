@@ -1,23 +1,38 @@
 package com.hung.ofastapp;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewStub;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hung.ofastapp.Adapter.Product_ViewPagerAdapter;
 import com.hung.ofastapp.CreateConnection.JSONParser;
+import com.hung.ofastapp.CreateConnection.ofastURL;
 
 import java.util.ArrayList;
 
-public class Product extends ActionBarActivity  {
+public class Product extends ActionBarActivity implements NavigationView.OnNavigationItemSelectedListener{
     ViewPager viewPager;
     Product_ViewPagerAdapter adapter;
     ArrayList<com.hung.ofastapp.Objects.Product> arrayList = new ArrayList<com.hung.ofastapp.Objects.Product>();
@@ -30,7 +45,11 @@ public class Product extends ActionBarActivity  {
     ArrayList<String> price = new ArrayList<String>();
     ArrayList<Integer> number = new ArrayList<>();
 
-
+    NavigationView navigationView;
+    DrawerLayout drawer;
+    Toolbar toolbar;
+    SearchView sv_findproduct;
+    Typeface tf1;
 
     LinearLayout lnlo_giohang;
     Button btn_addtocart;
@@ -38,16 +57,120 @@ public class Product extends ActionBarActivity  {
     Button btn_cong;
     TextView txtv_soluongsanpham;
     TextView txtv_soluong;
+
+    String brand_id = "30";
+    ViewStub base_content;
     int cartOrder =0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.product);
+        setContentView(R.layout.home);
+
+        base_content = (ViewStub) findViewById(R.id.base_content);
+        base_content.setLayoutResource(R.layout.product);
+        View stinflated = base_content.inflate();
+
+        //------------------------------------------------------------------------------------------
+        //----------------------------Tạo Toolbar cho Giao diện----------------------------------------
+        //------------------------------------------------------------------------------------------
+
+
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        sv_findproduct = (SearchView) findViewById(R.id.sv_findproduct);
+
+        /*----------------------------------------------------------------------------------------------------------------------------
+-----------------**********************PHẦN TOOLBAR***************---------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------*/
+        /*------------------------------------------------------------------------------------------
+        -----------------------Unfocus để ko hiện Keyboard all time-------------------------------
+        ------------------------------------------------------------------------------------------*/
+        setupUI(findViewById(R.id.layout_home));
+
+        sv_findproduct.setIconified(false);
+
+
+        /*------------------------------------------------------------------------------------------
+        --------------------------------------------------------------------------------------------
+        -----------------Khai báo ToolBar, và các thành phần cần thiết cho 1 Navi-------------------
+        ------------------------------------------------------------------------------------------*/
+                                    /*Toolbar*/
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                                    /*DrawerLayout*/
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+                                    /*Navigation*/
+        navigationView.setNavigationItemSelectedListener(this);
+        /*------------------------------------------------------------------------------------------
+        --------------------------------------------------------------------------------------------
+        -----------------------------Bỏ gạch chân trong SearchView----------------------------------
+        ------------------------------------------------------------------------------------------*/
+        tf1 = Typeface.createFromAsset(getAssets(), "VNF-Futura Regular.ttf");
+        int searchPlateId = sv_findproduct.getContext().getResources().getIdentifier("android:id/search_plate", null, null);
+        View searchPlateView = sv_findproduct.findViewById(searchPlateId);
+        searchPlateView.setBackgroundColor(Color.TRANSPARENT);
+  /*------------------------------------------------------------------------------------------
+          --------------------------------------------------------------------------------------------
+        -----------------Set Font cho Hint và sự kiện thi ấn vào SearchView-------------------------
+        ------------------------------------------------------------------------------------------*/
+        AutoCompleteTextView searchtext = (AutoCompleteTextView) sv_findproduct.findViewById(sv_findproduct.getContext().getResources().getIdentifier("android:id/search_src_text", null, null));
+        searchtext.setTextSize(20);
+        searchtext.setTypeface(tf1);
+        searchtext.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
+        searchtext.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (CheckOpen(drawer) == true) {
+                    drawer.closeDrawer(GravityCompat.START);
+                }
+                return false;
+            }
+        });
+        /*------------------------------------------------------------------------------------------
+        --------------------------------------------------------------------------------------------
+        ---------------------------------Click vào Icon SearchView----------------------------------
+        ------------------------------------------------------------------------------------------*/
+        sv_findproduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (CheckOpen(drawer) == true) {
+                    drawer.closeDrawer(GravityCompat.START);
+
+                }
+            }
+        });
+
+        /*------------------------------------------------------------------------------------------
+        --------------------------------------------------------------------------------------------
+        -------------------------Sự kiện thay đổi khi Typing SearchView-----------------------------
+        ------------------------------------------------------------------------------------------*/
+        sv_findproduct.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            //            Khi sumbit Searchview
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Toast.makeText(getApplicationContext(), "Đã search", Toast.LENGTH_SHORT).show();
+
+                return false;
+            }
+
+            //            Khi Typing  Searchview
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Toast.makeText(getApplicationContext(), "Đang gõ", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
+
+
         //------------------------------------------------------------------------------------------
         //---------------------------Khai báo các thuộc tính----------------------------------------
         //------------------------------------------------------------------------------------------
-        lnlo_giohang = (LinearLayout) findViewById(R.id.lnlo_giohang);
+        lnlo_giohang = (LinearLayout) findViewById(R.id.lnlo_cart);
         btn_cong = (Button) findViewById(R.id.btn_cong);
         btn_tru = (Button) findViewById(R.id.btn_tru);
         txtv_soluongsanpham = (TextView) findViewById(R.id.txtv_soluongsanpham);
@@ -80,13 +203,7 @@ public class Product extends ActionBarActivity  {
 
             }
         });
-        //------------------------------------------------------------------------------------------
-        //----------------------------Tạo Toolbar cho Giao diện----------------------------------------
-        //------------------------------------------------------------------------------------------
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
 
         //------------------------------------------------------------------------------------------
         //----------------------------Khai báo viewPager----------------------------------------
@@ -96,9 +213,11 @@ public class Product extends ActionBarActivity  {
         //------------------------------------------------------------------------------------------
         //-------------------Kết nối tới server, lấy dữ liệu rồi trả về Viewpager-------------------
         //------------------------------------------------------------------------------------------
+        this.brand_id = getIntent().getStringExtra("brand_id");
         getInfo = new getInfo();
-        getInfo.execute("http://o-fast.esy.es/frontend/web/index.php?r=catalog%2Fapplist");
-        viewPager.setOffscreenPageLimit(arrayList.size()-1);
+        getInfo.execute(ofastURL.brand_product + "&id=" + brand_id);
+        viewPager.setOffscreenPageLimit(arrayList.size() - 1);
+
         //------------------------------------------------------------------------------------------
         //----------------------------Sự kiện khi nhấn giỏ hàng----------------------------------------
         //------------------------------------------------------------------------------------------
@@ -125,7 +244,7 @@ public class Product extends ActionBarActivity  {
                     intent.putExtra("names",name);
                     intent.putExtra("prices",price);
                     intent.putExtra("images",image);
-                    intent.putExtra("numbers",number);
+                    intent.putExtra("numbers", number);
                     startActivity(intent);
                 }
         });
@@ -196,6 +315,35 @@ public class Product extends ActionBarActivity  {
 
     }
 
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.nav_news) {
+
+        } else if (id == R.id.nav_shop) {
+
+        } else if (id == R.id.nav_store) {
+
+        } else if (id == R.id.nav_account) {
+
+        } else if (id == R.id.nav_share) {
+
+        }else if(id==R.id.nav_logout){
+            /*--------------------------------------------------------------------------------------
+                Khi chọn Logout, thì Clear hết SharePreference rồi trở về trang Login & Register
+            ---------------------------------------------------------------------------------------*/
+            getSharedPreferences("LoginOneTimes",0).edit().clear().commit();
+            Intent intent = new Intent(Product.this, Login_and_Register.class);
+            startActivity(intent);
+        }
+        /*-----------------------Khi chọn xong thì đóng Navi-------------------*/
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
     private class getInfo extends AsyncTask<String,String,String> {
         @Override
         protected String doInBackground(String... params) {
@@ -209,11 +357,66 @@ public class Product extends ActionBarActivity  {
             adapter = new Product_ViewPagerAdapter(getApplicationContext(),arrayList);
             viewPager.setAdapter(adapter);
         }
-
     }
 
-        public com.hung.ofastapp.Objects.Product getProduct(int position) {
-            return arrayList.get(position);
-        }
+    public com.hung.ofastapp.Objects.Product getProduct(int position) {
+        return arrayList.get(position);
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    /*----------------------------------------------------------------------------------------------
+   ------------------------------------------------------------------------------------------------
+   -----------------------------Kiểm tra xem Drawer có đang mở hay không---------------------------
+   -----------------------------------------------------------------------------------------------*/
+    public boolean CheckOpen(DrawerLayout drawer)
+    {
+        if(drawer.isDrawerOpen(GravityCompat.START))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    //----------------------------------------------------------------------------------------------
+    //-------------Hàm ẩn Keyboard khi chạm vào màn hình chứa SearchView----------------------------
+    //---------------------hoặc 1 layout gì đó------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+    public void setupUI(View view) {
+
+        //Set up touch listener for non-text box views to hide keyboard.
+        if(!(view instanceof SearchView)) {
+
+            view.setOnTouchListener(new View.OnTouchListener() {
+
+                public boolean onTouch(View v, MotionEvent event) {
+                    hideSoftKeyboard(Product.this);
+                    sv_findproduct.setFocusable(false);
+                    return false;
+                }
+
+            });
+        }
+        //If a layout container, iterate over children and seed recursion.
+        if (view instanceof ViewGroup) {
+
+            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+
+                View innerView = ((ViewGroup) view).getChildAt(i);
+
+                setupUI(innerView);
+            }
+        }
+    }
+
+    //----------------------------------------------------------------------------------------------
+    //------------------------------Hàm ẩn Keyboard cho 1 Activity----------------------------------
+    //----------------------------------------------------------------------------------------------
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager = (InputMethodManager)  activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+    }
 }

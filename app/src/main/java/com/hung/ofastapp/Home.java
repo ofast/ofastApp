@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.SearchView;
@@ -47,12 +48,18 @@ public class Home extends ActionBarActivity
     public boolean doubleBackToExitPressedOnce = false;
     ViewPager viewPager;
     TabHost tabHost;
+    ViewStub base_content;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
+
+        base_content = (ViewStub) findViewById(R.id.base_content);
+        base_content.setLayoutResource(R.layout.home_tabhost);
+        View stinflated = base_content.inflate();
+
         /*------------------------------------------------------------------------------------------
         //------------------------------------------------------------------------------------------
         //--------------------------------------Ánh xạ----------------------------------------------
@@ -72,7 +79,7 @@ public class Home extends ActionBarActivity
         ------------------------------------------------------------------------------------------*/
         setupUI(findViewById(R.id.layout_home));
 
-       sv_findproduct.setIconified(false);
+        sv_findproduct.setIconified(false);
 
 
         /*------------------------------------------------------------------------------------------

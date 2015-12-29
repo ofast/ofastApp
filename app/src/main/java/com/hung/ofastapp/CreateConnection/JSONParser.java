@@ -200,7 +200,7 @@ public class JSONParser{
             currentOffset += linkImage.size();
             for(int i = 0; i<linkImage.size(); i++)
             {
-                String a = ("http://o-fast.esy.es/backend/web/uploads/" + linkImage.get(i));
+                String a = (ofastURL.brand_image + linkImage.get(i));
                 img.add(a);
                 thuongHieu = new ThuongHieu(img.get(i),tenthuonghieu.get(i),id_thuonghieu.get(i));
                 arrayList.add(thuongHieu);

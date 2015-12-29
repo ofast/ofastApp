@@ -32,7 +32,8 @@
         </activity>
         <activity
             android:name=".Product"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
+
         </activity>
         <activity android:name=".Order"
             android:theme="@style/AppTheme.NoActionBar" >
