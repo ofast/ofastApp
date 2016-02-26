@@ -251,7 +251,7 @@ public class JSONParser{
             //Get product
             for(int i = 0; i<link_images.size(); i++)
             {
-                String a = ("http://o-fast.esy.es/frontend/web/images/" + link_images.get(i));
+                String a = (ofastURL.frontend_Web_image + link_images.get(i));
                 images.add(a);
                 product = new Product(images.get(i),name.get(i),price.get(i));
                 arrayList.add(product);

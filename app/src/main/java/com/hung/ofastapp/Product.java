@@ -13,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -36,7 +37,6 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
     ViewPager viewPager;
     Product_ViewPagerAdapter adapter;
     ArrayList<com.hung.ofastapp.Objects.Product> arrayList = new ArrayList<com.hung.ofastapp.Objects.Product>();
-    ArrayList<com.hung.ofastapp.Objects.Product> lProdcutPicked = new ArrayList<com.hung.ofastapp.Objects.Product>();
     JSONParser image_par = new JSONParser();
     getInfo getInfo;
     public int pPostion = 0;
@@ -175,6 +175,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
         btn_tru = (Button) findViewById(R.id.btn_tru);
         txtv_soluongsanpham = (TextView) findViewById(R.id.txtv_soluongsanpham);
         txtv_soluong = (TextView) findViewById(R.id.txtv_soluong);
+
         //------------------------------------------------------------------------------------------
         //---------------Set Sự kiện khi ấn vào nút Cộng trừ các thứ--------------------------------
         //------------------------------------------------------------------------------------------
@@ -228,12 +229,16 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
             @Override
             public void onClick(View v) {
                 com.hung.ofastapp.Objects.Product prod = new com.hung.ofastapp.Objects.Product("","","");
-
+                Log.d("khang","Loi gio hang 1");
+                try {
                     for(int i=0; i<arrayList.size();i++)
                     {
+                        Log.d("khang","Loi gio hang 2");
                         prod = arrayList.get(i);
+                        Log.d("khang","Loi gio hang 3");
                         if(prod.isPicked())
                         {
+                            Log.d("khang","Loi gio hang 4");
                             image.add(i,prod.getImg_product());
                             name.add(i,prod.getName_product());
                             price.add(i,prod.getPrice_product());
@@ -241,11 +246,20 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
                         }
                     }
                     Intent intent = new Intent(Product.this, Order.class);
-                    intent.putExtra("names",name);
-                    intent.putExtra("prices",price);
-                    intent.putExtra("images",image);
+                    Log.d("khang","Loi gio hang 5");
+                    intent.putExtra("names", name);
+                    Log.d("khang", "Loi gio hang 6");
+                    intent.putExtra("prices", price);
+                    Log.d("khang", "Loi gio hang 7");
+                    intent.putExtra("images", image);
+                    Log.d("khang", "Loi gio hang 8");
                     intent.putExtra("numbers", number);
+                    Log.d("khang", "Loi gio hang 9");
                     startActivity(intent);
+                } catch (Exception e){
+                    Log.d("khang","Loi gio hang");
+                }
+
                 }
         });
 
