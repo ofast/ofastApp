@@ -233,12 +233,10 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
                 try {
                     for(int i=0; i<arrayList.size();i++)
                     {
-                        Log.d("khang","Loi gio hang 2");
                         prod = arrayList.get(i);
-                        Log.d("khang","Loi gio hang 3");
+                        if(prod.isPicked())
                         if(prod.isPicked())
                         {
-                            Log.d("khang","Loi gio hang 4");
                             image.add(i,prod.getImg_product());
                             name.add(i,prod.getName_product());
                             price.add(i,prod.getPrice_product());
@@ -246,18 +244,13 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
                         }
                     }
                     Intent intent = new Intent(Product.this, Order.class);
-                    Log.d("khang","Loi gio hang 5");
                     intent.putExtra("names", name);
-                    Log.d("khang", "Loi gio hang 6");
                     intent.putExtra("prices", price);
-                    Log.d("khang", "Loi gio hang 7");
                     intent.putExtra("images", image);
-                    Log.d("khang", "Loi gio hang 8");
                     intent.putExtra("numbers", number);
-                    Log.d("khang", "Loi gio hang 9");
                     startActivity(intent);
                 } catch (Exception e){
-                    Log.d("khang","Loi gio hang");
+
                 }
 
                 }
