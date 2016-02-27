@@ -234,7 +234,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
                     for(int i=0; i<arrayList.size();i++)
                     {
                         prod = arrayList.get(i);
-                        if(prod.isPicked())
+                      
                         if(prod.isPicked())
                         {
                             image.add(i,prod.getImg_product());
