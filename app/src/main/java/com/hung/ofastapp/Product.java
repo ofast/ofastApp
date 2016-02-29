@@ -31,12 +31,14 @@ import com.hung.ofastapp.Adapter.Product_ViewPagerAdapter;
 import com.hung.ofastapp.CreateConnection.JSONParser;
 import com.hung.ofastapp.CreateConnection.ofastURL;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Product extends ActionBarActivity implements NavigationView.OnNavigationItemSelectedListener{
     ViewPager viewPager;
     Product_ViewPagerAdapter adapter;
     ArrayList<com.hung.ofastapp.Objects.Product> arrayList = new ArrayList<com.hung.ofastapp.Objects.Product>();
+    ArrayList<com.hung.ofastapp.Objects.Product> orderList = new ArrayList<com.hung.ofastapp.Objects.Product>();
     JSONParser image_par = new JSONParser();
     getInfo getInfo;
     public int pPostion = 0;
@@ -229,26 +231,34 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
             @Override
             public void onClick(View v) {
                 com.hung.ofastapp.Objects.Product prod = new com.hung.ofastapp.Objects.Product("","","");
-                Log.d("khang","Loi gio hang 1");
+                Log.d("khang", "Loi gio hang 1");
                 try {
-                    for(int i=0; i<arrayList.size();i++)
-                    {
-                        prod = arrayList.get(i);
-                      
-                        if(prod.isPicked())
-                        {
-                            image.add(i,prod.getImg_product());
-                            name.add(i,prod.getName_product());
-                            price.add(i,prod.getPrice_product());
-                            number.add(i,prod.getNum_order());
-                        }
-                    }
+//                    for(int i=0; i<arrayList.size();i++)
+//                    {
+//                        prod = arrayList.get(i);
+//
+//                        if(prod.isPicked())
+//                        {
+//                            image.add(prod.getImg_product());
+//                            name.add(prod.getName_product());
+//                            price.add(prod.getPrice_product());
+//                            number.add(prod.getNum_order());
+//                        }
+//                    }
+//                    Intent intent = new Intent(Product.this, Order.class);
+//                    intent.putExtra("names", name);
+//                    intent.putExtra("prices", price);
+//                    intent.putExtra("images", image);
+//                    intent.putExtra("numbers", number);
+//                    startActivity(intent);
+
+/*==============================================================================================
+                                        TEST CODE
+ =============================================================================================*/
                     Intent intent = new Intent(Product.this, Order.class);
-                    intent.putExtra("names", name);
-                    intent.putExtra("prices", price);
-                    intent.putExtra("images", image);
-                    intent.putExtra("numbers", number);
+                    intent.putExtra("LISTORDER", (Serializable) orderList);
                     startActivity(intent);
+
                 } catch (Exception e){
 
                 }
@@ -273,6 +283,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
                     cartOrder += getProduct(pPostion).getNum_order();
                     btn_addtocart.setText("Cancel");
                     mproduct.setPicked(true);
+                    orderList.add(mproduct);
                     txtv_soluong.setText(String.valueOf(cartOrder));
                     btn_tru.setEnabled(false);
                     btn_cong.setEnabled(false);
@@ -281,6 +292,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
                     //hủy sản phẩm
                     cartOrder -= getProduct(pPostion).getNum_order();
                     mproduct.setPicked(false);
+                    orderList.remove(mproduct);
                     btn_addtocart.setText("Add to CART");
                     txtv_soluong.setText(String.valueOf(cartOrder));
                     btn_tru.setEnabled(true);

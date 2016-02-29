@@ -52,23 +52,47 @@ public class Order extends ActionBarActivity {
 
 
         Bundle bd = getIntent().getExtras();
-        ten = bd.getStringArrayList("names");
-        gia = bd.getStringArrayList("prices");
-        hinh = bd.getStringArrayList("images");
-        soluong = bd.getIntegerArrayList("numbers");
+//        ten = bd.getStringArrayList("names");
+//        gia = bd.getStringArrayList("prices");
+//        hinh = bd.getStringArrayList("images");
+//        soluong = bd.getIntegerArrayList("numbers");
 
-        for (int i = 0; i < ten.size(); i++) {
-            com.hung.ofastapp.Objects.Product product =
-                    new com.hung.ofastapp.Objects.Product(hinh.get(i), ten.get(i), soluong.get(i), gia.get(i));
-            arrayList.add(product);
-        }
+//        for (int i = 0; i < ten.size(); i++) {
+//            com.hung.ofastapp.Objects.Product product =
+//                    new com.hung.ofastapp.Objects.Product(hinh.get(i), ten.get(i), soluong.get(i), gia.get(i));
+//            arrayList.add(product);
+//        }
+
+//        adapter = new Product_CustomListviewDetail(this, R.layout.product_custom_listview_detail, arrayList);
+//        lv_dathang.setAdapter(adapter);
+
+//        for(int i = 0; arr; i++)
+//        {
+//            tongtien = tongtien + Float.parseFloat(gia.get(i)) * soluong.get(i);
+//        }
+
+        /* =======================================================================================
+                                                TEST CODE
+        ========================================================================================*/
+
+        arrayList = (ArrayList<com.hung.ofastapp.Objects.Product>) bd.getSerializable("LISTORDER");
+
+
         adapter = new Product_CustomListviewDetail(this, R.layout.product_custom_listview_detail, arrayList);
         lv_dathang.setAdapter(adapter);
-                        /* Tổng tiền */
-        for(int i = 0; i<hinh.size(); i++)
-        {
-            tongtien = tongtien + Float.parseFloat(gia.get(i)) * soluong.get(i);
+
+        /*
+            = Tong Tien =
+         */
+
+        for (com.hung.ofastapp.Objects.Product prod : arrayList
+             ) {
+            if(prod.isPicked()){
+                tongtien = tongtien +  prod.getNum_order() * Float.parseFloat(prod.getPrice_product());
+            }
         }
+
+
         txtv_tongtien.setText(String.valueOf(tongtien)+ "00VNĐ");
         btn_dathang.setOnClickListener(new View.OnClickListener() {
             @Override

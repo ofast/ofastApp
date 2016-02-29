@@ -1,9 +1,11 @@
 package com.hung.ofastapp.Objects;
 
+import java.io.Serializable;
+
 /**
  * Created by Hung on 12/14/2015.
  */
-public class Product {
+public class Product implements Serializable{
      public String img_product;
      public String name_product;
     public String price_product;
