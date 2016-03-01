@@ -104,9 +104,7 @@ public class Order extends ActionBarActivity {
 
     /* Sự kiện khi ấn Back Button */
     public boolean onOptionsItemSelected(MenuItem item){
-        Intent myIntent = new Intent(getApplicationContext(), Product.class);
-        startActivityForResult(myIntent, 0);
+     super .onBackPressed();
         return true;
-
     }
 }

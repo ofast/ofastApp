@@ -301,14 +301,14 @@ public class Home extends ActionBarActivity
             /*-----------Tab2 - Loại được chọn----------*/
             else if (tabhost.getCurrentTab() == 1) {
                 //tabhost.getTabWidget().getChildAt(tabhost.getCurrentTab()).setBackgroundColor(Color.parseColor("#4FC3F7"));
-                toolbar.setBackgroundColor(Color.parseColor("#4FC3F7"));
+                toolbar.setBackgroundColor(Color.parseColor("#039BE6"));
 
             }
             /*-----------Tab3 - Giảm giá được chọn----------*/
             else if (tabhost.getCurrentTab() == 2) {
 
                //  tabhost.getTabWidget().getChildAt(tabhost.getCurrentTab()).setBackgroundColor(Color.parseColor("#00E676"));
-                toolbar.setBackgroundColor(Color.parseColor("#00E676"));
+                toolbar.setBackgroundColor(Color.parseColor("#689F39"));
             }
         }
     }
@@ -328,10 +328,10 @@ public class Home extends ActionBarActivity
                 tv1.setTextColor(Color.parseColor("#e27070"));
             }
             else if (tabhost.getCurrentTab() == 1) {
-                tv1.setTextColor(Color.parseColor("#4FC3F7"));
+                tv1.setTextColor(Color.parseColor("#039BE6"));
             }
             else if (tabhost.getCurrentTab() == 2) {
-                tv1.setTextColor(Color.parseColor("#00E676"));
+                tv1.setTextColor(Color.parseColor("#689F39"));
             }
         }
          /*--------Set màu #FFFFFF cho tab được chọn---------------------------*/

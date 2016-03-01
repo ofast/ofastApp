@@ -23,6 +23,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,6 +53,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
     Toolbar toolbar;
     SearchView sv_findproduct;
     Typeface tf1;
+    ProgressBar progress_loadproduct;
 
     LinearLayout lnlo_giohang;
     Button btn_addtocart;
@@ -82,7 +84,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         sv_findproduct = (SearchView) findViewById(R.id.sv_findproduct);
-
+        progress_loadproduct = (ProgressBar) findViewById(R.id.progress_loadproduct);
         /*----------------------------------------------------------------------------------------------------------------------------
 -----------------**********************PHẦN TOOLBAR***************---------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------*/
@@ -90,10 +92,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
         -----------------------Unfocus để ko hiện Keyboard all time-------------------------------
         ------------------------------------------------------------------------------------------*/
         setupUI(findViewById(R.id.layout_home));
-
         sv_findproduct.setIconified(false);
-
-
         /*------------------------------------------------------------------------------------------
         --------------------------------------------------------------------------------------------
         -----------------Khai báo ToolBar, và các thành phần cần thiết cho 1 Navi-------------------
@@ -365,6 +364,11 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
 
     private class getInfo extends AsyncTask<String,String,String> {
         @Override
+        protected void onPreExecute() {
+            showProgress(true);
+        }
+
+        @Override
         protected String doInBackground(String... params) {
             String data = JSONParser.getData(params[0]);
             return data;
@@ -372,6 +376,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
 
         @Override
         protected void onPostExecute(String s) {
+            showProgress(false);
             arrayList = image_par.getImageProduct(s);
             adapter = new Product_ViewPagerAdapter(getApplicationContext(),arrayList);
             viewPager.setAdapter(adapter);
@@ -437,5 +442,22 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
     public static void hideSoftKeyboard(Activity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager)  activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+    }
+
+    //----------------------------------------------------------------------------------------------
+    //------------------------Hàm ẩn + hiện Progress for ViewPager----------------------------------
+    //----------------------------------------------------------------------------------------------
+    private void showProgress(final boolean show) {
+
+        if (show == true) {
+
+            progress_loadproduct.setVisibility(View.VISIBLE);
+            viewPager.setVisibility(View.GONE);
+        }
+        else
+        {
+            progress_loadproduct.setVisibility(View.GONE);
+            viewPager.setVisibility(View.VISIBLE);
+        }
     }
 }
