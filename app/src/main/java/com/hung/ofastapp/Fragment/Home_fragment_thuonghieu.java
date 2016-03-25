@@ -1,18 +1,26 @@
 package com.hung.ofastapp.Fragment;
 
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-
+import android.widget.Toast;
 import com.hung.ofastapp.Adapter.Home_CustomGridviewAdapter;
 import com.hung.ofastapp.CreateConnection.JSONParser;
 import com.hung.ofastapp.CreateConnection.ofastURL;
@@ -22,25 +30,32 @@ import com.hung.ofastapp.R;
 
 import java.util.ArrayList;
 
+import static android.widget.AbsListView.*;
+
 /**
  * Created by Hung on 12/5/2015.
  */
 public class Home_fragment_thuonghieu extends Fragment{
     Fetcher fetcher =  null;
+    private int mPreviousTotal = 0;
+    private boolean mLoading = true;
     Button btn_loadmore;
     LinearLayout layout_thuonghieu_progress;
     GridView grv_thuonghieu;
+    ImageView img_banner;
     ArrayList<ThuongHieu>  arrayList ;
     Home_CustomGridviewAdapter adapter;
     JSONParser parser = new JSONParser();
     String serverData;
 
-    boolean isload = false;
+
+    @TargetApi(Build.VERSION_CODES.M)
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.home_fragment_thuonghieu, container, false);
         btn_loadmore = (Button) rootView.findViewById(R.id.btn_loadmore);
+        img_banner = (ImageView) rootView.findViewById(R.id.img_banner);
         layout_thuonghieu_progress = (LinearLayout) rootView.findViewById(R.id.layout_thuonghieu_progress);
         grv_thuonghieu = (GridView) rootView.findViewById(R.id.grv_thuonghieu);
         arrayList = new ArrayList<ThuongHieu>();
@@ -51,14 +66,14 @@ public class Home_fragment_thuonghieu extends Fragment{
             btn_loadmore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showProgress(false);
+
                     ArrayList<ThuongHieu> moreList;
                     moreList = parser.Parse(serverData);
                     arrayList.addAll(moreList);
                     adapter = new Home_CustomGridviewAdapter(getActivity().getApplicationContext(), R.layout.home_content_custom_gridview, arrayList);
                     grv_thuonghieu.setAdapter(adapter);
                     setMarksGridScrolling(arrayList.size(), 0);
-                    isload = true;
+
                 }
             });
         grv_thuonghieu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -66,13 +81,24 @@ public class Home_fragment_thuonghieu extends Fragment{
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Intent intent = new Intent(getActivity().getApplicationContext(), Product.class);
-                intent.putExtra("brand_id",arrayList.get(position).getId());
+                intent.putExtra("brand_id", arrayList.get(position).getId());
                 startActivity(intent);
             }
         });
+        grv_thuonghieu.setOnScrollListener(new OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
 
+            }
 
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if(visibleItemCount + firstVisibleItem == totalItemCount)
+                {
 
+                }
+            }
+        });
         return rootView;
     }
     private class Fetcher extends AsyncTask<String,String,String> {

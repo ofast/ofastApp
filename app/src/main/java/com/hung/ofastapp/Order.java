@@ -76,8 +76,6 @@ public class Order extends ActionBarActivity {
         ========================================================================================*/
 
         arrayList = (ArrayList<com.hung.ofastapp.Objects.Product>) bd.getSerializable("LISTORDER");
-
-
         adapter = new Product_CustomListviewDetail(this, R.layout.product_custom_listview_detail, arrayList);
         lv_dathang.setAdapter(adapter);
 
