@@ -1,4 +1,4 @@
-package com.hung.ofastapp;
+﻿package com.hung.ofastapp;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -217,7 +217,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
         //------------------------------------------------------------------------------------------
         this.brand_id = getIntent().getStringExtra("brand_id");
         getInfo = new getInfo();
-        getInfo.execute(ofastURL.brand_product + "&id=" + brand_id);
+        getInfo.execute(ofastURL.brand_product + "id=" + brand_id);
         viewPager.setOffscreenPageLimit(arrayList.size() - 1);
 
         //------------------------------------------------------------------------------------------
