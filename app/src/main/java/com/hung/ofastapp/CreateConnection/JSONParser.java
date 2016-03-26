@@ -191,8 +191,8 @@ public class JSONParser{
             for(int i=currentOffset; i<linkImage.size()+currentOffset ;i++)
             {
                 JSONObject jb = jsonArray.getJSONObject(i);
-                jb.getString("title");
-                tenthuonghieu.add(jb.getString("title"));
+                jb.getString("brand_name");
+                tenthuonghieu.add(jb.getString("brand_name"));
                 jb.getString("id");
                 id_thuonghieu.add(jb.getString("id"));
             }
@@ -301,8 +301,8 @@ public class JSONParser{
         for (int i = offset; i < offset + number; i++) {
             if(i<jsonArray.length()){
                 JSONObject jb = jsonArray.getJSONObject(i);
-                jb.getString("logo");
-                linkImage.add(jb.getString("logo"));
+                jb.getString("image");
+                linkImage.add(jb.getString("image"));
 
             } else break;
         }
