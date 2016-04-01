@@ -1,4 +1,4 @@
-﻿package com.hung.ofastapp;
+package com.hung.ofastapp;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -76,7 +76,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
         View stinflated = base_content.inflate();
 
         //------------------------------------------------------------------------------------------
-        //----------------------------Tạo Toolbar cho Giao diện----------------------------------------
+        //----------------------------T?o Toolbar cho Giao di?n----------------------------------------
         //------------------------------------------------------------------------------------------
 
 
@@ -86,16 +86,16 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
         sv_findproduct = (SearchView) findViewById(R.id.sv_findproduct);
         progress_loadproduct = (ProgressBar) findViewById(R.id.progress_loadproduct);
         /*----------------------------------------------------------------------------------------------------------------------------
------------------**********************PHẦN TOOLBAR***************---------------------------------------------------------------------
+-----------------**********************PH?N TOOLBAR***************---------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------*/
         /*------------------------------------------------------------------------------------------
-        -----------------------Unfocus để ko hiện Keyboard all time-------------------------------
+        -----------------------Unfocus ?? ko hi?n Keyboard all time-------------------------------
         ------------------------------------------------------------------------------------------*/
         setupUI(findViewById(R.id.layout_home));
         sv_findproduct.setIconified(false);
         /*------------------------------------------------------------------------------------------
         --------------------------------------------------------------------------------------------
-        -----------------Khai báo ToolBar, và các thành phần cần thiết cho 1 Navi-------------------
+        -----------------Khai báo ToolBar, và các thành ph?n c?n thi?t cho 1 Navi-------------------
         ------------------------------------------------------------------------------------------*/
                                     /*Toolbar*/
         setSupportActionBar(toolbar);
@@ -109,7 +109,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
         navigationView.setNavigationItemSelectedListener(this);
         /*------------------------------------------------------------------------------------------
         --------------------------------------------------------------------------------------------
-        -----------------------------Bỏ gạch chân trong SearchView----------------------------------
+        -----------------------------B? g?ch chân trong SearchView----------------------------------
         ------------------------------------------------------------------------------------------*/
         tf1 = Typeface.createFromAsset(getAssets(), "VNF-Futura Regular.ttf");
         int searchPlateId = sv_findproduct.getContext().getResources().getIdentifier("android:id/search_plate", null, null);
@@ -117,7 +117,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
         searchPlateView.setBackgroundColor(Color.TRANSPARENT);
   /*------------------------------------------------------------------------------------------
           --------------------------------------------------------------------------------------------
-        -----------------Set Font cho Hint và sự kiện thi ấn vào SearchView-------------------------
+        -----------------Set Font cho Hint và s? ki?n thi ?n vào SearchView-------------------------
         ------------------------------------------------------------------------------------------*/
         AutoCompleteTextView searchtext = (AutoCompleteTextView) sv_findproduct.findViewById(sv_findproduct.getContext().getResources().getIdentifier("android:id/search_src_text", null, null));
         searchtext.setTextSize(20);
@@ -148,13 +148,13 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
 
         /*------------------------------------------------------------------------------------------
         --------------------------------------------------------------------------------------------
-        -------------------------Sự kiện thay đổi khi Typing SearchView-----------------------------
+        -------------------------S? ki?n thay ??i khi Typing SearchView-----------------------------
         ------------------------------------------------------------------------------------------*/
         sv_findproduct.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             //            Khi sumbit Searchview
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Toast.makeText(getApplicationContext(), "Đã search", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "?ã search", Toast.LENGTH_SHORT).show();
 
                 return false;
             }
@@ -162,14 +162,14 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
             //            Khi Typing  Searchview
             @Override
             public boolean onQueryTextChange(String newText) {
-                Toast.makeText(getApplicationContext(), "Đang gõ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "?ang gõ", Toast.LENGTH_SHORT).show();
                 return false;
             }
         });
 
 
         //------------------------------------------------------------------------------------------
-        //---------------------------Khai báo các thuộc tính----------------------------------------
+        //---------------------------Khai báo các thu?c tính----------------------------------------
         //------------------------------------------------------------------------------------------
         lnlo_giohang = (LinearLayout) findViewById(R.id.lnlo_cart);
         btn_cong = (Button) findViewById(R.id.btn_cong);
@@ -178,7 +178,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
         txtv_soluong = (TextView) findViewById(R.id.txtv_soluong);
 
         //------------------------------------------------------------------------------------------
-        //---------------Set Sự kiện khi ấn vào nút Cộng trừ các thứ--------------------------------
+        //---------------Set S? ki?n khi ?n vào nút C?ng tr? các th?--------------------------------
         //------------------------------------------------------------------------------------------
         btn_cong.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -213,7 +213,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
         viewPager =(ViewPager)findViewById(R.id.view_pager);
 
         //------------------------------------------------------------------------------------------
-        //-------------------Kết nối tới server, lấy dữ liệu rồi trả về Viewpager-------------------
+        //-------------------K?t n?i t?i server, l?y d? li?u r?i tr? v? Viewpager-------------------
         //------------------------------------------------------------------------------------------
         this.brand_id = getIntent().getStringExtra("brand_id");
         getInfo = new getInfo();
@@ -221,7 +221,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
         viewPager.setOffscreenPageLimit(arrayList.size() - 1);
 
         //------------------------------------------------------------------------------------------
-        //----------------------------Sự kiện khi nhấn giỏ hàng----------------------------------------
+        //----------------------------S? ki?n khi nh?n gi? hàng----------------------------------------
         //------------------------------------------------------------------------------------------
 
 
@@ -266,7 +266,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
         });
 
         //------------------------------------------------------------------------------------------
-        //----------------------------Sự kiện khi nhấn AddtoCart--------------------------------------
+        //----------------------------S? ki?n khi nh?n AddtoCart--------------------------------------
         //------------------------------------------------------------------------------------------
 
         btn_addtocart = (Button) findViewById(R.id.btn_addtocart);
@@ -277,7 +277,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
                 txtv_soluong.setVisibility(View.VISIBLE);
 
 
-                //Add sản phẩm
+                //Add s?n ph?m
                 if(!mproduct.isPicked()){
                     cartOrder += getProduct(pPostion).getNum_order();
                     btn_addtocart.setText("Cancel");
@@ -288,7 +288,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
                     btn_cong.setEnabled(false);
 
                 }else{
-                    //hủy sản phẩm
+                    //h?y s?n ph?m
                     cartOrder -= getProduct(pPostion).getNum_order();
                     mproduct.setPicked(false);
                     orderList.remove(mproduct);
@@ -350,13 +350,13 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
 
         }else if(id==R.id.nav_logout){
             /*--------------------------------------------------------------------------------------
-                Khi chọn Logout, thì Clear hết SharePreference rồi trở về trang Login & Register
+                Khi ch?n Logout, thì Clear h?t SharePreference r?i tr? v? trang Login & Register
             ---------------------------------------------------------------------------------------*/
             getSharedPreferences("LoginOneTimes",0).edit().clear().commit();
             Intent intent = new Intent(Product.this, Login_and_Register.class);
             startActivity(intent);
         }
-        /*-----------------------Khi chọn xong thì đóng Navi-------------------*/
+        /*-----------------------Khi ch?n xong thì ?óng Navi-------------------*/
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -394,7 +394,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
 
     /*----------------------------------------------------------------------------------------------
    ------------------------------------------------------------------------------------------------
-   -----------------------------Kiểm tra xem Drawer có đang mở hay không---------------------------
+   -----------------------------Ki?m tra xem Drawer có ?ang m? hay không---------------------------
    -----------------------------------------------------------------------------------------------*/
     public boolean CheckOpen(DrawerLayout drawer)
     {
@@ -406,8 +406,8 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
     }
 
     //----------------------------------------------------------------------------------------------
-    //-------------Hàm ẩn Keyboard khi chạm vào màn hình chứa SearchView----------------------------
-    //---------------------hoặc 1 layout gì đó------------------------------------------------------
+    //-------------Hàm ?n Keyboard khi ch?m vào màn hình ch?a SearchView----------------------------
+    //---------------------ho?c 1 layout gì ?ó------------------------------------------------------
     //----------------------------------------------------------------------------------------------
     public void setupUI(View view) {
 
@@ -437,7 +437,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
     }
 
     //----------------------------------------------------------------------------------------------
-    //------------------------------Hàm ẩn Keyboard cho 1 Activity----------------------------------
+    //------------------------------Hàm ?n Keyboard cho 1 Activity----------------------------------
     //----------------------------------------------------------------------------------------------
     public static void hideSoftKeyboard(Activity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager)  activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -445,7 +445,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
     }
 
     //----------------------------------------------------------------------------------------------
-    //------------------------Hàm ẩn + hiện Progress for ViewPager----------------------------------
+    //------------------------Hàm ?n + hi?n Progress for ViewPager----------------------------------
     //----------------------------------------------------------------------------------------------
     private void showProgress(final boolean show) {
 

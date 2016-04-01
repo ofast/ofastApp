@@ -273,26 +273,27 @@ public class Login_and_Register extends Activity {
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
-    public Runnable aaa = new Runnable()
-    {
-        @Override
-        public void run()
-        {
-            while (true)
-            {
-                // TODO add code to refresh in background
-                try
-                {
 
-                    Thread.sleep(1000);// sleeps 1 second
-
-                } catch (InterruptedException e){
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-
-        }
-    };
+//    public Runnable aaa = new Runnable()
+//    {
+//        @Override
+//        public void run()
+//        {
+//            while (true)
+//            {
+//                // TODO add code to refresh in background
+//                try
+//                {
+//
+//                    Thread.sleep(1000);// sleeps 1 second
+//
+//                } catch (InterruptedException e){
+//                    // TODO Auto-generated catch block
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//        }
+//    };
 
 }
