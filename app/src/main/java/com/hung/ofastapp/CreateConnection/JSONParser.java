@@ -186,7 +186,7 @@ public class JSONParser{
             List<String> id_thuonghieu = new ArrayList<String>();
 
             //Hàm lấy một dãy trong 1 mảng để show
-            linkImage = loadImageName(jsonArray, currentOffset, 5);
+            linkImage = loadImageName(jsonArray, currentOffset, 7);
 
             for(int i=currentOffset; i<linkImage.size()+currentOffset ;i++)
             {
