@@ -48,12 +48,12 @@
                 android:verticalSpacing="5dp"
                 android:horizontalSpacing="5dp"
                 android:id="@+id/grv_thuonghieu"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:stretchMode="columnWidth"
                 android:layout_height="0dp"
                 android:layout_weight="100"
                 android:clipToPadding="true"
-                android:numColumns="1"/>
+                android:numColumns="2"/>
 
 
 </LinearLayout>

@@ -25,6 +25,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
+import android.view.animation.GridLayoutAnimationController;
 import android.view.animation.TranslateAnimation;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -42,6 +43,7 @@ import com.hung.ofastapp.Product;
 import com.hung.ofastapp.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 import static android.widget.AbsListView.*;
@@ -83,7 +85,9 @@ public class Home_fragment_thuonghieu extends Fragment{
         //------------------------------------------------------------------------------------------
         //Tạo mờ cho gridview
         grv_thuonghieu.setFadingEdgeLength(150);
-
+        Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.flyin_right_to_left);
+        final GridLayoutAnimationController controller = new GridLayoutAnimationController(animation, .2f, .2f);
+        grv_thuonghieu.setLayoutAnimation(controller);
 
 
 
@@ -107,7 +111,7 @@ public class Home_fragment_thuonghieu extends Fragment{
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 final int currentFirstVisPos = view.getFirstVisiblePosition();
                 if (currentFirstVisPos > myLastVisiblePos) {
-                    if (firstVisibleItem ==1) {
+                    if (firstVisibleItem ==2) {
                         img_banner.animate().translationY(-img_banner.getHeight()).setInterpolator(new AccelerateInterpolator(2)).start();
                         grv_thuonghieu.animate().translationY(-img_banner.getHeight()).setInterpolator(new AccelerateInterpolator(2)).start();
                     }
@@ -117,12 +121,21 @@ public class Home_fragment_thuonghieu extends Fragment{
 //                        Handler handler = new Handler();
 //                        handler.postDelayed(new Runnable() {
 //                            public void run() {
-                                ArrayList<ThuongHieu> moreList;
-                                moreList = parser.Parse(serverData);
-                                arrayList.addAll(moreList);
-                                adapter = new Home_CustomGridviewAdapter(getActivity().getApplicationContext(), R.layout.home_content_custom_gridview, arrayList);
-                                grv_thuonghieu.setAdapter(adapter);
-                                setMarksGridScrolling(currentFirstVisPos + 1, 0);
+
+                        ArrayList<ThuongHieu> moreList;
+                        moreList = parser.Parse(serverData);
+
+
+
+
+
+                            arrayList.addAll(moreList);
+                            adapter = new Home_CustomGridviewAdapter(getActivity().getApplicationContext(), R.layout.home_content_custom_gridview, arrayList);
+                            grv_thuonghieu.setAdapter(adapter);
+                            setMarksGridScrolling(currentFirstVisPos + 2, 0);
+
+
+
                                 Log.d("Scroll END", "END END END");
 //                                dialog.dismiss();
 //                            }
@@ -192,7 +205,7 @@ public class Home_fragment_thuonghieu extends Fragment{
         grv_thuonghieu.postDelayed(new Runnable() {
             @Override
             public void run() {
-                grv_thuonghieu.smoothScrollToPositionFromTop(position, offset, 1);
+                grv_thuonghieu.smoothScrollToPositionFromTop(position, offset, 0);
             }
         }, 1);
 

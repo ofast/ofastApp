@@ -8,6 +8,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.hung.ofastapp.Objects.ThuongHieu;
 import com.hung.ofastapp.R;
 import com.squareup.picasso.Picasso;
@@ -54,11 +57,21 @@ public class Home_CustomGridviewAdapter extends ArrayAdapter<ThuongHieu> {
         holder.txtv_tenthuonghieu.setText(thuongHieu.name);
         holder.txtv_idthuonghieu.setText(thuongHieu.id);
 
-        Picasso.with(this.context)
+
+        //Thư viện Glide
+        Glide.with(this.context)
                 .load(thuongHieu.img)
-                .resize(155, 155)
-                .placeholder(R.drawable.logo)
+                .fitCenter()
+                .centerCrop()
+                .override(300,200)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.img_anhthuonghieu);
+        //Thư viện Picasso
+//        Picasso.with(this.context)
+//                .load(thuongHieu.img)
+//                .resize(155, 155)
+//                .placeholder(R.drawable.logo)
+//                .into(holder.img_anhthuonghieu);
         return convertView;
     }
 

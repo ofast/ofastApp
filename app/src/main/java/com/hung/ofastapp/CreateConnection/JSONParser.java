@@ -31,8 +31,6 @@ import java.util.Map;
  */
 
 public class JSONParser{
-
-    static Button btn_loadmore;
     String charset = "UTF-8";
     HttpURLConnection urlConnection;
     StringBuilder result = new StringBuilder();
@@ -40,14 +38,11 @@ public class JSONParser{
     JSONObject jObj = null;
     StringBuilder sbParams;
     String paramsString;
-
+    //Biến currentOffset hỗ trợ cho việc Loadmore
     static int currentOffset = 0;
-    static ArrayList<Integer> arrayList = new ArrayList<Integer>();
 
     public JSONObject makeHttpRequest(String url, String method,
                                       HashMap<String, String> params) {
-
-
         paramsString = makePostObj(params);
         if (method.equals("POST")) {
             doPost(url);
@@ -172,7 +167,17 @@ public class JSONParser{
         return null;
     }
 
-    //Hàm đọc file Js
+
+
+
+
+
+
+
+
+
+
+    //Hàm đọc file Js để get Thương HIệu
     public ArrayList<ThuongHieu> Parse(String json){
 
         try {
@@ -186,7 +191,7 @@ public class JSONParser{
             List<String> id_thuonghieu = new ArrayList<String>();
 
             //Hàm lấy một dãy trong 1 mảng để show
-            linkImage = loadImageName(jsonArray, currentOffset, 7);
+            linkImage = loadImageName(jsonArray, currentOffset, 10);
 
             for(int i=currentOffset; i<linkImage.size()+currentOffset ;i++)
             {
@@ -224,7 +229,12 @@ public class JSONParser{
 
     }
 
-    //get Product
+
+
+
+
+
+    // Hàm đọc JSON để get Product
     public ArrayList<Product> getImageProduct(String json){
 
         try {
@@ -264,7 +274,7 @@ public class JSONParser{
         }
     }
 
-//Hàm tạo kết nối tới Server
+//Lấy dữ liệu từ trên Server trả về
     public static String getData(String stringUrl) {
         BufferedReader reader = null;
         try {
@@ -295,6 +305,12 @@ public class JSONParser{
         }
 
     }
+
+
+
+
+
+
     //Hàm lấy từ vị trí offset tới vị trí number + offset!
     public List<String> loadImageName(JSONArray jsonArray, int offset, int number) throws JSONException {
         List<String> linkImage = new ArrayList<String>();
