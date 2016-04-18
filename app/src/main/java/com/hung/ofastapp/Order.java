@@ -42,7 +42,7 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
     ArrayList<com.hung.ofastapp.Objects.Product> arrayList = new ArrayList<>();
     Product_CustomListviewDetail adapter;
     EditText edt_phone;
-    EditText edt_name;
+    EditText edt_email;
     EditText edt_notes;
     View focusView;
     float tongtien = 0;
@@ -104,10 +104,11 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
                         context);
 //                alertDialogBuilder.setTitle("Nhập thông tin khách hàng");
                 alertDialogBuilder.setView(promptsView);
+                edt_email = (EditText) promptsView
+                        .findViewById(R.id.edt_email);
                 edt_phone = (EditText) promptsView
                         .findViewById(R.id.edt_phone);
-                edt_name = (EditText) promptsView
-                        .findViewById(R.id.edt_name);
+
                 edt_notes = (EditText) promptsView
                         .findViewById(R.id.edt_notes);
 
@@ -137,14 +138,14 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
 
                                 @Override
                                 public void onClick(View view) {
-                                    String hung = edt_name.getText().toString();
-                                    String khang = edt_phone.getText().toString();
-                                    String hieu = edt_notes.getText().toString();
+                                    String email =  edt_email.getText().toString();
+                                    String phone = edt_phone.getText().toString();
+                                    String notes = edt_notes.getText().toString();
 
-                                   boolean he = CheckInput(hung, khang);
+                                   boolean he = CheckInput(email, phone);
                                     if(he ==true)
                                     {
-                                        eOrderTask = new OrderTask(hung, khang,hieu);
+                                        eOrderTask = new OrderTask(email,phone,notes);
                                         eOrderTask.execute((Void) null);
                                         dialog.dismiss();
                                     }
@@ -167,17 +168,17 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
     /* =======================================================================================
         Kiểm tra điều kiện nhập liệu trước khi gửi lên Server
         ========================================================================================*/
-    private boolean CheckInput(String name, String phone) {
+    private boolean CheckInput(String email, String phone) {
         // Reset errors.
-        edt_name.setError(null);
+        edt_email.setError(null);
         edt_phone.setError(null);
 
         boolean cancel = false;
         focusView = null;
         // Kiểm tra trống Pass
-        if (TextUtils.isEmpty(name) ) {
-            edt_name.setError(getString(R.string.error_field_required));
-            focusView = edt_name;
+        if (TextUtils.isEmpty(email) ) {
+            edt_email.setError(getString(R.string.error_field_required));
+            focusView =  edt_email;
             cancel = true;
         }
         // Kiểm tra trống NumberPhone
@@ -186,8 +187,20 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
             focusView = edt_phone;
             cancel = true;
         }
+        if (CheckLenght(edt_phone.getText().toString()) == true) {
+            edt_phone.setError("SĐT không đúng, yêu cầu nhập lại!");
+            focusView = edt_phone;
+            cancel = true;
+        }
+        if(isValidEmail(email) == false)
+        {
+            edt_email.setError("Vui lòng nhập Email của bạn!");
+            focusView =edt_email;
+            cancel = true;
+        }
+
         if (cancel) {
-            focusView.requestFocus();
+
             return false;
         } else {
             return true;
@@ -307,6 +320,8 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
 
 
                         Toast.makeText(getApplicationContext(),"Kết nối tới Server thất bại, vui lòng thử lại sau giây lát!",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),mEmail,Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),mPhone,Toast.LENGTH_SHORT).show();
 //
                     } else {
                         Toast.makeText(getApplicationContext(),"Đã gửi đơn hàng thành công. Chúng tôi sẽ liên hệ bạn trong vài giây tới!", Toast.LENGTH_SHORT).show();
@@ -337,4 +352,17 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
         super .onBackPressed();
         return true;
     }
+    /* =======================================================================================
+                                     Check Lenght SĐT
+          ========================================================================================*/
+    public static boolean CheckLenght(String string)
+    {
+        return (string.length()>0&&string.length()<10);
+    }
+        /* =======================================================================================
+                                    Check Email
+          ========================================================================================*/
+        public final static boolean isValidEmail(CharSequence target) {
+            return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+        }
 }

@@ -15,24 +15,27 @@
 
 
     <EditText
-        android:id="@+id/edt_phone"
+        android:id="@+id/edt_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:singleLine="true"
         android:hint="Name"
-        android:gravity="center">
+        android:inputType="textEmailAddress"
+        android:gravity="center"
+       >
         <requestFocus />
 
     </EditText>
 
 
     <EditText
-        android:id="@+id/edt_name"
+        android:id="@+id/edt_phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:singleLine="true"
         android:hint="Phone"
-        android:gravity="center">
+        android:gravity="center"
+        android:inputType="numberDecimal">
         <requestFocus />
 
     </EditText>
