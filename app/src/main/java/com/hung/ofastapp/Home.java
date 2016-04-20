@@ -1,12 +1,14 @@
 package com.hung.ofastapp;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -22,16 +24,24 @@ import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.hung.ofastapp.Adapter.MyFragmentPagerAdapter;
 import com.hung.ofastapp.Fragment.Home_fragment_giamgia;
 import com.hung.ofastapp.Fragment.Home_fragment_loai;
 import com.hung.ofastapp.Fragment.Home_fragment_thuonghieu;
+import com.hung.ofastapp.Objects.*;
+import com.hung.ofastapp.Objects.Product;
 
+import java.io.Serializable;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,8 +59,12 @@ public class Home extends ActionBarActivity
     ViewPager viewPager;
     TabHost tabHost;
     ViewStub base_content;
+    LinearLayout lnlo_giohang;
+    ArrayList<com.hung.ofastapp.Objects.Product> arrayList = new ArrayList<Product>();
 
+    Context context =this;
 
+    TextView txtv_soluong;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +83,8 @@ public class Home extends ActionBarActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         sv_findproduct = (SearchView) findViewById(R.id.sv_findproduct);
         viewPager = (ViewPager) findViewById(R.id.view_pager);
-
+        lnlo_giohang = (LinearLayout) findViewById(R.id.lnlo_cart);
+        txtv_soluong = (TextView) findViewById(R.id.txtv_soluong);
 
 /*----------------------------------------------------------------------------------------------------------------------------
 -----------------**********************PHẦN TOOLBAR***************---------------------------------------------------------------------
@@ -104,6 +119,15 @@ public class Home extends ActionBarActivity
         int searchPlateId = sv_findproduct.getContext().getResources().getIdentifier("android:id/search_plate", null, null);
         View searchPlateView = sv_findproduct.findViewById(searchPlateId);
         searchPlateView.setBackgroundColor(Color.TRANSPARENT);
+
+
+
+
+ /*________________________________________________________________________________________________
+ ___________________________________________________________________________________________________*/
+
+
+
   /*------------------------------------------------------------------------------------------
           --------------------------------------------------------------------------------------------
         -----------------Set Font cho Hint và sự kiện thi ấn vào SearchView-------------------------
@@ -134,7 +158,14 @@ public class Home extends ActionBarActivity
                 }
             }
         });
-
+        lnlo_giohang.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),Order.class);
+                intent.putExtra("LISTORDER", (Serializable) arrayList);
+                startActivity(intent);
+            }
+        });
         /*------------------------------------------------------------------------------------------
         --------------------------------------------------------------------------------------------
         -------------------------Sự kiện thay đổi khi Typing SearchView-----------------------------
@@ -382,6 +413,23 @@ public class Home extends ActionBarActivity
     protected void onResume() {
         setupUI(findViewById(R.id.layout_home));
         doubleBackToExitPressedOnce = false;
+//        int soluongsanpham= 0;
+//        SharedPreferences aaa = PreferenceManager.getDefaultSharedPreferences(context);
+//        Gson gson = new Gson();
+//        String json = aaa.getString("ListProduct", null);
+//        if(json != null)
+//        {
+//            Type type = new TypeToken<ArrayList<Product>>() {}.getType();
+//            arrayList = gson.fromJson(json, type);
+//            for(int i = 0; i<arrayList.size(); i++)
+//            {
+//                soluongsanpham = soluongsanpham + arrayList.get(i).getNum_order();
+//            }
+//            Toast.makeText(getApplicationContext(),String.valueOf(arrayList.size()),Toast.LENGTH_SHORT).show();
+//            txtv_soluong.setVisibility(View.VISIBLE);
+//            txtv_soluong.setText(String.valueOf(soluongsanpham));
+//        }
+
         super.onResume();
     }
     //----------------------------------------------------------------------------------------------
@@ -432,5 +480,27 @@ public class Home extends ActionBarActivity
                 }
             }
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+//        int soluongsanpham= 0;
+//        SharedPreferences aaa = PreferenceManager.getDefaultSharedPreferences(context);
+//        Gson gson = new Gson();
+//        String json = aaa.getString("ListProduct", null);
+//        if(json != null)
+//        {
+//            Type type = new TypeToken<ArrayList<Product>>() {}.getType();
+//            arrayList = gson.fromJson(json, type);
+//            for(int i = 0; i<arrayList.size(); i++)
+//            {
+//                soluongsanpham = soluongsanpham + arrayList.get(i).getNum_order();
+//            }
+//            Toast.makeText(getApplicationContext(),String.valueOf(arrayList.size()),Toast.LENGTH_SHORT).show();
+//            txtv_soluong.setVisibility(View.VISIBLE);
+//            txtv_soluong.setText(String.valueOf(soluongsanpham));
+//        }
+
     }
 }

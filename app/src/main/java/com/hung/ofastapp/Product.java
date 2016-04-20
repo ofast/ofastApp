@@ -1,11 +1,14 @@
 package com.hung.ofastapp;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -28,6 +31,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.hung.ofastapp.Adapter.Product_ViewPagerAdapter;
 import com.hung.ofastapp.CreateConnection.JSONParser;
 import com.hung.ofastapp.CreateConnection.ofastURL;
@@ -43,10 +47,6 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
     JSONParser image_par = new JSONParser();
     getInfo getInfo;
     public int pPostion = 0;
-    ArrayList<String> image = new ArrayList<String>();
-    ArrayList<String> name = new ArrayList<String>();
-    ArrayList<String> price = new ArrayList<String>();
-    ArrayList<Integer> number = new ArrayList<>();
 
     NavigationView navigationView;
     DrawerLayout drawer;
@@ -54,7 +54,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
     SearchView sv_findproduct;
     Typeface tf1;
     ProgressBar progress_loadproduct;
-
+    Context context = this;
     LinearLayout lnlo_giohang;
     Button btn_addtocart;
     Button  btn_tru;
@@ -229,31 +229,9 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
         lnlo_giohang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                com.hung.ofastapp.Objects.Product prod = new com.hung.ofastapp.Objects.Product("","","");
                 Log.d("khang", "Loi gio hang 1");
                 try {
-//                    for(int i=0; i<arrayList.size();i++)
-//                    {
-//                        prod = arrayList.get(i);
-//
-//                        if(prod.isPicked())
-//                        {
-//                            image.add(prod.getImg_product());
-//                            name.add(prod.getName_product());
-//                            price.add(prod.getPrice_product());
-//                            number.add(prod.getNum_order());
-//                        }
-//                    }
-//                    Intent intent = new Intent(Product.this, Order.class);
-//                    intent.putExtra("names", name);
-//                    intent.putExtra("prices", price);
-//                    intent.putExtra("images", image);
-//                    intent.putExtra("numbers", number);
-//                    startActivity(intent);
 
-/*==============================================================================================
-                                        TEST CODE
- =============================================================================================*/
                     Intent intent = new Intent(Product.this, Order.class);
                     intent.putExtra("LISTORDER", (Serializable) orderList);
                     startActivity(intent);

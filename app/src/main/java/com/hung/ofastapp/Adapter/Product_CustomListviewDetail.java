@@ -2,6 +2,7 @@ package com.hung.ofastapp.Adapter;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.hung.ofastapp.Objects.Product;
 import com.hung.ofastapp.R;
 import com.squareup.picasso.Picasso;
@@ -36,7 +39,6 @@ public class Product_CustomListviewDetail extends ArrayAdapter<Product> {
         TextView txtv_price_product;
         TextView txtv_soluong_product;
 
-
     }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -62,12 +64,23 @@ public class Product_CustomListviewDetail extends ArrayAdapter<Product> {
         tf1 = Typeface.createFromAsset(convertView.getContext().getAssets(),"VKORIN.TTF");
         holder.txtv_price_product.setTypeface(tf1);
         holder.txtv_soluong_product.setText(String.valueOf(product.num_order));
-
+//        Glide.with(this.context)
+//                .load(product.img_product)
+//                .fitCenter()
+//                .centerCrop()
+//                .override(300,200)
+//                .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                .into(holder.img_image_product);
         Picasso.with(this.context)
                 .load(product.img_product)
-                .resize(155, 155)
+                .resize(dpToPx(80),dpToPx(80))
                 .placeholder(R.drawable.logo)
                 .into(holder.img_image_product);
         return convertView;
+    }
+    public int dpToPx(int dp) {
+        DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
+        int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+        return px;
     }
 }

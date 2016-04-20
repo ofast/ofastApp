@@ -6,13 +6,17 @@ import android.app.LoaderManager;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -20,40 +24,55 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.hung.ofastapp.Adapter.Product_CustomListviewDetail;
 import com.hung.ofastapp.CreateConnection.JSONParser;
 import com.hung.ofastapp.CreateConnection.ofastURL;
+import com.hung.ofastapp.Listener.SwipeDetector;
+import com.hung.ofastapp.Objects.*;
+import com.hung.ofastapp.Objects.Product;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-public class Order extends ActionBarActivity implements LoaderManager.LoaderCallbacks<Cursor>{
+public class Order extends ActionBarActivity implements LoaderManager.LoaderCallbacks<Cursor> {
     ListView lv_dathang;
     TextView txtv_tongtien;
     TextView title;
+    TextView txtv_noproduct;
     Button btn_dathang;
     ArrayList<com.hung.ofastapp.Objects.Product> arrayList = new ArrayList<>();
     Product_CustomListviewDetail adapter;
     EditText edt_phone;
     EditText edt_email;
     EditText edt_notes;
+    int soluong =0;
     View focusView;
     float tongtien = 0;
     final Context context = this;
     OrderTask eOrderTask;
-
+    SwipeDetector swipeDetector = new SwipeDetector();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dathang);
-        Typeface  tf1 = Typeface.createFromAsset(getAssets(), "VKORIN.TTF");
+        setContentView(R.layout.order);
+        Typeface tf1 = Typeface.createFromAsset(getAssets(), "VKORIN.TTF");
           /* Khai báo toolbar và set button Back */
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -64,6 +83,7 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
         lv_dathang = (ListView) findViewById(R.id.lv_dathang);
         lv_dathang = (ListView) findViewById(R.id.lv_dathang);
         txtv_tongtien = (TextView) findViewById(R.id.txtv_tongtien);
+        txtv_noproduct = (TextView) findViewById(R.id.txtv_noproduct);
         btn_dathang = (Button) findViewById(R.id.btn_dathang);
         title = (TextView) findViewById(R.id.txtv_info);
         title.setTypeface(tf1);
@@ -74,95 +94,147 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
         ========================================================================================*/
         Bundle bd = getIntent().getExtras();
         arrayList = (ArrayList<com.hung.ofastapp.Objects.Product>) bd.getSerializable("LISTORDER");
-        adapter = new Product_CustomListviewDetail(this, R.layout.product_custom_listview_detail, arrayList);
-        lv_dathang.setAdapter(adapter);
-        for (com.hung.ofastapp.Objects.Product prod : arrayList
-             ) {
-            if(prod.isPicked()){
-                tongtien = tongtien +  prod.getNum_order() * Float.parseFloat(prod.getPrice_product());
+        if(arrayList.isEmpty())
+        {
+            Log.d("No PRODUCT:", "KHÔNG CÓ SẢN PHẨM");
+            lv_dathang.setVisibility(View.GONE);
+            txtv_noproduct.setVisibility(View.VISIBLE);
+//            btn_dathang.setEnabled(false);
+
+
+        }else {
+
+            adapter = new Product_CustomListviewDetail(this, R.layout.product_custom_listview_detail, arrayList);
+            lv_dathang.setAdapter(adapter);
+            for (com.hung.ofastapp.Objects.Product prod : arrayList
+                    ) {
+                if (prod.isPicked()) {
+                    tongtien = tongtien + prod.getNum_order() * Float.parseFloat(prod.getPrice_product());
+                    soluong = soluong + prod.getNum_order();
+                }
             }
+//            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+//            SharedPreferences.Editor editor = sharedPrefs.edit();
+//            Gson gson = new Gson();
+//            String json = gson.toJson(arrayList);
+//            editor.putString("ListProduct", json);
+//            editor.commit();
         }
+ /* =======================================================================================
+        Lướt trái, phải trong listview
+        ========================================================================================*/
+        lv_dathang.setOnTouchListener(swipeDetector);
+        lv_dathang.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (swipeDetector.swipeDetected()) {
+                    //Trái -> Phải
+                    if (swipeDetector.getAction() == SwipeDetector.Action.LR) {
+
+//                        SharedPreferences aaa = PreferenceManager.getDefaultSharedPreferences(context);
+//                        Gson gson = new Gson();
+//                        String json = aaa.getString("ListProduct", null);
+//                        Type type = new TypeToken<ArrayList<Product>>() {}.getType();
+//                        ArrayList<Product> hahaaa = gson.fromJson(json, type);
+//                        Toast.makeText(getApplicationContext(),String.valueOf(hahaaa.size()),Toast.LENGTH_SHORT).show();
+                    }
+                    //Phải -> Trái
+                    if (swipeDetector.getAction() == SwipeDetector.Action.RL) {
+
+
+                    }
+                }
+            }
+        });
+
+
 
 
         /* =======================================================================================
                                          Set tổng tiền
         ========================================================================================*/
-        txtv_tongtien.setText(String.valueOf(tongtien)+ "00VNĐ");
+            txtv_tongtien.setText(String.valueOf(tongtien)+"00VNĐ");
 
 
         /* =======================================================================================
                                          SỰ KIỆN KHI NHẤN NÚT ĐẶT HÀNG
         ========================================================================================*/
-        btn_dathang.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            btn_dathang.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v) {
 
-                LayoutInflater li = LayoutInflater.from(context);
-                View promptsView = li.inflate(R.layout.oder_dialog_info, null);
 
-                final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                        context);
+                    if (arrayList.isEmpty()) {
+
+                        Snackbar.make(v, "Replace with your own action", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                    } else {
+
+                        LayoutInflater li = LayoutInflater.from(context);
+                        View promptsView = li.inflate(R.layout.oder_dialog_info, null);
+
+                        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                                context);
 //                alertDialogBuilder.setTitle("Nhập thông tin khách hàng");
-                alertDialogBuilder.setView(promptsView);
-                edt_email = (EditText) promptsView
-                        .findViewById(R.id.edt_email);
-                edt_phone = (EditText) promptsView
-                        .findViewById(R.id.edt_phone);
+                        alertDialogBuilder.setView(promptsView);
+                        edt_email = (EditText) promptsView
+                                .findViewById(R.id.edt_email);
+                        edt_phone = (EditText) promptsView
+                                .findViewById(R.id.edt_phone);
 
-                edt_notes = (EditText) promptsView
-                        .findViewById(R.id.edt_notes);
+                        edt_notes = (EditText) promptsView
+                                .findViewById(R.id.edt_notes);
 
-                    alertDialogBuilder
-                            .setCancelable(false)
-                            .setPositiveButton("OK",null)
-                            .setNegativeButton("Cancel",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog,int id) {
-                                            dialog.cancel();
-                                        }
-                                    });
+                        alertDialogBuilder
+                                .setCancelable(false)
+                                .setPositiveButton("OK", null)
+                                .setNegativeButton("Cancel",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.cancel();
+                                            }
+                                        });
 
-                    // create alert dialog
-                    final AlertDialog aaa = alertDialogBuilder.create();
+                        // create alert dialog
+                        final AlertDialog aaa = alertDialogBuilder.create();
 
-                aaa.setOnShowListener(new DialogInterface.OnShowListener() {
+                        aaa.setOnShowListener(new DialogInterface.OnShowListener() {
 
-                        @Override
-                        public void onShow(final DialogInterface dialog) {
+                            @Override
+                            public void onShow(final DialogInterface dialog) {
 //Khi sử dụng .setPositiveButton("OK",null) thì phải sử dụng hàm ở dưới để không bị ẩn dialog khi ấn vào nút OK,
 // vì trong quá trình ấn OK, chúng ta phải kiểm tra nhập có hợp lệ hay không, nếu không hợp lệ thì focus vào phần
 // nhập không hợp lệ đó đồng thời không được tắt dialog. sử dụng dialog.dimiss để tắt dilag lúc cần thiết.
 //
-                            Button b = aaa.getButton(AlertDialog.BUTTON_POSITIVE);
-                            b.setOnClickListener(new View.OnClickListener() {
+                                Button b = aaa.getButton(AlertDialog.BUTTON_POSITIVE);
+                                b.setOnClickListener(new View.OnClickListener() {
 
-                                @Override
-                                public void onClick(View view) {
-                                    String email =  edt_email.getText().toString();
-                                    String phone = edt_phone.getText().toString();
-                                    String notes = edt_notes.getText().toString();
+                                    @Override
+                                    public void onClick(View view) {
+                                        String email = edt_email.getText().toString();
+                                        String phone = edt_phone.getText().toString();
+                                        String notes = edt_notes.getText().toString();
 
-                                   boolean he = CheckInput(email, phone);
-                                    if(he ==true)
-                                    {
-                                        eOrderTask = new OrderTask(email,phone,notes);
-                                        eOrderTask.execute((Void) null);
-                                        dialog.dismiss();
+                                        boolean he = CheckInput(email, phone);
+                                        if (he == true) {
+                                            eOrderTask = new OrderTask(email, phone, notes);
+                                            eOrderTask.execute((Void) null);
+                                            dialog.dismiss();
+                                        } else {
+                                            focusView.requestFocus();
+                                        }
+
                                     }
-                                    else {
-                                        focusView.requestFocus();
-                                    }
-
-                                }
-                            });
-                        }
-                    });
-                    // show it
-                    aaa.show();
-            }
-
-         });
-    }
+                                });
+                            }
+                        });
+                        // show it
+                        aaa.show();
+                    }
+                }
+            });
+        }
 
 
     /* =======================================================================================
@@ -239,6 +311,9 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
     }
+
+
+
     private interface ProfileQuery {
         String[] PROJECTION = {
                 ContactsContract.CommonDataKinds.Email.ADDRESS,
@@ -365,4 +440,6 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
         public final static boolean isValidEmail(CharSequence target) {
             return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
         }
+
+
 }

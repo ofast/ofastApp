@@ -2,20 +2,13 @@ package com.hung.ofastapp.Fragment;
 
 
 import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
+import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,15 +19,11 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.GridLayoutAnimationController;
-import android.view.animation.TranslateAnimation;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.Toast;
+
 import com.hung.ofastapp.Adapter.Home_CustomGridviewAdapter;
 import com.hung.ofastapp.CreateConnection.JSONParser;
 import com.hung.ofastapp.CreateConnection.ofastURL;
@@ -43,8 +32,9 @@ import com.hung.ofastapp.Product;
 import com.hung.ofastapp.R;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
+
+import in.srain.cube.views.GridViewWithHeaderAndFooter;
 
 import static android.widget.AbsListView.*;
 
@@ -57,37 +47,42 @@ public class Home_fragment_thuonghieu extends Fragment{
     private boolean mLoading = true;
 //    Button btn_loadmore;
     LinearLayout layout_thuonghieu_progress;
-    GridView grv_thuonghieu;
+    GridViewWithHeaderAndFooter grv_thuonghieu;
     ImageView img_banner;
     ArrayList<ThuongHieu>  arrayList ;
     Home_CustomGridviewAdapter adapter;
     JSONParser parser = new JSONParser();
     String serverData;
     int myLastVisiblePos = 0;
+    int lastTopValue =0;
     LinearLayout main_layout;
     @TargetApi(Build.VERSION_CODES.M)
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.home_fragment_thuonghieu, container, false);
-        img_banner = (ImageView) rootView.findViewById(R.id.img_banner);
+        img_banner = (ImageView) rootView.findViewById(R.id.img_thuonghieu);
 
         layout_thuonghieu_progress = (LinearLayout) rootView.findViewById(R.id.layout_thuonghieu_progress);
         main_layout = (LinearLayout) rootView.findViewById(R.id.main_layout);
-        grv_thuonghieu = (GridView) rootView.findViewById(R.id.grv_thuonghieu);
+        grv_thuonghieu = (GridViewWithHeaderAndFooter) rootView.findViewById(R.id.grv_thuonghieu);
         arrayList = new ArrayList<ThuongHieu>();
-
             fetcher = new Fetcher();
             fetcher.execute(ofastURL.brand);
             parser = new JSONParser();
+
+
+        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+        View headerView = layoutInflater.inflate(R.layout.banner_header, null);
+        grv_thuonghieu.addHeaderView(headerView);
 
         //------------------------------------------Testcode----------------------------------------
         //------------------------------------------------------------------------------------------
         //Tạo mờ cho gridview
         grv_thuonghieu.setFadingEdgeLength(150);
-        Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.flyin_right_to_left);
-        final GridLayoutAnimationController controller = new GridLayoutAnimationController(animation, .2f, .2f);
-        grv_thuonghieu.setLayoutAnimation(controller);
+//        Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.flyin_right_to_left);
+//        final GridLayoutAnimationController controller = new GridLayoutAnimationController(animation, .2f, .2f);
+//        grv_thuonghieu.setLayoutAnimation(controller);
 
 
 
@@ -101,63 +96,34 @@ public class Home_fragment_thuonghieu extends Fragment{
                 startActivity(intent);
             }
         });
+
+
+
         grv_thuonghieu.setOnScrollListener(new OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
 
             }
-
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 final int currentFirstVisPos = view.getFirstVisiblePosition();
                 if (currentFirstVisPos > myLastVisiblePos) {
-                    if (firstVisibleItem ==2) {
-                        img_banner.animate().translationY(-img_banner.getHeight()).setInterpolator(new AccelerateInterpolator(2)).start();
-                        grv_thuonghieu.animate().translationY(-img_banner.getHeight()).setInterpolator(new AccelerateInterpolator(2)).start();
-                    }
                     if (firstVisibleItem + visibleItemCount >= totalItemCount) {
-//                        final ProgressDialog dialog = ProgressDialog.show(getActivity(), "", "Loading..Wait..", true);
-//                        dialog.show();
-//                        Handler handler = new Handler();
-//                        handler.postDelayed(new Runnable() {
-//                            public void run() {
-
                         ArrayList<ThuongHieu> moreList;
                         moreList = parser.Parse(serverData);
+                        arrayList.addAll(moreList);
+                        adapter = new Home_CustomGridviewAdapter(getActivity().getApplicationContext(), R.layout.home_content_custom_gridview, arrayList);
+                        grv_thuonghieu.setAdapter(adapter);
+                        setMarksGridScrolling(currentFirstVisPos + 2, 0);
 
-
-
-
-
-                            arrayList.addAll(moreList);
-                            adapter = new Home_CustomGridviewAdapter(getActivity().getApplicationContext(), R.layout.home_content_custom_gridview, arrayList);
-                            grv_thuonghieu.setAdapter(adapter);
-                            setMarksGridScrolling(currentFirstVisPos + 2, 0);
-
-
-
-                                Log.d("Scroll END", "END END END");
-//                                dialog.dismiss();
-//                            }
-//                        }, 1000); //3s
-
+                        Log.d("Scroll END", "END END END");
                     }
                     Log.d("Scroll DOWN", "DOWN DOWN DOWN");
-
-                }
-                if (currentFirstVisPos < myLastVisiblePos) {
-
-                    if (firstVisibleItem ==0) {
-                        img_banner.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
-                        grv_thuonghieu.animate().translationY(0).setInterpolator(new AccelerateInterpolator(2)).start();
-                    }
-                    Log.d("Scroll UP", "UP UP UP");
                 }
                 myLastVisiblePos = currentFirstVisPos;
             }
         });
 
-  
 
         return rootView;
     }
@@ -177,7 +143,6 @@ public class Home_fragment_thuonghieu extends Fragment{
         @Override
         protected void onPostExecute(String s) {
             fetcher = null;
-
             arrayList = parser.Parse(s);
             adapter = new Home_CustomGridviewAdapter(getActivity().getApplicationContext(),R.layout.home_content_custom_gridview,arrayList);
             grv_thuonghieu.setAdapter(adapter);
