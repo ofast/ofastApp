@@ -6,15 +6,12 @@ import android.app.LoaderManager;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.Loader;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBarActivity;
@@ -31,25 +28,17 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.hung.ofastapp.Adapter.Product_CustomListviewDetail;
 import com.hung.ofastapp.CreateConnection.JSONParser;
 import com.hung.ofastapp.CreateConnection.ofastURL;
 import com.hung.ofastapp.Listener.SwipeDetector;
-import com.hung.ofastapp.Objects.*;
-import com.hung.ofastapp.Objects.Product;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class Order extends ActionBarActivity implements LoaderManager.LoaderCallbacks<Cursor> {
     ListView lv_dathang;
@@ -357,16 +346,44 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
         protected JSONObject doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
             try {
-                HashMap<String, String> data = new HashMap<String, String>();
-                data.put("Order[email]", mEmail);
-                data.put("Order[phone]", mPhone);
-                data.put("Order[notes]", mNotes);
+
+            /* ----------------------------------------------------------------------------------
+               ------------------------ Add by Khang-va : gui json array ------------------------
+               ------ Phan products thay bang 1 mang json array voi 2 truong id va quantity -----
+               ----------------------------------------------------------------------------------
+            */
+
+                // tao 1 jsonObject the hien 1 product
+                JSONObject jProducts = new JSONObject();
+                jProducts.put("id", "28");
+                jProducts.put("quantity" , "3");
+
+                // tao jsonArray de luu cac product dang jsonObject
+                JSONArray jaProduct = new JSONArray();
+                jaProduct.put(jProducts);
+
+                // tao jsonObject voi cac thong tin co ban de up len server.
+                // phan product la 1 mang JsonArray product
+
+                JSONObject jsonParam = new JSONObject();
+                jsonParam.put("Order[email]", mEmail);
+                jsonParam.put("Order[phone]", mPhone);
+                jsonParam.put("Order[notes]", mNotes);
+                jsonParam.put("products", jaProduct);
+
+
+                // code cu cua hung.
+//                HashMap<String, String> data = new HashMap<String, String>();
+//                data.put("Order[email]", mEmail);
+//                data.put("Order[phone]", mPhone);
+//                data.put("Order[notes]", mNotes);
+
                 Log.d("request", "starting");
                 /*-----------------------------MakeHttpRequest-----------------------------------------
                 ---------------Gửi yêu cầu lên server theo đường dẫn URL, phương thức POST, dữ liệu
                 ---------------truyền vào là data------------------------------------------------*/
-                JSONObject json = jsonParser.makeHttpRequest(
-                        ORDER_URL, "POST", data);
+                JSONObject json = jsonParser.makeJsonHttpRequest(
+                        ORDER_URL, jsonParam);
 
                 if (json != null) {
                     return json;

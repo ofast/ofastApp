@@ -1,7 +1,6 @@
 package com.hung.ofastapp.CreateConnection;
 
 import android.util.Log;
-import android.widget.Button;
 
 import com.hung.ofastapp.Objects.Product;
 import com.hung.ofastapp.Objects.ThuongHieu;
@@ -48,9 +47,74 @@ public class JSONParser{
             doPost(url);
         } else if (method.equals("GET")) {
             doGet(url);
+        }else if(method.equals("JSONPOST")){
+            doPostJson(url);
         }
 
         try {
+            //Receive the response from the server
+            int httpResult = urlConnection.getResponseCode();
+            Log.d("JSON Parser", "HTTP Code: " + httpResult + " " );
+            if(httpResult == HttpURLConnection.HTTP_OK) {
+
+                InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+                BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    result.append(line);
+                }
+
+                Log.d("JSON Parser", "result: " + result.toString());
+                reader.close();
+            }
+
+            urlConnection.disconnect();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+        // try parse the string to a JSON object
+        try {
+            jObj = new JSONObject(result.toString());
+        } catch (JSONException e) {
+            Log.e("JSON Parser", "Error parsing data " + e.toString());
+        }
+
+        // return JSON Object
+        return jObj;
+    }
+
+    /* =================================================================================
+       ======================== Make Http Request to Post Json =========================
+       ========================== Add by Khang-va 21-04-2016 ===========================
+       =================================================================================*/
+
+    public JSONObject makeJsonHttpRequest(String url, JSONObject data) {
+
+        try {
+            urlObj = new URL(url);
+
+            urlConnection = (HttpURLConnection) urlObj.openConnection();
+            urlConnection.setReadTimeout(15000);
+            urlConnection.setConnectTimeout(15000);
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setDoInput(true);
+            urlConnection.setDoOutput(true);
+            urlConnection.setRequestProperty("Content-Type", "application/json");
+            urlConnection.setRequestProperty("Accept", "application/json");
+
+            urlConnection.connect();
+
+            OutputStreamWriter os = new OutputStreamWriter(urlConnection.getOutputStream());
+            os.write(data.toString());
+            os.flush();
+            os.close();
+            os.close();
+
             //Receive the response from the server
             int httpResult = urlConnection.getResponseCode();
             Log.d("JSON Parser", "HTTP Code: " + httpResult + " " );
@@ -140,6 +204,46 @@ public class JSONParser{
             e.printStackTrace();
         }
 
+    }
+
+    /* =================================================================================
+       =================== Trash function for Post Json Request ========================
+       ========================== Add by Khang-va 21-04-2016 ===========================
+       ======================== Copyright  makeJsonHttpRequest =========================
+       =================================================================================*/
+
+    public void doPostJson(String url){
+        // request method is POST
+        try {
+            JSONObject jsonParam = new JSONObject();
+            jsonParam.put("khang", "25 da thanh cong nha");
+            jsonParam.put("description", "Real");
+            jsonParam.put("enable", "true");
+
+            urlObj = new URL(url);
+
+            urlConnection = (HttpURLConnection) urlObj.openConnection();
+            urlConnection.setReadTimeout(15000);
+            urlConnection.setConnectTimeout(15000);
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setDoInput(true);
+            urlConnection.setDoOutput(true);
+            urlConnection.setRequestProperty("Content-Type", "application/json");
+            urlConnection.setRequestProperty("Accept", "application/json");
+
+            urlConnection.connect();
+
+            OutputStreamWriter os = new OutputStreamWriter(urlConnection.getOutputStream());
+            os.write(jsonParam.toString());
+            os.flush();
+            os.close();
+            os.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.d("DoPost", "post error");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public String makePostObj(HashMap<String, String> params) {
