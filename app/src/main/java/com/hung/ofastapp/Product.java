@@ -32,11 +32,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.hung.ofastapp.Adapter.Product_ViewPagerAdapter;
 import com.hung.ofastapp.CreateConnection.JSONParser;
 import com.hung.ofastapp.CreateConnection.ofastURL;
 
 import java.io.Serializable;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class Product extends ActionBarActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -233,7 +235,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
                 try {
 
                     Intent intent = new Intent(Product.this, Order.class);
-                    intent.putExtra("LISTORDER", (Serializable) orderList);
+//                    intent.putExtra("LISTORDER", (Serializable) orderList);
                     startActivity(intent);
 
                 } catch (Exception e){
@@ -242,9 +244,38 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
 
                 }
         });
-
+        /*Kiểm tra có tồn tại cái SharePreference nào được lưu hay không, nếu có thì tạo 1 braylist chứa tất cả nội dung có trong
+        * SharePreference, sau đó, add chúng vào mảng orderlist chứa nhưng Object đã được chọn từ lúc trước, rồi xóa brraylisr đi
+        *  đồng thời, xóa luôn những gì có trong SharePreference*/
+        if(CheckContainShare() == true)
+        {
+            int prd_soluong=0;
+            ArrayList<com.hung.ofastapp.Objects.Product> brrayList = new ArrayList<com.hung.ofastapp.Objects.Product>();
+            Log.d("Có tồn tại Share: ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            // Get arraylít<object> có trong sharepreference
+            SharedPreferences aaa = PreferenceManager.getDefaultSharedPreferences(context);
+            Gson gson = new Gson();
+            String json = aaa.getString("ListProduct", null);
+            Type type = new TypeToken<ArrayList<com.hung.ofastapp.Objects.Product>>() {}.getType();
+            //Lưu vào brraylist
+            brrayList = gson.fromJson(json, type);
+            //Chuyển tất cả các object có trong brraylist qua orderlist
+            orderList.addAll(brrayList);
+            for(int i=0; i<orderList.size();i++)
+            {
+                prd_soluong = prd_soluong + orderList.get(i).getNum_order();
+                Log.d("Đậu cô ve","Đậu xanh");
+            }
+            txtv_soluong.setVisibility(View.VISIBLE);
+            txtv_soluong.setText(String.valueOf(prd_soluong));
+            //Xóa brraylist để đảm bảo là brraylist hoàn toàn trống, đễ chứa lại những object sau này.
+            brrayList.clear();
+            //Xóa SharePreference đang tồn tại trong máy
+//            SharedPreferences settings = context.getSharedPreferences("ListProduct", Context.MODE_PRIVATE);
+//            settings.edit().clear().commit();
+        }
         //------------------------------------------------------------------------------------------
-        //----------------------------S? ki?n khi nh?n AddtoCart--------------------------------------
+        //----------------------------Sự kiện nhấn AddtoCart--------------------------------------
         //------------------------------------------------------------------------------------------
 
         btn_addtocart = (Button) findViewById(R.id.btn_addtocart);
@@ -252,12 +283,17 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
             @Override
             public void onClick(View v) {
                 com.hung.ofastapp.Objects.Product mproduct = getProduct(pPostion);
-                txtv_soluong.setVisibility(View.VISIBLE);
+//                txtv_soluong.setVisibility(View.VISIBLE);
+                int soluongsanpham = 0;
+                for(int i=0; i<orderList.size(); i++)
+                {
+                    soluongsanpham = soluongsanpham + orderList.get(i).getNum_order();
 
+                }
 
                 //Add s?n ph?m
                 if(!mproduct.isPicked()){
-                    cartOrder += getProduct(pPostion).getNum_order();
+                    cartOrder = getProduct(pPostion).getNum_order() + soluongsanpham;
                     btn_addtocart.setText("Cancel");
                     mproduct.setPicked(true);
                     orderList.add(mproduct);
@@ -267,7 +303,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
 
                 }else{
                     //h?y s?n ph?m
-                    cartOrder -= getProduct(pPostion).getNum_order();
+                    cartOrder = -getProduct(pPostion).getNum_order() + soluongsanpham;
                     mproduct.setPicked(false);
                     orderList.remove(mproduct);
                     btn_addtocart.setText("Add to CART");
@@ -275,6 +311,16 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
                     btn_tru.setEnabled(true);
                     btn_cong.setEnabled(true);
                 }
+                //------------------------------------------------------------------------------------------
+                //-----------------Khi đã có arraylist<Product> được chọn thì thêm vào Share-----------------
+                //------------------------------------------------------------------------------------------
+                SharedPreferences appSharedPrefs = PreferenceManager
+                        .getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor prefsEditor = appSharedPrefs.edit();
+                Gson gson = new Gson();
+                String json = gson.toJson(orderList);
+                prefsEditor.putString("ListProduct", json);
+                prefsEditor.commit();
             }
         });
 
@@ -302,6 +348,8 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
             }
         });
     }
+
+
 
 
     public boolean onOptionsItemSelected(MenuItem item){
@@ -437,5 +485,16 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
             progress_loadproduct.setVisibility(View.GONE);
             viewPager.setVisibility(View.VISIBLE);
         }
+    }
+    private boolean CheckContainShare() {
+        SharedPreferences appSharedPrefs = PreferenceManager
+                .getDefaultSharedPreferences(this.getApplicationContext());
+        Gson gson = new Gson();
+        String json = appSharedPrefs.getString("ListProduct", "");
+        if(json.isEmpty() == false)
+        {
+            return true;
+        }
+        else return false;
     }
 }

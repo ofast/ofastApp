@@ -6,12 +6,15 @@ import android.app.LoaderManager;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBarActivity;
@@ -28,15 +31,20 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.hung.ofastapp.Adapter.Product_CustomListviewDetail;
 import com.hung.ofastapp.CreateConnection.JSONParser;
 import com.hung.ofastapp.CreateConnection.ofastURL;
 import com.hung.ofastapp.Listener.SwipeDetector;
+import com.hung.ofastapp.Objects.*;
+import com.hung.ofastapp.Objects.Product;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,6 +65,7 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
     final Context context = this;
     OrderTask eOrderTask;
     SwipeDetector swipeDetector = new SwipeDetector();
+    Bundle bd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,16 +90,21 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
         /* =======================================================================================
           Nhận đối tượng được chọn từ Product.java kết hợp với số lượng để tạo thành 1 ListView Order
         ========================================================================================*/
-        Bundle bd = getIntent().getExtras();
-        arrayList = (ArrayList<com.hung.ofastapp.Objects.Product>) bd.getSerializable("LISTORDER");
+        if(CheckContainShare() == true)
+        {
+            int soluongsanpham= 0;
+            SharedPreferences aaa = PreferenceManager.getDefaultSharedPreferences(context);
+            Gson gson = new Gson();
+            String json = aaa.getString("ListProduct", "");
+            Type type = new TypeToken<ArrayList<Product>>() {}.getType();
+            arrayList = gson.fromJson(json, type);
+
+        }
         if(arrayList.isEmpty())
         {
             Log.d("No PRODUCT:", "KHÔNG CÓ SẢN PHẨM");
             lv_dathang.setVisibility(View.GONE);
             txtv_noproduct.setVisibility(View.VISIBLE);
-//            btn_dathang.setEnabled(false);
-
-
         }else {
 
             adapter = new Product_CustomListviewDetail(this, R.layout.product_custom_listview_detail, arrayList);
@@ -102,39 +116,28 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
                     soluong = soluong + prod.getNum_order();
                 }
             }
-//            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-//            SharedPreferences.Editor editor = sharedPrefs.edit();
-//            Gson gson = new Gson();
-//            String json = gson.toJson(arrayList);
-//            editor.putString("ListProduct", json);
-//            editor.commit();
         }
  /* =======================================================================================
         Lướt trái, phải trong listview
         ========================================================================================*/
-        lv_dathang.setOnTouchListener(swipeDetector);
-        lv_dathang.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (swipeDetector.swipeDetected()) {
-                    //Trái -> Phải
-                    if (swipeDetector.getAction() == SwipeDetector.Action.LR) {
-
-//                        SharedPreferences aaa = PreferenceManager.getDefaultSharedPreferences(context);
-//                        Gson gson = new Gson();
-//                        String json = aaa.getString("ListProduct", null);
-//                        Type type = new TypeToken<ArrayList<Product>>() {}.getType();
-//                        ArrayList<Product> hahaaa = gson.fromJson(json, type);
-//                        Toast.makeText(getApplicationContext(),String.valueOf(hahaaa.size()),Toast.LENGTH_SHORT).show();
-                    }
-                    //Phải -> Trái
-                    if (swipeDetector.getAction() == SwipeDetector.Action.RL) {
-
-
-                    }
-                }
-            }
-        });
+//        lv_dathang.setOnTouchListener(swipeDetector);
+//        lv_dathang.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                if (swipeDetector.swipeDetected()) {
+//                    //Trái -> Phải
+//                    if (swipeDetector.getAction() == SwipeDetector.Action.LR) {
+//
+////
+//                    }
+//                    //Phải -> Trái
+//                    if (swipeDetector.getAction() == SwipeDetector.Action.RL) {
+//
+//
+//                    }
+//                }
+//            }
+//        });
 
 
 
@@ -416,6 +419,20 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
                         Toast.makeText(getApplicationContext(),mPhone,Toast.LENGTH_SHORT).show();
 //
                     } else {
+                       if(CheckContainShare() == true)
+                       {
+                        ArrayList<Product> nullarraylist = new ArrayList<Product>();
+
+                           SharedPreferences clearlist = PreferenceManager
+                                   .getDefaultSharedPreferences(getApplicationContext());
+                           SharedPreferences.Editor prefsEditor = clearlist.edit();
+                           Gson gson = new Gson();
+                           String json = gson.toJson(nullarraylist);
+                           prefsEditor.putString("ListProduct", json);
+                           prefsEditor.commit();
+                       }
+                        Intent intent = new Intent(Order.this, Home.class);
+                        startActivity(intent);
                         Toast.makeText(getApplicationContext(),"Đã gửi đơn hàng thành công. Chúng tôi sẽ liên hệ bạn trong vài giây tới!", Toast.LENGTH_SHORT).show();
 //
                     }
@@ -457,6 +474,16 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
         public final static boolean isValidEmail(CharSequence target) {
             return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
         }
-
+    private boolean CheckContainShare() {
+        SharedPreferences appSharedPrefs = PreferenceManager
+                .getDefaultSharedPreferences(this.getApplicationContext());
+        Gson gson = new Gson();
+        String json = appSharedPrefs.getString("ListProduct", "");
+        if(json.isEmpty() == false)
+        {
+            return true;
+        }
+        else return false;
+    }
 
 }

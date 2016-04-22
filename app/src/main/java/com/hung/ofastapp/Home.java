@@ -162,7 +162,7 @@ public class Home extends ActionBarActivity
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(),Order.class);
-                intent.putExtra("LISTORDER", (Serializable) arrayList);
+//                intent.putExtra("LISTORDER", (Serializable) arrayList);
                 startActivity(intent);
             }
         });
@@ -278,6 +278,7 @@ public class Home extends ActionBarActivity
             /*--------------------------------------------------------------------------------------
                 Khi chọn Logout, thì Clear hết SharePreference rồi trở về trang Login & Register
             ---------------------------------------------------------------------------------------*/
+            context.getSharedPreferences("ListProduct",context.MODE_PRIVATE).edit().clear().commit();
             getSharedPreferences("LoginOneTimes",0).edit().clear().commit();
             Intent intent = new Intent(Home.this, Login_and_Register.class);
             startActivity(intent);
@@ -411,26 +412,30 @@ public class Home extends ActionBarActivity
     //----------------------------------------------------------------------------------------------
     @Override
     protected void onResume() {
+        super.onResume();
         setupUI(findViewById(R.id.layout_home));
         doubleBackToExitPressedOnce = false;
-//        int soluongsanpham= 0;
-//        SharedPreferences aaa = PreferenceManager.getDefaultSharedPreferences(context);
-//        Gson gson = new Gson();
-//        String json = aaa.getString("ListProduct", null);
-//        if(json != null)
-//        {
-//            Type type = new TypeToken<ArrayList<Product>>() {}.getType();
-//            arrayList = gson.fromJson(json, type);
-//            for(int i = 0; i<arrayList.size(); i++)
-//            {
-//                soluongsanpham = soluongsanpham + arrayList.get(i).getNum_order();
-//            }
-//            Toast.makeText(getApplicationContext(),String.valueOf(arrayList.size()),Toast.LENGTH_SHORT).show();
-//            txtv_soluong.setVisibility(View.VISIBLE);
-//            txtv_soluong.setText(String.valueOf(soluongsanpham));
-//        }
+        if(CheckContainShare() == true)
+        {
+            int soluongsanpham= 0;
+            SharedPreferences aaa = PreferenceManager.getDefaultSharedPreferences(context);
+            Gson gson = new Gson();
+            String json = aaa.getString("ListProduct", "");
+            Type type = new TypeToken<ArrayList<Product>>() {}.getType();
+            arrayList = gson.fromJson(json, type);
+            for(int i = 0; i<arrayList.size(); i++)
+            {
+                soluongsanpham = soluongsanpham + arrayList.get(i).getNum_order();
+            }
+            Toast.makeText(getApplicationContext(),String.valueOf(arrayList.size()),Toast.LENGTH_SHORT).show();
+            txtv_soluong.setVisibility(View.VISIBLE);
+            txtv_soluong.setText(String.valueOf(soluongsanpham));
+        }
+        else {
+            Toast.makeText(getApplicationContext(),"hihihih", Toast.LENGTH_SHORT).show();
+            txtv_soluong.setVisibility(View.GONE);
+        }
 
-        super.onResume();
     }
     //----------------------------------------------------------------------------------------------
     //-----------------------------Sự kiện khi ấn Back của điện thoại-------------------------------
@@ -485,22 +490,37 @@ public class Home extends ActionBarActivity
     @Override
     protected void onPause() {
         super.onPause();
-//        int soluongsanpham= 0;
-//        SharedPreferences aaa = PreferenceManager.getDefaultSharedPreferences(context);
-//        Gson gson = new Gson();
-//        String json = aaa.getString("ListProduct", null);
-//        if(json != null)
-//        {
-//            Type type = new TypeToken<ArrayList<Product>>() {}.getType();
-//            arrayList = gson.fromJson(json, type);
-//            for(int i = 0; i<arrayList.size(); i++)
-//            {
-//                soluongsanpham = soluongsanpham + arrayList.get(i).getNum_order();
-//            }
-//            Toast.makeText(getApplicationContext(),String.valueOf(arrayList.size()),Toast.LENGTH_SHORT).show();
-//            txtv_soluong.setVisibility(View.VISIBLE);
-//            txtv_soluong.setText(String.valueOf(soluongsanpham));
-//        }
+        if(CheckContainShare() == true)
+        {
+            int soluongsanpham= 0;
+            SharedPreferences aaa = PreferenceManager.getDefaultSharedPreferences(context);
+            Gson gson = new Gson();
+            String json = aaa.getString("ListProduct", "");
+            Type type = new TypeToken<ArrayList<Product>>() {}.getType();
+            arrayList = gson.fromJson(json, type);
+            for(int i = 0; i<arrayList.size(); i++)
+            {
+                soluongsanpham = soluongsanpham + arrayList.get(i).getNum_order();
+            }
+            Toast.makeText(getApplicationContext(),String.valueOf(arrayList.size()),Toast.LENGTH_SHORT).show();
+            txtv_soluong.setVisibility(View.VISIBLE);
+            txtv_soluong.setText(String.valueOf(soluongsanpham));
+        }
+        else {
+            Toast.makeText(getApplicationContext(),"hihihih", Toast.LENGTH_SHORT).show();
+            txtv_soluong.setVisibility(View.GONE);
+        }
+    }
 
+    private boolean CheckContainShare() {
+        SharedPreferences appSharedPrefs = PreferenceManager
+                .getDefaultSharedPreferences(this.getApplicationContext());
+        Gson gson = new Gson();
+        String json = appSharedPrefs.getString("ListProduct", "");
+        if(json.isEmpty() == false)
+        {
+            return true;
+        }
+        else return false;
     }
 }
