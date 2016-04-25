@@ -6,6 +6,7 @@ import java.io.Serializable;
  * Created by Hung on 12/14/2015.
  */
 public class Product implements Serializable{
+    public int id_product;
      public String img_product;
      public String name_product;
     public String price_product;
@@ -22,6 +23,27 @@ public class Product implements Serializable{
         this.name_product = name_product;
         this.price_product = price_product;
         this.num_order = num_order;
+    }
+    public Product(int id_product,String img_product, String name_product, String price_product) {
+        this.id_product = id_product;
+        this.img_product = img_product;
+        this.name_product = name_product;
+        this.price_product = price_product;
+    }
+    public Product(int id_product, String img_product, String name_product, int num_order, String price_product) {
+        this.id_product = id_product;
+        this.img_product = img_product;
+        this.name_product = name_product;
+        this.price_product = price_product;
+        this.num_order = num_order;
+    }
+
+    public int getId_product() {
+        return id_product;
+    }
+
+    public void setId_product(int id_product) {
+        this.id_product = id_product;
     }
 
     public String getImg_product() {

@@ -40,8 +40,9 @@ import com.hung.ofastapp.CreateConnection.ofastURL;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 
-public class Product extends ActionBarActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class Product extends ActionBarActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, ViewPager.OnPageChangeListener {
     ViewPager viewPager;
     Product_ViewPagerAdapter adapter;
     ArrayList<com.hung.ofastapp.Objects.Product> arrayList = new ArrayList<com.hung.ofastapp.Objects.Product>();
@@ -62,7 +63,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
     Button  btn_tru;
     Button btn_cong;
     TextView txtv_soluongsanpham;
-    TextView txtv_soluong;
+    TextView txtv_tongsoluongsanpham;
 
     String brand_id = "30";
     ViewStub base_content;
@@ -177,7 +178,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
         btn_cong = (Button) findViewById(R.id.btn_cong);
         btn_tru = (Button) findViewById(R.id.btn_tru);
         txtv_soluongsanpham = (TextView) findViewById(R.id.txtv_soluongsanpham);
-        txtv_soluong = (TextView) findViewById(R.id.txtv_soluong);
+        txtv_tongsoluongsanpham = (TextView) findViewById(R.id.txtv_tongsoluongsanpham);
 
         //------------------------------------------------------------------------------------------
         //---------------Set S? ki?n khi ?n vào nút C?ng tr? các th?--------------------------------
@@ -220,29 +221,24 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
         this.brand_id = getIntent().getStringExtra("brand_id");
         getInfo = new getInfo();
         getInfo.execute(ofastURL.brand_product + "id=" + brand_id);
+//        viewPager.setCurrentItem(0);
         viewPager.setOffscreenPageLimit(arrayList.size() - 1);
 
         //------------------------------------------------------------------------------------------
-        //----------------------------S? ki?n khi nh?n gi? hàng----------------------------------------
+        //----------------------------Sự kiện khi ấn giỏ hàng----------------------------------------
         //------------------------------------------------------------------------------------------
-
-
-
         lnlo_giohang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("khang", "Loi gio hang 1");
+                Log.d("Sự kiện giỏ hàng: ", "True");
                 try {
-
                     Intent intent = new Intent(Product.this, Order.class);
-//                    intent.putExtra("LISTORDER", (Serializable) orderList);
                     startActivity(intent);
-
                 } catch (Exception e){
 
                 }
 
-                }
+            }
         });
         /*Kiểm tra có tồn tại cái SharePreference nào được lưu hay không, nếu có thì tạo 1 braylist chứa tất cả nội dung có trong
         * SharePreference, sau đó, add chúng vào mảng orderlist chứa nhưng Object đã được chọn từ lúc trước, rồi xóa brraylisr đi
@@ -266,87 +262,22 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
                 prd_soluong = prd_soluong + orderList.get(i).getNum_order();
                 Log.d("Đậu cô ve","Đậu xanh");
             }
-            txtv_soluong.setVisibility(View.VISIBLE);
-            txtv_soluong.setText(String.valueOf(prd_soluong));
+            txtv_tongsoluongsanpham.setVisibility(View.VISIBLE);
+            txtv_tongsoluongsanpham.setText(String.valueOf(prd_soluong));
             //Xóa brraylist để đảm bảo là brraylist hoàn toàn trống, đễ chứa lại những object sau này.
             brrayList.clear();
-            //Xóa SharePreference đang tồn tại trong máy
-//            SharedPreferences settings = context.getSharedPreferences("ListProduct", Context.MODE_PRIVATE);
-//            settings.edit().clear().commit();
+
         }
         //------------------------------------------------------------------------------------------
         //----------------------------Sự kiện nhấn AddtoCart--------------------------------------
         //------------------------------------------------------------------------------------------
-
         btn_addtocart = (Button) findViewById(R.id.btn_addtocart);
-        btn_addtocart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                com.hung.ofastapp.Objects.Product mproduct = getProduct(pPostion);
-//                txtv_soluong.setVisibility(View.VISIBLE);
-                int soluongsanpham = 0;
-                for(int i=0; i<orderList.size(); i++)
-                {
-                    soluongsanpham = soluongsanpham + orderList.get(i).getNum_order();
+        btn_addtocart.setOnClickListener(this);
+        //------------------------------------------------------------------------------------------
+        //---------------------------Sự kiện khi vuốt item trong Viewpager--------------------------
+        //------------------------------------------------------------------------------------------
 
-                }
-
-                //Add s?n ph?m
-                if(!mproduct.isPicked()){
-                    cartOrder = getProduct(pPostion).getNum_order() + soluongsanpham;
-                    btn_addtocart.setText("Cancel");
-                    mproduct.setPicked(true);
-                    orderList.add(mproduct);
-                    txtv_soluong.setText(String.valueOf(cartOrder));
-                    btn_tru.setEnabled(false);
-                    btn_cong.setEnabled(false);
-
-                }else{
-                    //h?y s?n ph?m
-                    cartOrder = -getProduct(pPostion).getNum_order() + soluongsanpham;
-                    mproduct.setPicked(false);
-                    orderList.remove(mproduct);
-                    btn_addtocart.setText("Add to CART");
-                    txtv_soluong.setText(String.valueOf(cartOrder));
-                    btn_tru.setEnabled(true);
-                    btn_cong.setEnabled(true);
-                }
-                //------------------------------------------------------------------------------------------
-                //-----------------Khi đã có arraylist<Product> được chọn thì thêm vào Share-----------------
-                //------------------------------------------------------------------------------------------
-                SharedPreferences appSharedPrefs = PreferenceManager
-                        .getDefaultSharedPreferences(getApplicationContext());
-                SharedPreferences.Editor prefsEditor = appSharedPrefs.edit();
-                Gson gson = new Gson();
-                String json = gson.toJson(orderList);
-                prefsEditor.putString("ListProduct", json);
-                prefsEditor.commit();
-            }
-        });
-
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-            @Override
-            public void onPageSelected(int position) {
-                viewPager.getChildAt(position);
-                pPostion = position;
-                if(getProduct(position).isPicked()){
-                    btn_addtocart.setText("Cancel");
-                    btn_tru.setEnabled(false);
-                    btn_cong.setEnabled(false);
-                }else{
-                    btn_addtocart.setText("Add to CART");
-                    btn_tru.setEnabled(true);
-                    btn_cong.setEnabled(true);
-                }
-                txtv_soluongsanpham.setText(String.valueOf(getProduct(pPostion).getNum_order()));
-            }
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        });
+        viewPager.setOnPageChangeListener(this);
     }
 
 
@@ -388,6 +319,9 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
         return true;
     }
 
+
+
+
     private class getInfo extends AsyncTask<String,String,String> {
         @Override
         protected void onPreExecute() {
@@ -404,6 +338,10 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
         protected void onPostExecute(String s) {
             showProgress(false);
             arrayList = image_par.getImageProduct(s);
+            if(CheckContainShare() == true)
+            {
+                CheckContainProduct();
+            }
             adapter = new Product_ViewPagerAdapter(getApplicationContext(),arrayList);
             viewPager.setAdapter(adapter);
         }
@@ -497,4 +435,188 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
         }
         else return false;
     }
+    public boolean CheckAndAdd(ArrayList<com.hung.ofastapp.Objects.Product> aaa, com.hung.ofastapp.Objects.Product bbb, com.hung.ofastapp.Objects.Product ccc)
+    {
+
+        if(CheckContainShare()==true)
+        {
+            for (int i = 0; i<aaa.size(); i++)
+            {
+                if(aaa.get(i).getId_product() == bbb.getId_product())
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    public void CheckContainProduct()
+    {
+        for (int i = 0; i<orderList.size(); i++)
+        {
+            Log.d("orderlist.id:", String.valueOf(orderList.get(i).getId_product()));
+            for(int h = 0; h<arrayList.size(); h = h+1)
+            {
+                Log.d("arraylist.id:", String.valueOf(arrayList.get(h).getId_product()));
+                if(orderList.get(i).getId_product() == arrayList.get(h).getId_product())
+                {
+                    arrayList.set(h,orderList.get(i));
+
+
+
+//                    arrayList.get(h).setNum_order(orderList.get(i).getNum_order());
+//                    Log.d("soluongsanpham:", String.valueOf(arrayList.get(h).getNum_order()));
+//
+//                        arrayList.get(h).setPicked(true);
+//
+//
+//                    txtv_soluongsanpham.setText(String.valueOf(arrayList.get(h).getNum_order()));
+//                    Log.d("CheckContainProduct:", String.valueOf(arrayList.get(h).getNum_order()));
+//                    if(arrayList.get(h).isPicked() == true){
+//                        btn_addtocart.setText("Cancel");
+//                        btn_tru.setEnabled(false);
+//                        btn_cong.setEnabled(false);
+//
+//                    }
+//                    else{
+//                        btn_addtocart.setText("Add to CART");
+//                        btn_tru.setEnabled(true);
+//                        btn_cong.setEnabled(true);
+//                    }
+                }
+
+
+
+
+            }
+        }
+
+    }
+    public void CheckAndRemove(ArrayList<com.hung.ofastapp.Objects.Product> aaa, com.hung.ofastapp.Objects.Product bbb)
+    {
+
+        if(CheckContainShare()==true)
+        {
+            for (int i = 0; i<aaa.size(); i++)
+            {
+                if(aaa.get(i).getId_product() == bbb.getId_product())
+                {
+                    aaa.remove(i);
+                }
+            }
+        }
+
+    }
+
+
+    ///On Click Listener of btn_addtoCart
+    @Override
+    public void onClick(View v) {
+        Log.d("Sự kiện thêm sản phẩm: ", "True");
+        com.hung.ofastapp.Objects.Product mproduct = getProduct(pPostion);
+        int tongsoluongsanpham = 0;
+        for(int i=0; i<orderList.size(); i++)
+        {
+            tongsoluongsanpham = tongsoluongsanpham + orderList.get(i).getNum_order();
+
+        }
+
+        //Add s?n ph?m
+        if(!mproduct.isPicked()){
+            com.hung.ofastapp.Objects.Product ccc = new com.hung.ofastapp.Objects.Product(0,"","",0,"");
+            Log.d("Sự kiện ấn Add: ", "True");
+            cartOrder = getProduct(pPostion).getNum_order() + tongsoluongsanpham;
+
+            if(CheckAndAdd(orderList,mproduct,ccc) == true)
+            {
+                Log.d("Không addproduct ", "True");
+            }
+            else
+            {
+                Log.d("Đã addproduct ", "True");
+                orderList.add(mproduct);
+            }
+
+            txtv_tongsoluongsanpham.setText(String.valueOf(cartOrder));
+            btn_addtocart.setText("Cancel");
+            mproduct.setPicked(true);
+            btn_tru.setEnabled(false);
+            btn_cong.setEnabled(false);
+
+        }else{
+            com.hung.ofastapp.Objects.Product ccc = new com.hung.ofastapp.Objects.Product(0,"","",0,"");
+            //h?y s?n ph?m
+            Log.d("Sự kiện ấn Cancel: ", "True");
+            cartOrder = -getProduct(pPostion).getNum_order() + tongsoluongsanpham;
+            mproduct.setPicked(false);
+            CheckAndRemove(orderList,mproduct);
+            btn_addtocart.setText("Add to CART");
+            txtv_tongsoluongsanpham.setText(String.valueOf(cartOrder));
+            btn_tru.setEnabled(true);
+            btn_cong.setEnabled(true);
+        }
+        //------------------------------------------------------------------------------------------
+        //-----------------Khi đã có arraylist<Product> được chọn thì thêm vào Share-----------------
+        //------------------------------------------------------------------------------------------
+        SharedPreferences appSharedPrefs = PreferenceManager
+                .getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor prefsEditor = appSharedPrefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(orderList);
+        Log.d("ORDERLIST NUMBER: ",String.valueOf(orderList.size()));
+        prefsEditor.putString("ListProduct", json);
+        prefsEditor.commit();
+    }
+
+
+    //----------------------------------------------------------------------------------------------
+    //--------------------------------Viewpager.SetOnPageChange-------------------------------------
+    //----------------------------------------------------------------------------------------------
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        Log.d("ID_PRODUCT",String.valueOf(arrayList.get(position).getId_product()));
+        viewPager.getChildAt(position);
+                pPostion = position;
+                if(getProduct(position).isPicked()){
+                    btn_addtocart.setText("Cancel");
+                    btn_tru.setEnabled(false);
+                    btn_cong.setEnabled(false);
+                }else{
+                    btn_addtocart.setText("Add to CART");
+                    btn_tru.setEnabled(true);
+                    btn_cong.setEnabled(true);
+                }
+                txtv_soluongsanpham.setText(String.valueOf(getProduct(pPostion).getNum_order()));
+
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
+    //----------------------------------------------------------------------------------------------
+    //-------------------------------Sự kiện khi destroy(tắt hẳn app)-------------------------------
+    //----------------------------------------------------------------------------------------------
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//        if(CheckContainShare() == true)
+//        {
+//            Log.d("Destroy of Product: ","True");
+//            ArrayList<com.hung.ofastapp.Objects.Product> nullarraylist = new ArrayList<com.hung.ofastapp.Objects.Product>();
+//
+//            SharedPreferences clearlist = PreferenceManager
+//                    .getDefaultSharedPreferences(getApplicationContext());
+//            SharedPreferences.Editor prefsEditor = clearlist.edit();
+//            Gson gson = new Gson();
+//            String json = gson.toJson(nullarraylist);
+//            prefsEditor.putString("ListProduct", json);
+//            prefsEditor.commit();
+//        }
+//    }
 }

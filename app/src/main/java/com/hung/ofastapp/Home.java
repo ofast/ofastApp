@@ -64,7 +64,7 @@ public class Home extends ActionBarActivity
 
     Context context =this;
 
-    TextView txtv_soluong;
+    TextView txtv_tongsoluongsanpham;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,7 +84,7 @@ public class Home extends ActionBarActivity
         sv_findproduct = (SearchView) findViewById(R.id.sv_findproduct);
         viewPager = (ViewPager) findViewById(R.id.view_pager);
         lnlo_giohang = (LinearLayout) findViewById(R.id.lnlo_cart);
-        txtv_soluong = (TextView) findViewById(R.id.txtv_soluong);
+        txtv_tongsoluongsanpham = (TextView) findViewById(R.id.txtv_tongsoluongsanpham);
 
 /*----------------------------------------------------------------------------------------------------------------------------
 -----------------**********************PHẦN TOOLBAR***************---------------------------------------------------------------------
@@ -428,12 +428,12 @@ public class Home extends ActionBarActivity
                 soluongsanpham = soluongsanpham + arrayList.get(i).getNum_order();
             }
             Toast.makeText(getApplicationContext(),String.valueOf(arrayList.size()),Toast.LENGTH_SHORT).show();
-            txtv_soluong.setVisibility(View.VISIBLE);
-            txtv_soluong.setText(String.valueOf(soluongsanpham));
+            txtv_tongsoluongsanpham.setVisibility(View.VISIBLE);
+            txtv_tongsoluongsanpham.setText(String.valueOf(soluongsanpham));
         }
         else {
             Toast.makeText(getApplicationContext(),"hihihih", Toast.LENGTH_SHORT).show();
-            txtv_soluong.setVisibility(View.GONE);
+            txtv_tongsoluongsanpham.setVisibility(View.GONE);
         }
 
     }
@@ -503,12 +503,12 @@ public class Home extends ActionBarActivity
                 soluongsanpham = soluongsanpham + arrayList.get(i).getNum_order();
             }
             Toast.makeText(getApplicationContext(),String.valueOf(arrayList.size()),Toast.LENGTH_SHORT).show();
-            txtv_soluong.setVisibility(View.VISIBLE);
-            txtv_soluong.setText(String.valueOf(soluongsanpham));
+            txtv_tongsoluongsanpham.setVisibility(View.VISIBLE);
+            txtv_tongsoluongsanpham.setText(String.valueOf(soluongsanpham));
         }
         else {
             Toast.makeText(getApplicationContext(),"hihihih", Toast.LENGTH_SHORT).show();
-            txtv_soluong.setVisibility(View.GONE);
+            txtv_tongsoluongsanpham.setVisibility(View.GONE);
         }
     }
 

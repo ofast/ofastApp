@@ -357,21 +357,25 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
             */
 
                 // tao 1 jsonObject the hien 1 product
-                JSONObject jProducts = new JSONObject();
-                jProducts.put("id", "28");
-                jProducts.put("quantity" , "3");
-
                 // tao jsonArray de luu cac product dang jsonObject
                 JSONArray jaProduct = new JSONArray();
-                jaProduct.put(jProducts);
-
+                //Put arraylist lên server
+                for(int i=0; i<arrayList.size(); i++)
+                {
+                    JSONObject jProducts = new JSONObject();
+                    jProducts.put("id",arrayList.get(i).getId_product());
+                    //quantity là số lượng sản phẩm được post lên
+                    jProducts.put("quantity",arrayList.get(i).getNum_order());
+                    jProducts.put("brand_id","1");
+                    jaProduct.put(jProducts);
+                }
                 // tao jsonObject voi cac thong tin co ban de up len server.
                 // phan product la 1 mang JsonArray product
 
                 JSONObject jsonParam = new JSONObject();
-                jsonParam.put("Order[email]", mEmail);
-                jsonParam.put("Order[phone]", mPhone);
-                jsonParam.put("Order[notes]", mNotes);
+                jsonParam.put("email", mEmail);
+                jsonParam.put("phone", mPhone);
+                jsonParam.put("notes", mNotes);
                 jsonParam.put("products", jaProduct);
 
 
@@ -485,5 +489,6 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
         }
         else return false;
     }
+
 
 }

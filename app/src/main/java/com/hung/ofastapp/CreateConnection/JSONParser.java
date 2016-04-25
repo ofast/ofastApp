@@ -345,6 +345,7 @@ public class JSONParser{
         try {
             Product product;
             ArrayList<Product> arrayList= new ArrayList<Product>();
+            List<Integer> id = new ArrayList<Integer>();
             List<String> link_images = new ArrayList<String>();
             List<String> images = new ArrayList<String>();
             List<String> name = new ArrayList<String>();
@@ -355,6 +356,8 @@ public class JSONParser{
             for(int i=0; i<jsonArray.length();i++)
             {
                 JSONObject jb = jsonArray.getJSONObject(i);
+                jb.getString("id");
+                id.add(jb.getInt("id"));
                 jb.getString("images");
                 link_images.add(jb.getString("images"));
                 jb.getString("title");
@@ -368,7 +371,7 @@ public class JSONParser{
             {
                 String a = (ofastURL.frontend_Web_image + link_images.get(i));
                 images.add(a);
-                product = new Product(images.get(i),name.get(i),price.get(i));
+                product = new Product(id.get(i),images.get(i),name.get(i),price.get(i));
                 arrayList.add(product);
                 Log.d("aaaaaaaaaaaaaaaaaaaa", price.toString());
             }
