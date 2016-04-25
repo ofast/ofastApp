@@ -82,4 +82,8 @@ public class Product_ViewPagerAdapter extends PagerAdapter{
         return view;
     }
 
+    @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
+    }
 }
