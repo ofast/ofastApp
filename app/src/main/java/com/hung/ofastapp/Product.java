@@ -468,10 +468,10 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
 //                    Log.d("soluongsanpham:", String.valueOf(arrayList.get(h).getNum_order()));
 //
 //                        arrayList.get(h).setPicked(true);
-//
-//
-//                    txtv_soluongsanpham.setText(String.valueOf(arrayList.get(h).getNum_order()));
-//                    Log.d("CheckContainProduct:", String.valueOf(arrayList.get(h).getNum_order()));
+////
+////
+////                    txtv_soluongsanpham.setText(String.valueOf(arrayList.get(h).getNum_order()));
+////                    Log.d("CheckContainProduct:", String.valueOf(arrayList.get(h).getNum_order()));
 //                    if(arrayList.get(h).isPicked() == true){
 //                        btn_addtocart.setText("Cancel");
 //                        btn_tru.setEnabled(false);

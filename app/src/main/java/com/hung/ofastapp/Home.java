@@ -436,6 +436,7 @@ public class Home extends ActionBarActivity
             txtv_tongsoluongsanpham.setVisibility(View.GONE);
         }
 
+
     }
     //----------------------------------------------------------------------------------------------
     //-----------------------------Sự kiện khi ấn Back của điện thoại-------------------------------
@@ -523,4 +524,5 @@ public class Home extends ActionBarActivity
         }
         else return false;
     }
+
 }

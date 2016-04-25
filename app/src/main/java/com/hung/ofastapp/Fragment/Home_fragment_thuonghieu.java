@@ -111,10 +111,14 @@ public class Home_fragment_thuonghieu extends Fragment{
                     if (firstVisibleItem + visibleItemCount >= totalItemCount) {
                         ArrayList<ThuongHieu> moreList;
                         moreList = parser.Parse(serverData);
-                        arrayList.addAll(moreList);
-                        adapter = new Home_CustomGridviewAdapter(getActivity().getApplicationContext(), R.layout.home_content_custom_gridview, arrayList);
-                        grv_thuonghieu.setAdapter(adapter);
-                        setMarksGridScrolling(currentFirstVisPos + 2, 0);
+                        if(moreList.isEmpty() == false)
+                        {
+                            arrayList.addAll(moreList);
+                            adapter = new Home_CustomGridviewAdapter(getActivity().getApplicationContext(), R.layout.home_content_custom_gridview, arrayList);
+                            grv_thuonghieu.setAdapter(adapter);
+                            setMarksGridScrolling(currentFirstVisPos + 2, 0);
+                        }
+
 
                         Log.d("Scroll END", "END END END");
                     }
@@ -176,5 +180,10 @@ public class Home_fragment_thuonghieu extends Fragment{
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+    }
 }
 
