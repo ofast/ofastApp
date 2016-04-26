@@ -25,6 +25,7 @@ import android.view.ViewStub;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
@@ -58,7 +59,8 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
     Typeface tf1;
     ProgressBar progress_loadproduct;
     Context context = this;
-    LinearLayout lnlo_giohang;
+    ImageButton imgbtn_giohang;
+
     Button btn_addtocart;
     Button  btn_tru;
     Button btn_cong;
@@ -174,7 +176,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
         //------------------------------------------------------------------------------------------
         //---------------------------Khai báo các thu?c tính----------------------------------------
         //------------------------------------------------------------------------------------------
-        lnlo_giohang = (LinearLayout) findViewById(R.id.lnlo_cart);
+        imgbtn_giohang = (ImageButton) findViewById(R.id.imgbtn_giohang);
         btn_cong = (Button) findViewById(R.id.btn_cong);
         btn_tru = (Button) findViewById(R.id.btn_tru);
         txtv_soluongsanpham = (TextView) findViewById(R.id.txtv_soluongsanpham);
@@ -228,7 +230,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
         //------------------------------------------------------------------------------------------
         //----------------------------Sự kiện khi ấn giỏ hàng----------------------------------------
         //------------------------------------------------------------------------------------------
-        lnlo_giohang.setOnClickListener(new View.OnClickListener() {
+        imgbtn_giohang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("Sự kiện giỏ hàng: ", "True");

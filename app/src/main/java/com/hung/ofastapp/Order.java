@@ -24,7 +24,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -46,22 +49,24 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Order extends ActionBarActivity implements LoaderManager.LoaderCallbacks<Cursor> {
     ListView lv_dathang;
-    TextView txtv_tongtien;
+     TextView txtv_tongtien ;
     TextView title;
     TextView txtv_noproduct;
     Button btn_dathang;
     ArrayList<com.hung.ofastapp.Objects.Product> arrayList = new ArrayList<>();
+    ArrayList<com.hung.ofastapp.Objects.Product> brrayList = new ArrayList<>();
     Product_CustomListviewDetail adapter;
     EditText edt_phone;
     EditText edt_email;
     EditText edt_notes;
-    int soluong =0;
+    public int soluong = 0;
     View focusView;
-    float tongtien = 0;
+    public float tongtien = 0;
     final Context context = this;
     OrderTask eOrderTask;
     SwipeDetector swipeDetector = new SwipeDetector();
@@ -92,61 +97,37 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
         ========================================================================================*/
         if(CheckContainShare() == true)
         {
-            int soluongsanpham= 0;
+
             SharedPreferences aaa = PreferenceManager.getDefaultSharedPreferences(context);
             Gson gson = new Gson();
             String json = aaa.getString("ListProduct", "");
             Type type = new TypeToken<ArrayList<Product>>() {}.getType();
-            arrayList = gson.fromJson(json, type);
+            brrayList = gson.fromJson(json, type);
 
         }
-        if(arrayList.isEmpty())
+        if(brrayList.isEmpty())
         {
             Log.d("No PRODUCT:", "KHÔNG CÓ SẢN PHẨM");
             lv_dathang.setVisibility(View.GONE);
             txtv_noproduct.setVisibility(View.VISIBLE);
         }else {
-
+            arrayList.addAll(brrayList);
             adapter = new Product_CustomListviewDetail(this, R.layout.product_custom_listview_detail, arrayList);
+            lv_dathang.setItemsCanFocus(false);
             lv_dathang.setAdapter(adapter);
-            for (com.hung.ofastapp.Objects.Product prod : arrayList
-                    ) {
-                if (prod.isPicked()) {
-                    tongtien = tongtien + prod.getNum_order() * Float.parseFloat(prod.getPrice_product());
-                    soluong = soluong + prod.getNum_order();
-                }
-            }
-        }
- /* =======================================================================================
-        Lướt trái, phải trong listview
-        ========================================================================================*/
-//        lv_dathang.setOnTouchListener(swipeDetector);
-//        lv_dathang.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                if (swipeDetector.swipeDetected()) {
-//                    //Trái -> Phải
-//                    if (swipeDetector.getAction() == SwipeDetector.Action.LR) {
-//
-////
-//                    }
-//                    //Phải -> Trái
-//                    if (swipeDetector.getAction() == SwipeDetector.Action.RL) {
-//
-//
-//                    }
-//                }
-//            }
-//        });
-
-
-
-
-        /* =======================================================================================
-                                         Set tổng tiền
-        ========================================================================================*/
+            lv_dathang.setFriction(ViewConfiguration.getScrollFriction()*5);
+            TinhTong(arrayList);
             txtv_tongtien.setText(String.valueOf(tongtien)+"00VNĐ");
 
+        }
+
+        int b =0;
+        for(int i = 0; i<arrayList.size(); i++)
+        {
+            b = b+arrayList.get(i).getNum_order();
+
+        }
+        Log.d("BBBBBBBBBBBBBBBBB",String.valueOf(b));
 
         /* =======================================================================================
                                          SỰ KIỆN KHI NHẤN NÚT ĐẶT HÀNG
@@ -155,17 +136,12 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
             {
                 @Override
                 public void onClick(View v) {
-
-
                     if (arrayList.isEmpty()) {
-
                         Snackbar.make(v, "Replace with your own action", Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
                     } else {
-
                         LayoutInflater li = LayoutInflater.from(context);
                         View promptsView = li.inflate(R.layout.oder_dialog_info, null);
-
                         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                                 context);
 //                alertDialogBuilder.setTitle("Nhập thông tin khách hàng");
@@ -271,10 +247,15 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
 
     /* =======================================================================================
-                        Override phần tạo kết nối với Server
-       ========================================================================================*/
+                            Override phần tạo kết nối với Server
+           ========================================================================================*/
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(this,
@@ -463,11 +444,20 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
        ========================================================================================*/
     public boolean onOptionsItemSelected(MenuItem item){
         super .onBackPressed();
+
+
+
         return true;
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
     /* =======================================================================================
-                                     Check Lenght SĐT
-          ========================================================================================*/
+                                         Check Lenght SĐT
+              ========================================================================================*/
     public static boolean CheckLenght(String string)
     {
         return (string.length()>0&&string.length()<10);
@@ -488,6 +478,17 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
             return true;
         }
         else return false;
+    }
+
+    public void TinhTong(ArrayList<Product> aaa)
+    {
+
+        for(int i = 0; i<arrayList.size(); i++)
+        {
+            tongtien = tongtien + aaa.get(i).getNum_order() * Float.parseFloat(aaa.get(i).getPrice_product());
+            soluong = soluong + aaa.get(i).getNum_order();
+        }
+
     }
 
 

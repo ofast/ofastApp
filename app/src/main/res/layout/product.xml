@@ -67,6 +67,7 @@
             android:weightSum="100">
 
             <Button
+                android:background="@drawable/custom_button_sub"
                 android:text="-"
                 android:textSize="30sp"
                 android:id="@+id/btn_tru"
@@ -84,6 +85,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent" />
             <Button
+                android:background="@drawable/custom_button_add"
                 android:text="+"
                 android:textSize="30sp"
                 android:layout_weight="15"

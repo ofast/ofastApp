@@ -91,6 +91,10 @@ public class Product implements Serializable{
     }
 
     public void subOrder(){
-        this.num_order --;
+        if(num_order>1)
+        {
+            this.num_order --;
+        }
+
     }
 }

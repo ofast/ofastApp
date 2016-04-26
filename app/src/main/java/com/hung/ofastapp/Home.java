@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
@@ -54,12 +55,14 @@ public class Home extends ActionBarActivity
     DrawerLayout drawer;
     Toolbar toolbar;
     SearchView sv_findproduct;
+
     Typeface tf1;
     public boolean doubleBackToExitPressedOnce = false;
     ViewPager viewPager;
     TabHost tabHost;
     ViewStub base_content;
-    LinearLayout lnlo_giohang;
+    ImageButton imgbtn_giohang;
+//    LinearLayout lnlo_giohang;
     ArrayList<com.hung.ofastapp.Objects.Product> arrayList = new ArrayList<Product>();
 
     Context context =this;
@@ -83,7 +86,8 @@ public class Home extends ActionBarActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         sv_findproduct = (SearchView) findViewById(R.id.sv_findproduct);
         viewPager = (ViewPager) findViewById(R.id.view_pager);
-        lnlo_giohang = (LinearLayout) findViewById(R.id.lnlo_cart);
+        imgbtn_giohang = (ImageButton) findViewById(R.id.imgbtn_giohang);
+//        lnlo_giohang = (LinearLayout) findViewById(R.id.lnlo_cart);
         txtv_tongsoluongsanpham = (TextView) findViewById(R.id.txtv_tongsoluongsanpham);
 
 /*----------------------------------------------------------------------------------------------------------------------------
@@ -158,7 +162,7 @@ public class Home extends ActionBarActivity
                 }
             }
         });
-        lnlo_giohang.setOnClickListener(new View.OnClickListener() {
+        imgbtn_giohang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(),Order.class);
@@ -417,19 +421,27 @@ public class Home extends ActionBarActivity
         doubleBackToExitPressedOnce = false;
         if(CheckContainShare() == true)
         {
+
             int soluongsanpham= 0;
             SharedPreferences aaa = PreferenceManager.getDefaultSharedPreferences(context);
             Gson gson = new Gson();
             String json = aaa.getString("ListProduct", "");
             Type type = new TypeToken<ArrayList<Product>>() {}.getType();
             arrayList = gson.fromJson(json, type);
-            for(int i = 0; i<arrayList.size(); i++)
+            if(arrayList.isEmpty())
             {
-                soluongsanpham = soluongsanpham + arrayList.get(i).getNum_order();
+                txtv_tongsoluongsanpham.setVisibility(View.GONE);
             }
-            Toast.makeText(getApplicationContext(),String.valueOf(arrayList.size()),Toast.LENGTH_SHORT).show();
-            txtv_tongsoluongsanpham.setVisibility(View.VISIBLE);
-            txtv_tongsoluongsanpham.setText(String.valueOf(soluongsanpham));
+            else {
+                for(int i = 0; i<arrayList.size(); i++)
+                {
+                    soluongsanpham = soluongsanpham + arrayList.get(i).getNum_order();
+                }
+                Toast.makeText(getApplicationContext(),String.valueOf(arrayList.size()),Toast.LENGTH_SHORT).show();
+                txtv_tongsoluongsanpham.setVisibility(View.VISIBLE);
+                txtv_tongsoluongsanpham.setText(String.valueOf(soluongsanpham));
+            }
+
         }
         else {
             Toast.makeText(getApplicationContext(),"hihihih", Toast.LENGTH_SHORT).show();

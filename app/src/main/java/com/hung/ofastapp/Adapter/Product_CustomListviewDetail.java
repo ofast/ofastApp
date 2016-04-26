@@ -3,16 +3,21 @@ package com.hung.ofastapp.Adapter;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.model.StringLoader;
 import com.hung.ofastapp.Objects.Product;
+import com.hung.ofastapp.Order;
 import com.hung.ofastapp.R;
 import com.squareup.picasso.Picasso;
 
@@ -21,7 +26,9 @@ import java.util.ArrayList;
 /**
  * Created by Hung on 12/14/2015.
  */
-public class Product_CustomListviewDetail extends ArrayAdapter<Product> {
+public class Product_CustomListviewDetail extends ArrayAdapter<Product>  {
+
+Order order = new Order();
     Context context;
     int LayoutID;
     ArrayList<Product> arrayList;
@@ -33,15 +40,28 @@ public class Product_CustomListviewDetail extends ArrayAdapter<Product> {
         this.LayoutID = LayoutID;
         this.arrayList = arrayList;
     }
+//    public void Product_CustomListviewDetail(ArrayList<Product> abc) {
+//        arrayList.clear();
+//        arrayList.addAll(abc);
+//        this.notifyDataSetChanged();
+//    }
+    public void updatelist(ArrayAdapter<Product> c){
+        c.clear();
+        c.addAll(arrayList);
+        notifyDataSetChanged();
+    }
     private class ViewHolder {
         ImageView img_image_product;
         TextView txtv_name_product;
         TextView txtv_price_product;
         TextView txtv_soluong_product;
+        TextView txtv_soluong;
+        Button btn_cong;
+        Button btn_tru;
 
     }
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, final ViewGroup parent) {
         //Declaramos el ImageView
 
         LayoutInflater inflater = (LayoutInflater) context
@@ -53,17 +73,53 @@ public class Product_CustomListviewDetail extends ArrayAdapter<Product> {
             holder.txtv_name_product = (TextView) convertView.findViewById(R.id.txtv_name_product);
             holder.txtv_soluong_product = (TextView) convertView.findViewById(R.id.txtv_soluong_product);
             holder.txtv_price_product = (TextView)convertView.findViewById(R.id.txtv_price_product);
+            holder.btn_cong = (Button) convertView.findViewById(R.id.btn_cong);
+            holder.btn_tru = (Button) convertView.findViewById(R.id.btn_tru);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        Product product = arrayList.get(position);
+        final Product product = arrayList.get(position);
         holder.txtv_name_product.setText(product.name_product);
         holder.txtv_price_product.setText(product.price_product);
 
         tf1 = Typeface.createFromAsset(convertView.getContext().getAssets(),"VKORIN.TTF");
         holder.txtv_price_product.setTypeface(tf1);
         holder.txtv_soluong_product.setText(String.valueOf(product.num_order));
+        holder.btn_cong.setTag(position);
+        holder.btn_cong.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                product.addOrder();
+                holder.txtv_soluong_product.setText(String.valueOf(product.getNum_order()));
+                Toast.makeText(getContext(),"BTN + of:" +position,Toast.LENGTH_SHORT).show();
+                Product_CustomListviewDetail.this.notifyDataSetChanged();
+            }
+        });
+        if(product.getNum_order() >1)
+        {
+            holder.btn_tru.setEnabled(true);
+            Product_CustomListviewDetail.this.notifyDataSetChanged();
+        }
+        holder.btn_tru.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                product.subOrder();
+                Log.d(String.valueOf(position),String.valueOf(arrayList.get(position).getNum_order()));
+                holder.txtv_soluong_product.setText(String.valueOf(product.getNum_order()));
+                Toast.makeText(getContext(),"BTN - of:" +position,Toast.LENGTH_SHORT).show();
+                Product_CustomListviewDetail.this.notifyDataSetChanged();
+
+
+            }
+        });
+        if(product.getNum_order() == 1)
+        {
+            holder.btn_tru.setEnabled(false);
+            Product_CustomListviewDetail.this.notifyDataSetChanged();
+        }
+
 //        Glide.with(this.context)
 //                .load(product.img_product)
 //                .fitCenter()
@@ -73,9 +129,10 @@ public class Product_CustomListviewDetail extends ArrayAdapter<Product> {
 //                .into(holder.img_image_product);
         Picasso.with(this.context)
                 .load(product.img_product)
-                .resize(dpToPx(80),dpToPx(80))
+                .resize(dpToPx(90),dpToPx(90))
                 .placeholder(R.drawable.logo)
                 .into(holder.img_image_product);
+
         return convertView;
     }
     public int dpToPx(int dp) {

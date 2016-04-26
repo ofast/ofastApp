@@ -9,26 +9,61 @@
         android:id="@+id/img_image_product"
         android:layout_weight="20"
         android:layout_width="0dp"
-        android:layout_height="80dp" />
-    <TextView
-        android:gravity="center"
-        android:id="@+id/txtv_name_product"
+        android:layout_height="90dp" />
+    <LinearLayout
         android:layout_width="0dp"
-        android:layout_weight="40"
-        android:layout_height="80dp" />
-    <TextView
-        android:id="@+id/txtv_soluong_product"
-        android:layout_weight="20"
-        android:gravity="center"
-        android:layout_width="0dp"
-        android:layout_height="80dp" />
+        android:orientation="vertical"
+        android:layout_height="90dp"
+        android:layout_weight="50">
+        <TextView
+            android:gravity="center"
+            android:id="@+id/txtv_name_product"
+            android:layout_width="match_parent"
+            android:layout_height="40dp" />
+        <LinearLayout
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:weightSum="100"
+            android:orientation="horizontal">
+            <Button
+                android:background="@drawable/custom_button_sub"
+                android:text="-"
+                android:textSize="20sp"
+                android:id="@+id/btn_tru"
+                android:gravity="center"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                />
+            <TextView
+                android:layout_weight="40"
+                android:id="@+id/txtv_soluong_product"
+                android:text="1"
+                android:textColor="#ca4c4a"
+                android:textSize="30dp"
+                android:gravity="center"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+            <Button
+                android:background="@drawable/custom_button_add"
+                android:text="+"
+                android:textSize="20sp"
+                android:layout_weight="30"
+                android:id="@+id/btn_cong"
+                android:layout_gravity="center"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+    </LinearLayout>
+
+
     <TextView
         android:gravity="center"
         android:id="@+id/txtv_price_product"
         android:layout_width="0dp"
         android:textColor="?attr/colorPrimary"
-        android:layout_weight="20"
-        android:layout_height="80dp" />
+        android:layout_weight="30"
+        android:layout_height="90dp" />
 
 
 </LinearLayout>
