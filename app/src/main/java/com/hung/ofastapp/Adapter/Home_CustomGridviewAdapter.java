@@ -11,8 +11,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.hung.ofastapp.Home;
 import com.hung.ofastapp.Objects.ThuongHieu;
 import com.hung.ofastapp.R;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -25,6 +27,8 @@ public class Home_CustomGridviewAdapter extends ArrayAdapter<ThuongHieu> {
     int LayoutID;
     ArrayList<ThuongHieu> arrayList;
     ViewHolder holder;
+    int a = 0;
+    int b = 0;
     public Home_CustomGridviewAdapter(Context context, int LayoutID, ArrayList<ThuongHieu> arrayList) {
         super(context, LayoutID, arrayList);
         this.context = context;
@@ -69,7 +73,9 @@ public class Home_CustomGridviewAdapter extends ArrayAdapter<ThuongHieu> {
         //Thư viện Picasso
 //        Picasso.with(this.context)
 //                .load(thuongHieu.img)
-//                .resize(155, 155)
+//                .resize(300, 200)
+//                .centerCrop()
+//                .noFade()
 //                .placeholder(R.drawable.logo)
 //                .into(holder.img_anhthuonghieu);
         return convertView;

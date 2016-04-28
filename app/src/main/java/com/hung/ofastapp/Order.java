@@ -3,6 +3,7 @@ package com.hung.ofastapp;
 
 import android.app.AlertDialog;
 import android.app.LoaderManager;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
@@ -21,6 +22,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -52,6 +54,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import dmax.dialog.SpotsDialog;
+
 public class Order extends ActionBarActivity implements LoaderManager.LoaderCallbacks<Cursor> {
     ListView lv_dathang;
      TextView txtv_tongtien ;
@@ -70,7 +74,7 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
     final Context context = this;
     OrderTask eOrderTask;
     SwipeDetector swipeDetector = new SwipeDetector();
-    Bundle bd;
+    private AlertDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,52 +94,38 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
         btn_dathang = (Button) findViewById(R.id.btn_dathang);
         title = (TextView) findViewById(R.id.txtv_info);
         title.setTypeface(tf1);
+        progressDialog = new SpotsDialog(Order.this, R.style.Custom);
 
 
         /* =======================================================================================
           Nhận đối tượng được chọn từ Product.java kết hợp với số lượng để tạo thành 1 ListView Order
         ========================================================================================*/
-        if(CheckContainShare() == true)
-        {
-
+        if (CheckContainShare() == true) {
+            Log.d("Có tồn tại Share ", "ON");
             SharedPreferences aaa = PreferenceManager.getDefaultSharedPreferences(context);
             Gson gson = new Gson();
             String json = aaa.getString("ListProduct", "");
             Type type = new TypeToken<ArrayList<Product>>() {}.getType();
-            brrayList = gson.fromJson(json, type);
+            arrayList = gson.fromJson(json, type);
 
         }
-        if(brrayList.isEmpty())
-        {
-            Log.d("No PRODUCT:", "KHÔNG CÓ SẢN PHẨM");
-            lv_dathang.setVisibility(View.GONE);
-            txtv_noproduct.setVisibility(View.VISIBLE);
-        }else {
-            arrayList.addAll(brrayList);
-            adapter = new Product_CustomListviewDetail(this, R.layout.product_custom_listview_detail, arrayList);
-            lv_dathang.setItemsCanFocus(false);
-            lv_dathang.setAdapter(adapter);
-            lv_dathang.setFriction(ViewConfiguration.getScrollFriction()*5);
-            TinhTong(arrayList);
-            txtv_tongtien.setText(String.valueOf(tongtien)+"00VNĐ");
+        adapter = new Product_CustomListviewDetail(this, R.layout.product_custom_listview_detail, arrayList);
+        TinhTong(arrayList);
+        txtv_tongtien.setText(String.valueOf(tongtien) + "00VNĐ");
+        lv_dathang.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
 
-        }
 
-        int b =0;
-        for(int i = 0; i<arrayList.size(); i++)
-        {
-            b = b+arrayList.get(i).getNum_order();
-
-        }
-        Log.d("BBBBBBBBBBBBBBBBB",String.valueOf(b));
 
         /* =======================================================================================
                                          SỰ KIỆN KHI NHẤN NÚT ĐẶT HÀNG
         ========================================================================================*/
             btn_dathang.setOnClickListener(new View.OnClickListener()
             {
+
                 @Override
                 public void onClick(View v) {
+                    Log.d("NÚT ĐẶT HÀNG ", "ON");
                     if (arrayList.isEmpty()) {
                         Snackbar.make(v, "Replace with your own action", Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
@@ -160,14 +150,15 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
                                 .setNegativeButton("Cancel",
                                         new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int id) {
+                                                Log.d("Dialog ", "Cancel");
                                                 dialog.cancel();
                                             }
                                         });
 
                         // create alert dialog
-                        final AlertDialog aaa = alertDialogBuilder.create();
+                        final AlertDialog alertDialog = alertDialogBuilder.create();
 
-                        aaa.setOnShowListener(new DialogInterface.OnShowListener() {
+                        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
 
                             @Override
                             public void onShow(final DialogInterface dialog) {
@@ -175,17 +166,18 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
 // vì trong quá trình ấn OK, chúng ta phải kiểm tra nhập có hợp lệ hay không, nếu không hợp lệ thì focus vào phần
 // nhập không hợp lệ đó đồng thời không được tắt dialog. sử dụng dialog.dimiss để tắt dilag lúc cần thiết.
 //
-                                Button b = aaa.getButton(AlertDialog.BUTTON_POSITIVE);
-                                b.setOnClickListener(new View.OnClickListener() {
+                                Button button = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                                button.setOnClickListener(new View.OnClickListener() {
 
                                     @Override
                                     public void onClick(View view) {
+                                        Log.d("Dialog ", "OK");
                                         String email = edt_email.getText().toString();
                                         String phone = edt_phone.getText().toString();
                                         String notes = edt_notes.getText().toString();
 
-                                        boolean he = CheckInput(email, phone);
-                                        if (he == true) {
+                                        boolean checkInput = CheckInput(email, phone);
+                                        if (checkInput == true) {
                                             eOrderTask = new OrderTask(email, phone, notes);
                                             eOrderTask.execute((Void) null);
                                             dialog.dismiss();
@@ -198,7 +190,7 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
                             }
                         });
                         // show it
-                        aaa.show();
+                        alertDialog.show();
                     }
                 }
             });
@@ -212,46 +204,47 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
         // Reset errors.
         edt_email.setError(null);
         edt_phone.setError(null);
-
         boolean cancel = false;
         focusView = null;
         // Kiểm tra trống Pass
         if (TextUtils.isEmpty(email) ) {
+            Log.d("Lỗi Email", "Trống");
             edt_email.setError(getString(R.string.error_field_required));
             focusView =  edt_email;
             cancel = true;
         }
         // Kiểm tra trống NumberPhone
         if (TextUtils.isEmpty(phone) ) {
+            Log.d("Lỗi SĐT", "Trống");
             edt_phone.setError(getString(R.string.error_field_required));
             focusView = edt_phone;
             cancel = true;
         }
+        //Kiểm tra độ dài của SĐT
         if (CheckLenght(edt_phone.getText().toString()) == true) {
+            Log.d("Lỗi SĐT", "FALSE");
             edt_phone.setError("SĐT không đúng, yêu cầu nhập lại!");
             focusView = edt_phone;
             cancel = true;
         }
+        //Kiểm tra đúng sai của Email, tồn tại @ vào .
         if(isValidEmail(email) == false)
         {
+            Log.d("Lỗi Email", "FALSE");
             edt_email.setError("Vui lòng nhập Email của bạn!");
             focusView =edt_email;
             cancel = true;
         }
-
+        //Nếu có lỗi thì trả về false, còn không thì trả về true
         if (cancel) {
-
+            Log.d("Lỗi", "FALSE");
             return false;
         } else {
+            Log.d("KHông có lỗi", "TRUE");
             return true;
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-    }
 
     /* =======================================================================================
                             Override phần tạo kết nối với Server
@@ -284,9 +277,6 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
     }
-
-
-
     private interface ProfileQuery {
         String[] PROJECTION = {
                 ContactsContract.CommonDataKinds.Email.ADDRESS,
@@ -322,7 +312,7 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
 
         /*Hàm trước khi Xử lý đăng kí*/
         protected void onPreExecute() {
-
+            progressDialog.show();
         }
         /*Hàm kết nối tới Server \*/
         //Order[email] , Order[phone], Order[notes], Oder[product]
@@ -397,8 +387,7 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
                     String error = result.getString(TAG_ERROR);
                     Log.d("success", success + message + error);
                     if (!success.equals("true")) {
-
-
+                        Log.d("Gửi hàng thành công:  ","ON");
                         Toast.makeText(getApplicationContext(),"Kết nối tới Server thất bại, vui lòng thử lại sau giây lát!",Toast.LENGTH_SHORT).show();
                         Toast.makeText(getApplicationContext(),mEmail,Toast.LENGTH_SHORT).show();
                         Toast.makeText(getApplicationContext(),mPhone,Toast.LENGTH_SHORT).show();
@@ -416,6 +405,7 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
                            prefsEditor.putString("ListProduct", json);
                            prefsEditor.commit();
                        }
+                        progressDialog.dismiss();
                         Intent intent = new Intent(Order.this, Home.class);
                         startActivity(intent);
                         Toast.makeText(getApplicationContext(),"Đã gửi đơn hàng thành công. Chúng tôi sẽ liên hệ bạn trong vài giây tới!", Toast.LENGTH_SHORT).show();
@@ -444,31 +434,62 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
        ========================================================================================*/
     public boolean onOptionsItemSelected(MenuItem item){
         super .onBackPressed();
-
-
-
+        Log.d("OptionsItemSelected:  ","ON");
+        SharedPreferences clearlist = PreferenceManager
+                .getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor prefsEditor = clearlist.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(arrayList);
+        prefsEditor.putString("ListProduct", json);
+        prefsEditor.commit();
         return true;
     }
 
+    /* =======================================================================================
+                                 Sự kiện khi ấn Back từ Device
+     ========================================================================================*/
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        Log.d("onBackPressed:  ","ON");
+        SharedPreferences clearlist = PreferenceManager
+                .getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor prefsEditor = clearlist.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(arrayList);
+        prefsEditor.putString("ListProduct", json);
+        prefsEditor.commit();
+
     }
+    /* =======================================================================================
+                                          onResume
+        ========================================================================================*/
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("Onresume","ON");
+    }
+
 
     /* =======================================================================================
                                          Check Lenght SĐT
-              ========================================================================================*/
+    ========================================================================================*/
     public static boolean CheckLenght(String string)
     {
         return (string.length()>0&&string.length()<10);
     }
-        /* =======================================================================================
+
+     /* =======================================================================================
                                     Check Email
-          ========================================================================================*/
+    ========================================================================================*/
         public final static boolean isValidEmail(CharSequence target) {
             return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
         }
+    /* =======================================================================================
+                        Kiểm tra có tồn tại SharePreference hay không
+    ========================================================================================*/
     private boolean CheckContainShare() {
+        Log.d("CheckContainShare:  ","ON");
         SharedPreferences appSharedPrefs = PreferenceManager
                 .getDefaultSharedPreferences(this.getApplicationContext());
         Gson gson = new Gson();
@@ -479,16 +500,17 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
         }
         else return false;
     }
-
+    /* =======================================================================================
+                      Hàm tính tổng tiền cho tất cả các sản phẩm được chọn
+    ========================================================================================*/
     public void TinhTong(ArrayList<Product> aaa)
     {
-
         for(int i = 0; i<arrayList.size(); i++)
         {
             tongtien = tongtien + aaa.get(i).getNum_order() * Float.parseFloat(aaa.get(i).getPrice_product());
-            soluong = soluong + aaa.get(i).getNum_order();
-        }
 
+        }
+        Log.d("Tính Tổng:  ",String.valueOf(tongtien));
     }
 
 

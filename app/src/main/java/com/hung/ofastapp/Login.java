@@ -453,6 +453,7 @@ public class Login extends Activity implements LoaderManager.LoaderCallbacks<Cur
                             editor.apply();
                             Intent intent = new Intent(Login.this, Home.class);
                             startActivity(intent);
+                            finish();
                             Log.d("success", "true");
                         }
                     } catch (JSONException e) {

@@ -90,8 +90,15 @@ public class Product implements Serializable{
         this.num_order ++;
     }
 
-    public void subOrder(){
+    public void subProduct(){
         if(num_order>1)
+        {
+            this.num_order --;
+        }
+
+    }
+    public void subOrder(){
+        if(num_order>0)
         {
             this.num_order --;
         }

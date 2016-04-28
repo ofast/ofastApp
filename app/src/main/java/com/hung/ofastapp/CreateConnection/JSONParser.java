@@ -320,6 +320,8 @@ public class JSONParser{
            {
                currentOffset =0;
                arrayList.clear();
+
+
            }
            Log.d("jkahsdkjhasd", String.valueOf(jsonArray.length()));
             Log.d("ssssssssss", String.valueOf(arrayList.size()));

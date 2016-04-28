@@ -1,6 +1,8 @@
 package com.hung.ofastapp.Adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -28,10 +30,15 @@ import java.util.ArrayList;
  */
 public class Product_CustomListviewDetail extends ArrayAdapter<Product>  {
 
-Order order = new Order();
+
+    public static boolean flagadd;
+    Order order = new Order();
+
+    Product_CustomListviewDetail adapter;
     Context context;
     int LayoutID;
-    ArrayList<Product> arrayList;
+    ArrayList<Product> arrayList = new ArrayList<Product>();
+    ArrayList<Product> brrayList = new ArrayList<Product>();
     ViewHolder holder;
     Typeface tf1;
     public Product_CustomListviewDetail(Context context, int LayoutID, ArrayList<Product> arrayList) {
@@ -39,17 +46,11 @@ Order order = new Order();
         this.context = context;
         this.LayoutID = LayoutID;
         this.arrayList = arrayList;
+        this.adapter = this;
     }
-//    public void Product_CustomListviewDetail(ArrayList<Product> abc) {
-//        arrayList.clear();
-//        arrayList.addAll(abc);
-//        this.notifyDataSetChanged();
-//    }
-    public void updatelist(ArrayAdapter<Product> c){
-        c.clear();
-        c.addAll(arrayList);
-        notifyDataSetChanged();
-    }
+
+
+
     private class ViewHolder {
         ImageView img_image_product;
         TextView txtv_name_product;
@@ -60,6 +61,7 @@ Order order = new Order();
         Button btn_tru;
 
     }
+
     @Override
     public View getView(final int position, View convertView, final ViewGroup parent) {
         //Declaramos el ImageView
@@ -87,16 +89,20 @@ Order order = new Order();
         holder.txtv_price_product.setTypeface(tf1);
         holder.txtv_soluong_product.setText(String.valueOf(product.num_order));
         holder.btn_cong.setTag(position);
+        flagadd = false;
         holder.btn_cong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 product.addOrder();
                 holder.txtv_soluong_product.setText(String.valueOf(product.getNum_order()));
                 Toast.makeText(getContext(),"BTN + of:" +position,Toast.LENGTH_SHORT).show();
-                Product_CustomListviewDetail.this.notifyDataSetChanged();
+//             arrayList.remove(product);
+
+                adapter.notifyDataSetChanged();
+
             }
         });
-        if(product.getNum_order() >1)
+        if(product.getNum_order() >0)
         {
             holder.btn_tru.setEnabled(true);
             Product_CustomListviewDetail.this.notifyDataSetChanged();
@@ -110,15 +116,17 @@ Order order = new Order();
                 holder.txtv_soluong_product.setText(String.valueOf(product.getNum_order()));
                 Toast.makeText(getContext(),"BTN - of:" +position,Toast.LENGTH_SHORT).show();
                 Product_CustomListviewDetail.this.notifyDataSetChanged();
+                if(product.getNum_order() == 0)
+                {
+                    arrayList.remove(product);
+//            holder.btn_tru.setEnabled(false);
+                    Product_CustomListviewDetail.this.notifyDataSetChanged();
 
+                }
 
             }
         });
-        if(product.getNum_order() == 1)
-        {
-            holder.btn_tru.setEnabled(false);
-            Product_CustomListviewDetail.this.notifyDataSetChanged();
-        }
+
 
 //        Glide.with(this.context)
 //                .load(product.img_product)
@@ -135,6 +143,8 @@ Order order = new Order();
 
         return convertView;
     }
+
+
     public int dpToPx(int dp) {
         DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
         int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
