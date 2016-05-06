@@ -34,6 +34,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.hung.ofastapp.Adapter.Product_CustomListviewDetail;
 import com.hung.ofastapp.Adapter.Product_ViewPagerAdapter;
 import com.hung.ofastapp.CreateConnection.JSONParser;
 import com.hung.ofastapp.CreateConnection.ofastURL;
@@ -51,7 +52,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
     JSONParser image_par = new JSONParser();
     getInfo getInfo;
     public int pPostion = 0;
-
+    int number_position;
     NavigationView navigationView;
     DrawerLayout drawer;
     Toolbar toolbar;
@@ -489,7 +490,6 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
                 }
             }
         }
-
     }
     public boolean CheckAndAdd(ArrayList<com.hung.ofastapp.Objects.Product> aaa, com.hung.ofastapp.Objects.Product bbb)
     {
@@ -535,7 +535,6 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
         for(int i=0; i<orderList.size(); i++)
         {
             tongsoluongsanpham = tongsoluongsanpham + orderList.get(i).getNum_order();
-
         }
 
         //Add s?n ph?m
@@ -561,7 +560,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
             btn_cong.setEnabled(false);
 
         }else{
-            com.hung.ofastapp.Objects.Product ccc = new com.hung.ofastapp.Objects.Product(0,"","",0,"");
+
             //h?y s?n ph?m
             Log.d("Sự kiện ấn Cancel: ", "True");
             cartOrder = -getProduct(pPostion).getNum_order() + tongsoluongsanpham;
@@ -663,28 +662,29 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
 
     @Override
     protected void onResume() {
-        super.onResume();
+
+        Log.d("SO THU TU: ",String.valueOf(viewPager.getCurrentItem()));
         Log.d("ON RESUME","FUCKING");
-        if(CheckContainShare()==true)
-        {
+//        adapter = new Product_ViewPagerAdapter(context,arrayList);
+//        viewPager.setAdapter(adapter);
+        if(CheckContainShare()==true) {
             orderList.clear();
-            int prd_soluong=0;
+            int prd_soluong = 0;
             ArrayList<com.hung.ofastapp.Objects.Product> brrayList = new ArrayList<com.hung.ofastapp.Objects.Product>();
-            Log.d("Có tồn tại Share: ","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            Log.d("Có tồn tại Share: ", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             // Get arraylít<object> có trong sharepreference
             SharedPreferences aaa = PreferenceManager.getDefaultSharedPreferences(context);
             Gson gson = new Gson();
             String json = aaa.getString("ListProduct", null);
-            Type type = new TypeToken<ArrayList<com.hung.ofastapp.Objects.Product>>() {}.getType();
+            Type type = new TypeToken<ArrayList<com.hung.ofastapp.Objects.Product>>() {
+            }.getType();
             //Lưu vào brraylist
             brrayList = gson.fromJson(json, type);
-            if(brrayList.isEmpty() == false)
-            {
+            if (brrayList.size() != 0) {
                 orderList.addAll(brrayList);
-                for(int i=0; i<orderList.size();i++)
-                {
+                for (int i = 0; i < orderList.size(); i++) {
                     prd_soluong = prd_soluong + orderList.get(i).getNum_order();
-                    Log.d("Đậu cô ve","Đậu xanh");
+                    Log.d("Đậu cô ve", "Đậu xanh");
 
                 }
                 txtv_tongsoluongsanpham.setVisibility(View.VISIBLE);
@@ -692,8 +692,49 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
                 //Xóa brraylist để đảm bảo là brraylist hoàn toàn trống, đễ chứa lại những object sau này.
                 brrayList.clear();
                 CheckContainProduct();
-                txtv_soluongsanpham.setText(String.valueOf(orderList.get(pPostion).getNum_order()));
+                if(arrayList.size() != 0)
+                {
+                    if(CheckContainProductTF(orderList, arrayList.get(viewPager.getCurrentItem()), number_position) == false)
+                    {
+
+                    }
+                    else {
+                        if(arrayList.get(viewPager.getCurrentItem()).isPicked()){
+                            btn_addtocart.setText("Cancel");
+                            btn_tru.setEnabled(false);
+                            btn_cong.setEnabled(false);
+                        }else{
+                            btn_addtocart.setText("Add to CART");
+                            btn_tru.setEnabled(true);
+                            btn_cong.setEnabled(true);
+                        }
+                        Log.d("Số lượng hiện tại: ", String.valueOf(arrayList.get(viewPager.getCurrentItem()).getNum_order()));
+                        Log.d("Số lượng hiện thực tế: ", String.valueOf(pPostion));
+                        txtv_soluongsanpham.setText(String.valueOf(arrayList.get(viewPager.getCurrentItem()).getNum_order()));
+                    }
+
+//
+
+                }
             }
         }
+
+
+        super.onResume();
+    }
+    public boolean CheckContainProductTF(ArrayList<com.hung.ofastapp.Objects.Product> abc, com.hung.ofastapp.Objects.Product xyz, int b)
+    {
+        b=0;
+        for (int i = 0; i<abc.size(); i++)
+        {
+
+                if(orderList.get(i).getId_product() == xyz.getId_product())
+                {
+                    b= i;
+                   return true;
+                }
+
+        }
+        return false;
     }
 }

@@ -89,45 +89,49 @@ public class Product_CustomListviewDetail extends ArrayAdapter<Product>  {
         holder.txtv_price_product.setTypeface(tf1);
         holder.txtv_soluong_product.setText(String.valueOf(product.num_order));
         holder.btn_cong.setTag(position);
-        flagadd = false;
+        //Set sự kiện khi nhấn Button +
         holder.btn_cong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 product.addOrder();
                 holder.txtv_soluong_product.setText(String.valueOf(product.getNum_order()));
                 Toast.makeText(getContext(),"BTN + of:" +position,Toast.LENGTH_SHORT).show();
-//             arrayList.remove(product);
-
-                adapter.notifyDataSetChanged();
-
+                arrayList.set(position,product);
+                Log.d("AAAAAAA",String.valueOf(arrayList.get(position).getNum_order()));
+                Product_CustomListviewDetail.this.notifyDataSetChanged();
             }
         });
-        if(product.getNum_order() >0)
-        {
-            holder.btn_tru.setEnabled(true);
-            Product_CustomListviewDetail.this.notifyDataSetChanged();
-        }
+        //Set sự kiện khi nhấn Button -
         holder.btn_tru.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                product.subOrder();
+                product.subProduct();
                 Log.d(String.valueOf(position),String.valueOf(arrayList.get(position).getNum_order()));
                 holder.txtv_soluong_product.setText(String.valueOf(product.getNum_order()));
                 Toast.makeText(getContext(),"BTN - of:" +position,Toast.LENGTH_SHORT).show();
                 Product_CustomListviewDetail.this.notifyDataSetChanged();
-                if(product.getNum_order() == 0)
-                {
-                    arrayList.remove(product);
-//            holder.btn_tru.setEnabled(false);
-                    Product_CustomListviewDetail.this.notifyDataSetChanged();
-
-                }
 
             }
         });
+        if(product.getNum_order() == 1)
+        {
+            holder.btn_tru.setEnabled(false);
+//                    arrayList.remove(product);
+//                    ((Order)context).TinhTong(arrayList);
+            Product_CustomListviewDetail.this.notifyDataSetChanged();
+        }
+        //Kiểm tra số lượng sản phẩm lớn hơn 1
+        if(product.getNum_order() >1)
+        {
+            holder.btn_tru.setEnabled(true);
+            Product_CustomListviewDetail.this.notifyDataSetChanged();
+        }
 
+        //Chạy lại hàm Tính TỔng từ Home
+        ((Order)context).TinhTong(arrayList);
 
+        //Lấy ảnh từ web về
 //        Glide.with(this.context)
 //                .load(product.img_product)
 //                .fitCenter()

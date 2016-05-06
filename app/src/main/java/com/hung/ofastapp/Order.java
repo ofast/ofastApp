@@ -110,9 +110,9 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
 
         }
         adapter = new Product_CustomListviewDetail(this, R.layout.product_custom_listview_detail, arrayList);
-        TinhTong(arrayList);
-        txtv_tongtien.setText(String.valueOf(tongtien) + "00VNĐ");
         lv_dathang.setAdapter(adapter);
+        lv_dathang.invalidate();
+        TinhTong(arrayList);
         adapter.notifyDataSetChanged();
 
 
@@ -435,9 +435,9 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
     public boolean onOptionsItemSelected(MenuItem item){
         super .onBackPressed();
         Log.d("OptionsItemSelected:  ","ON");
-        SharedPreferences clearlist = PreferenceManager
+        SharedPreferences onOptionsItemSelected = PreferenceManager
                 .getDefaultSharedPreferences(getApplicationContext());
-        SharedPreferences.Editor prefsEditor = clearlist.edit();
+        SharedPreferences.Editor prefsEditor = onOptionsItemSelected.edit();
         Gson gson = new Gson();
         String json = gson.toJson(arrayList);
         prefsEditor.putString("ListProduct", json);
@@ -452,14 +452,13 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
     public void onBackPressed() {
         super.onBackPressed();
         Log.d("onBackPressed:  ","ON");
-        SharedPreferences clearlist = PreferenceManager
+        SharedPreferences onBackPressed = PreferenceManager
                 .getDefaultSharedPreferences(getApplicationContext());
-        SharedPreferences.Editor prefsEditor = clearlist.edit();
+        SharedPreferences.Editor prefsEditor = onBackPressed.edit();
         Gson gson = new Gson();
         String json = gson.toJson(arrayList);
         prefsEditor.putString("ListProduct", json);
         prefsEditor.commit();
-
     }
     /* =======================================================================================
                                           onResume
@@ -467,7 +466,9 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d("SIZE ARRAYLIST",String.valueOf(arrayList.size()));
         Log.d("Onresume","ON");
+
     }
 
 
@@ -510,8 +511,31 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
             tongtien = tongtien + aaa.get(i).getNum_order() * Float.parseFloat(aaa.get(i).getPrice_product());
 
         }
+        txtv_tongtien.setText(String.valueOf(tongtien) + "00VNĐ");
         Log.d("Tính Tổng:  ",String.valueOf(tongtien));
+        tongtien = 0;
+        if(arrayList.size() == 0)
+        {
+            txtv_tongtien.setText("Tổng tiền");
+        }
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d("ON STOP","KIDDING MEEEEE");
+//        SharedPreferences onStop = PreferenceManager
+//                .getDefaultSharedPreferences(getAoppplicationContext());
+//        SharedPreferences.Editor prefsEditor = onStop.edit();
+//        Gson gson = new Gson();
+//        String json = gson.toJson(arrayList);
+//        prefsEditor.putString("ListProduct", json);
+//        prefsEditor.commit();
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d("ON DESTROY", "FUCK FUCK");
+    }
 }
