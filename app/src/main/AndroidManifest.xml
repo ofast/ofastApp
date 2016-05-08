@@ -36,7 +36,8 @@
         <activity
             android:name=".Order"
             android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".Search"></activity>
+        <activity android:name=".Search"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
