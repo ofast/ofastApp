@@ -110,7 +110,8 @@ public class Home extends ActionBarActivity
         imgbtn_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(Home.this, Search.class);
+                startActivity(intent);
             }
         });
 
