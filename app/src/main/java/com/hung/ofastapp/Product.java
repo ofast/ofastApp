@@ -680,8 +680,9 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
             }.getType();
             //Lưu vào brraylist
             brrayList = gson.fromJson(json, type);
-            if (brrayList.size() != 0) {
+//            if (brrayList.size() != 0) {
                 orderList.addAll(brrayList);
+                Log.d("ORDER LIST lúc này:", String.valueOf(orderList.size()));
                 for (int i = 0; i < orderList.size(); i++) {
                     prd_soluong = prd_soluong + orderList.get(i).getNum_order();
                     Log.d("Đậu cô ve", "Đậu xanh");
@@ -694,47 +695,75 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
                 CheckContainProduct();
                 if(arrayList.size() != 0)
                 {
-                    if(CheckContainProductTF(orderList, arrayList.get(viewPager.getCurrentItem()), number_position) == false)
+                    for(int i = 0; i<arrayList.size(); i++)
                     {
+                       if(CheckContainProductTF(orderList,arrayList.get(i)) == true)
+                       {
+                           arrayList.get(i).setPicked(true);
+                           CheckPicked(arrayList.get(i));
+                       } else {
+                           arrayList.get(i).setPicked(false);
+                           CheckPicked(arrayList.get(i));
+                       }
+                    }
+
+                    if(CheckContainProductTF(orderList, arrayList.get(viewPager.getCurrentItem())) == false)
+                    {
+                        arrayList.get(viewPager.getCurrentItem()).setPicked(false);
+                        CheckPicked(arrayList.get(viewPager.getCurrentItem()));
 
                     }
                     else {
-                        if(arrayList.get(viewPager.getCurrentItem()).isPicked()){
-                            btn_addtocart.setText("Cancel");
-                            btn_tru.setEnabled(false);
-                            btn_cong.setEnabled(false);
-                        }else{
-                            btn_addtocart.setText("Add to CART");
-                            btn_tru.setEnabled(true);
-                            btn_cong.setEnabled(true);
-                        }
+                        arrayList.get(viewPager.getCurrentItem()).setPicked(true);
+                        CheckPicked(arrayList.get(viewPager.getCurrentItem()));
+                    }
                         Log.d("Số lượng hiện tại: ", String.valueOf(arrayList.get(viewPager.getCurrentItem()).getNum_order()));
                         Log.d("Số lượng hiện thực tế: ", String.valueOf(pPostion));
                         txtv_soluongsanpham.setText(String.valueOf(arrayList.get(viewPager.getCurrentItem()).getNum_order()));
-                    }
-
-//
 
                 }
-            }
+//            }
+//            else {
+//              int soluong0 =0;
+//               Log.d("KHÔNG CÓ SẢN PHẨM NÀO","LLL");
+//                Log.d("Số lượng SP",String.valueOf(txtv_tongsoluongsanpham.getText()));
+//                for(int i = 0; i<arrayList.size(); i++)
+//                {
+//                    arrayList.get(i).setPicked(false);
+//                    CheckPicked(arrayList.get(i));
+//                    soluong0 = soluong0 + arrayList.get(i).getNum_order();
+//                }
+//                txtv_tongsoluongsanpham.setText(String.valueOf(soluong0));
+//            }
         }
-
-
         super.onResume();
     }
-    public boolean CheckContainProductTF(ArrayList<com.hung.ofastapp.Objects.Product> abc, com.hung.ofastapp.Objects.Product xyz, int b)
+    public boolean CheckContainProductTF(ArrayList<com.hung.ofastapp.Objects.Product> abc, com.hung.ofastapp.Objects.Product xyz)
     {
-        b=0;
+
         for (int i = 0; i<abc.size(); i++)
         {
 
                 if(orderList.get(i).getId_product() == xyz.getId_product())
                 {
-                    b= i;
+
                    return true;
                 }
 
         }
         return false;
+    }
+
+    public void CheckPicked(com.hung.ofastapp.Objects.Product product)
+    {
+        if(product.isPicked()){
+            btn_addtocart.setText("Cancel");
+            btn_tru.setEnabled(false);
+            btn_cong.setEnabled(false);
+        }else{
+            btn_addtocart.setText("Add to CART");
+            btn_tru.setEnabled(true);
+            btn_cong.setEnabled(true);
+        }
     }
 }

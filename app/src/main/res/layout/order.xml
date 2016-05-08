@@ -35,13 +35,13 @@
     android:layout_width="match_parent"
     android:layout_height="1dp"
     android:background="#8f6c6c"/>
-        <ListView
+        <com.baoyz.swipemenulistview.SwipeMenuListView
             android:visibility="visible"
             android:id="@+id/lv_dathang"
             android:layout_width="match_parent"
             android:layout_weight="80"
             android:layout_height="0dp">
-        </ListView>
+        </com.baoyz.swipemenulistview.SwipeMenuListView>
         <TextView
             android:id="@+id/txtv_noproduct"
             android:visibility="gone"

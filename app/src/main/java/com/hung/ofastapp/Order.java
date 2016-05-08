@@ -10,8 +10,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -22,6 +25,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -36,6 +40,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baoyz.swipemenulistview.SwipeMenu;
+import com.baoyz.swipemenulistview.SwipeMenuCreator;
+import com.baoyz.swipemenulistview.SwipeMenuItem;
+import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hung.ofastapp.Adapter.Product_CustomListviewDetail;
@@ -57,7 +65,7 @@ import java.util.List;
 import dmax.dialog.SpotsDialog;
 
 public class Order extends ActionBarActivity implements LoaderManager.LoaderCallbacks<Cursor> {
-    ListView lv_dathang;
+    SwipeMenuListView lv_dathang;
      TextView txtv_tongtien ;
     TextView title;
     TextView txtv_noproduct;
@@ -87,8 +95,8 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
             /* Ánh xạ các thuộc tính */
-        lv_dathang = (ListView) findViewById(R.id.lv_dathang);
-        lv_dathang = (ListView) findViewById(R.id.lv_dathang);
+
+        lv_dathang = (SwipeMenuListView) findViewById(R.id.lv_dathang);
         txtv_tongtien = (TextView) findViewById(R.id.txtv_tongtien);
         txtv_noproduct = (TextView) findViewById(R.id.txtv_noproduct);
         btn_dathang = (Button) findViewById(R.id.btn_dathang);
@@ -114,8 +122,58 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
         lv_dathang.invalidate();
         TinhTong(arrayList);
         adapter.notifyDataSetChanged();
+        ///Tạo Icon Xóa khi Swipe
+        SwipeMenuCreator creator = new SwipeMenuCreator() {
+            @Override
+            public void create(SwipeMenu menu) {
+                //Tạo item Xóa, có thể tạo thêm item khác tương tự như các thuộc tính dưới đây
+                SwipeMenuItem deleteItem = new SwipeMenuItem(
+                        getApplicationContext());
+                // set item background
+                deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF9,
+                        0x3F, 0x25)));
+                // set item width
+                deleteItem.setWidth(dp2px(80));
+                // set a icon
+                deleteItem.setIcon(R.drawable.ic_delete);
+                // add to menu
+                menu.addMenuItem(deleteItem);
+            }
+        };
+        lv_dathang.setMenuCreator(creator);
+        //Sự kiện khi ấn vào icon Xóa
+        lv_dathang.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+                switch (index) {
+                    case 0:
+                        //delete
+                        CheckAndRemove(arrayList,arrayList.get(position));
+                        if(arrayList.size() ==0)
+                        {
+                            txtv_tongtien.setText("Tổng tiền");
+                        }
+                        adapter.notifyDataSetChanged();
+//                        SharedPreferences onMenuItemClick = PreferenceManager
+//                                .getDefaultSharedPreferences(getApplicationContext());
+//                        SharedPreferences.Editor prefsEditor = onMenuItemClick.edit();
+//                        Gson gson = new Gson();
+//                        String json = gson.toJson(arrayList);
+//                        prefsEditor.putString("ListProduct", json);
+//                        prefsEditor.commit();
+                        Log.d("Mảng sau khi xóa", String.valueOf(arrayList.size()));
 
+                        break;
+                    //Nếu có thêm item khác có thể làm tương tự.
+//                    case 1:
+//                      Thêm code vào đây nếu có thêm item
+//                        break;
+                }
 
+                return false;
+            }
+        });
+        adapter.notifyDataSetChanged();
 
         /* =======================================================================================
                                          SỰ KIỆN KHI NHẤN NÚT ĐẶT HÀNG
@@ -537,5 +595,28 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
     protected void onDestroy() {
         super.onDestroy();
         Log.d("ON DESTROY", "FUCK FUCK");
+    }
+
+    // DP to PXL
+    private int dp2px(int dp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
+                getResources().getDisplayMetrics());
+    }
+    ///Check and remove
+    public void CheckAndRemove(ArrayList<com.hung.ofastapp.Objects.Product> aaa, com.hung.ofastapp.Objects.Product bbb)
+    {
+        Log.d("CheckAndRemove","ON");
+        if(CheckContainShare()==true)
+        {
+            for (int i = 0; i<aaa.size(); i++)
+            {
+                if(aaa.get(i).getId_product() == bbb.getId_product())
+                {
+                    aaa.remove(i);
+                    Log.d("REMOVED PRODUCT","ON");
+                }
+            }
+        }
+
     }
 }
