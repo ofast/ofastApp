@@ -319,9 +319,7 @@ public class JSONParser{
            if(arrayList.size() == jsonArray.length())
            {
                currentOffset =0;
-               arrayList.clear();
-
-
+//               arrayList.clear();
            }
            Log.d("jkahsdkjhasd", String.valueOf(jsonArray.length()));
             Log.d("ssssssssss", String.valueOf(arrayList.size()));

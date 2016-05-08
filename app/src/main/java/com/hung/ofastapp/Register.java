@@ -37,6 +37,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import dmax.dialog.SpotsDialog;
+
 public class Register extends Activity implements LoaderManager.LoaderCallbacks<Cursor>{
     UserRegisterTask eRegisterTask;
     Typeface tf1, tf2;
@@ -46,7 +48,7 @@ public class Register extends Activity implements LoaderManager.LoaderCallbacks<
     Button btn_login, btn_register,btn_register_box;
     View focusView;
     LinearLayout linear_registerbox;
-
+    SpotsDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +70,7 @@ public class Register extends Activity implements LoaderManager.LoaderCallbacks<
         btn_login = (Button)findViewById(R.id.btn_login);
         btn_register = (Button)findViewById(R.id.btn_register);
         btn_register_box = (Button)findViewById(R.id.btn_register_box);
+        progressDialog = new SpotsDialog(Register.this, R.style.progress_register);
 
         //------------------------------------------------------------------------------------------
         //-------------------------------------Set font---------------------------------------------
@@ -284,7 +287,7 @@ public class Register extends Activity implements LoaderManager.LoaderCallbacks<
         }
                         /*Hàm trước khi Xử lý đăng kí*/
         protected void onPreExecute() {
-
+            progressDialog.show();
         }
                      /*Hàm kết nối tới Server \*/
         @Override
@@ -315,6 +318,7 @@ public class Register extends Activity implements LoaderManager.LoaderCallbacks<
                      /*Nhận kết quả từ Server, bắt đầu xử lý dữ liệu trả về*/
         @Override
         protected void onPostExecute(final JSONObject result) {
+            progressDialog.dismiss();
 
             eRegisterTask = null;
             if (result != null) {

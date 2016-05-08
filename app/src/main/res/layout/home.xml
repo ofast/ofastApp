@@ -17,26 +17,42 @@
             app:contentInsetEnd="0dp"
             app:contentInsetStart="0dp"
             app:popupTheme="@style/AppTheme.PopupOverlay">
+
+
+                <!--<android.widget.SearchView-->
+                    <!--android:background="@drawable/custom_home_search"-->
+                    <!--android:layout_weight="83"-->
+                    <!--android:id="@+id/sv_findproduct"-->
+                    <!--android:layout_width="0px"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:queryHint="@string/search_view_hint">-->
+                <!--</android.widget.SearchView>-->
             <LinearLayout
-                android:weightSum="100"
+                android:layout_margin="4dp"
+                android:gravity="center"
                 android:orientation="horizontal"
+                android:weightSum="100"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
-                <android.widget.SearchView
-                    android:background="@drawable/custom_home_search"
-                    android:layout_weight="83"
-                    android:id="@+id/sv_findproduct"
-                    android:layout_width="0px"
-                    android:layout_height="match_parent"
-                    android:queryHint="@string/search_view_hint">
-                </android.widget.SearchView>
-
+                <View
+                    android:layout_weight="72"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"/>
+                <ImageButton
+                    android:id="@+id/imgbtn_search"
+                    android:background="@android:color/transparent"
+                    android:layout_weight="10"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/button_search"/>
+                <View
+                    android:layout_weight="3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"/>
                 <LinearLayout
-                    android:id="@+id/lnlo_cart"
-                    android:orientation="vertical"
-                    android:weightSum="100"
-                    android:layout_weight="17"
+
+                    android:layout_gravity="center"
+                    android:layout_weight="15"
                     android:layout_width="0dp"
                     android:layout_height="match_parent">
                     <include layout="@layout/home_giohang"/>

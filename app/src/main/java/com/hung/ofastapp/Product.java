@@ -56,7 +56,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
     NavigationView navigationView;
     DrawerLayout drawer;
     Toolbar toolbar;
-    SearchView sv_findproduct;
+//    SearchView sv_findproduct;
     Typeface tf1;
     ProgressBar progress_loadproduct;
     Context context = this;
@@ -89,7 +89,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        sv_findproduct = (SearchView) findViewById(R.id.sv_findproduct);
+//        sv_findproduct = (SearchView) findViewById(R.id.sv_findproduct);
         progress_loadproduct = (ProgressBar) findViewById(R.id.progress_loadproduct);
         /*----------------------------------------------------------------------------------------------------------------------------
 -----------------**********************PH?N TOOLBAR***************---------------------------------------------------------------------
@@ -98,7 +98,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
         -----------------------Unfocus ?? ko hi?n Keyboard all time-------------------------------
         ------------------------------------------------------------------------------------------*/
         setupUI(findViewById(R.id.layout_home));
-        sv_findproduct.setIconified(false);
+//        sv_findproduct.setIconified(false);
         /*------------------------------------------------------------------------------------------
         --------------------------------------------------------------------------------------------
         -----------------Khai báo ToolBar, và các thành ph?n c?n thi?t cho 1 Navi-------------------
@@ -118,60 +118,60 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
         -----------------------------B? g?ch chân trong SearchView----------------------------------
         ------------------------------------------------------------------------------------------*/
         tf1 = Typeface.createFromAsset(getAssets(), "VNF-Futura Regular.ttf");
-        int searchPlateId = sv_findproduct.getContext().getResources().getIdentifier("android:id/search_plate", null, null);
-        View searchPlateView = sv_findproduct.findViewById(searchPlateId);
-        searchPlateView.setBackgroundColor(Color.TRANSPARENT);
+//        int searchPlateId = sv_findproduct.getContext().getResources().getIdentifier("android:id/search_plate", null, null);
+//        View searchPlateView = sv_findproduct.findViewById(searchPlateId);
+//        searchPlateView.setBackgroundColor(Color.TRANSPARENT);
   /*------------------------------------------------------------------------------------------
           --------------------------------------------------------------------------------------------
         -----------------Set Font cho Hint và s? ki?n thi ?n vào SearchView-------------------------
         ------------------------------------------------------------------------------------------*/
-        AutoCompleteTextView searchtext = (AutoCompleteTextView) sv_findproduct.findViewById(sv_findproduct.getContext().getResources().getIdentifier("android:id/search_src_text", null, null));
-        searchtext.setTextSize(20);
-        searchtext.setTypeface(tf1);
-        searchtext.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
-        searchtext.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (CheckOpen(drawer) == true) {
-                    drawer.closeDrawer(GravityCompat.START);
-                }
-                return false;
-            }
-        });
+//        AutoCompleteTextView searchtext = (AutoCompleteTextView) sv_findproduct.findViewById(sv_findproduct.getContext().getResources().getIdentifier("android:id/search_src_text", null, null));
+//        searchtext.setTextSize(20);
+//        searchtext.setTypeface(tf1);
+//        searchtext.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
+//        searchtext.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                if (CheckOpen(drawer) == true) {
+//                    drawer.closeDrawer(GravityCompat.START);
+//                }
+//                return false;
+//            }
+//        });
         /*------------------------------------------------------------------------------------------
         --------------------------------------------------------------------------------------------
         ---------------------------------Click vào Icon SearchView----------------------------------
-        ------------------------------------------------------------------------------------------*/
-        sv_findproduct.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (CheckOpen(drawer) == true) {
-                    drawer.closeDrawer(GravityCompat.START);
-
-                }
-            }
-        });
+//        ------------------------------------------------------------------------------------------*/
+//        sv_findproduct.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (CheckOpen(drawer) == true) {
+//                    drawer.closeDrawer(GravityCompat.START);
+//
+//                }
+//            }
+//        });
 
         /*------------------------------------------------------------------------------------------
         --------------------------------------------------------------------------------------------
         -------------------------S? ki?n thay ??i khi Typing SearchView-----------------------------
         ------------------------------------------------------------------------------------------*/
-        sv_findproduct.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            //            Khi sumbit Searchview
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                Toast.makeText(getApplicationContext(), "?ã search", Toast.LENGTH_SHORT).show();
-
-                return false;
-            }
-
-            //            Khi Typing  Searchview
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                Toast.makeText(getApplicationContext(), "?ang gõ", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-        });
+//        sv_findproduct.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            //            Khi sumbit Searchview
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                Toast.makeText(getApplicationContext(), "?ã search", Toast.LENGTH_SHORT).show();
+//
+//                return false;
+//            }
+//
+//            //            Khi Typing  Searchview
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                Toast.makeText(getApplicationContext(), "?ang gõ", Toast.LENGTH_SHORT).show();
+//                return false;
+//            }
+//        });
 
 
         //------------------------------------------------------------------------------------------
@@ -413,7 +413,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
 
                 public boolean onTouch(View v, MotionEvent event) {
                     hideSoftKeyboard(Product.this);
-                    sv_findproduct.setFocusable(false);
+//                    sv_findproduct.setFocusable(false);
                     return false;
                 }
 
@@ -448,7 +448,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
         if (show == true) {
             Log.d("showProgress","TRUE");
             progress_loadproduct.setVisibility(View.VISIBLE);
-            viewPager.setVisibility(View.GONE);
+//            viewPager.setVisibility(View.GONE);
         }
         else
         {

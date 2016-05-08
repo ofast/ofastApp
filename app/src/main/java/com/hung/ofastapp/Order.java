@@ -94,7 +94,7 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
         btn_dathang = (Button) findViewById(R.id.btn_dathang);
         title = (TextView) findViewById(R.id.txtv_info);
         title.setTypeface(tf1);
-        progressDialog = new SpotsDialog(Order.this, R.style.Custom);
+        progressDialog = new SpotsDialog(Order.this, R.style.progress_order);
 
 
         /* =======================================================================================

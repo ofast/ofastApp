@@ -67,6 +67,7 @@ public class Home_CustomGridviewAdapter extends ArrayAdapter<ThuongHieu> {
                 .load(thuongHieu.img)
                 .fitCenter()
                 .centerCrop()
+                .animate(R.anim.flyin_right_to_left)
                 .override(300,200)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.img_anhthuonghieu);

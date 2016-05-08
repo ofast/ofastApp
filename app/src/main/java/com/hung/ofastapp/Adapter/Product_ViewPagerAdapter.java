@@ -1,6 +1,7 @@
 package com.hung.ofastapp.Adapter;
 
 import android.content.Context;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -58,21 +59,30 @@ public class Product_ViewPagerAdapter extends PagerAdapter{
         View view = inflater.inflate(R.layout.product_content,null);
         ((ViewPager) collection).addView(view);
         final ImageView img_product = (ImageView) view.findViewById(R.id.img_product);
-        TextView txtv_tensanpham = (TextView) view.findViewById(R.id.txtv_tensanpham);
-        TextView txtv_giasanpham = (TextView) view.findViewById(R.id.txtv_giasanpham);
+
+        final TextView txtv_tensanpham = (TextView) view.findViewById(R.id.txtv_tensanpham);
+        final TextView txtv_giasanpham = (TextView) view.findViewById(R.id.txtv_giasanpham);
         TextView txtv_picked = (TextView) view.findViewById(R.id.txtv_picked);
         TextView txtv_number = (TextView) view.findViewById(R.id.txtv_numorder);
 
 
 
-        Product product = arrayList.get(position);
+        final Product product = arrayList.get(position);
         Picasso.with(context)
                 .load(product.img_product)
                 .placeholder(R.drawable.logo)
                 .resize(150,150)
                 .into(img_product);
-        txtv_tensanpham.setText(product.name_product);
-        txtv_giasanpham.setText(product.price_product);
+        Handler mainHandler = new Handler(context.getMainLooper());
+
+        Runnable myRunnable = new Runnable() {
+            @Override
+            public void run() {
+                txtv_tensanpham.setText(product.name_product);
+                txtv_giasanpham.setText(product.price_product);} // This is your code
+        };
+        mainHandler.post(myRunnable);
+
         txtv_number.setText(String.valueOf(product.num_order));
         if(product.picked) {
             txtv_picked.setText("Picked true");

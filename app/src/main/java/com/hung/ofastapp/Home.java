@@ -5,7 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -55,14 +58,14 @@ public class Home extends ActionBarActivity
     NavigationView navigationView;
     DrawerLayout drawer;
     Toolbar toolbar;
-    SearchView sv_findproduct;
-Home_fragment_thuonghieu load_brand = new Home_fragment_thuonghieu();
+    Home_fragment_thuonghieu load_brand;
     Typeface tf1;
     public boolean doubleBackToExitPressedOnce = false;
     ViewPager viewPager;
     TabHost tabHost;
     ViewStub base_content;
     ImageButton imgbtn_giohang;
+    ImageButton imgbtn_search;
 //    LinearLayout lnlo_giohang;
     ArrayList<com.hung.ofastapp.Objects.Product> arrayList = new ArrayList<Product>();
 
@@ -85,21 +88,34 @@ Home_fragment_thuonghieu load_brand = new Home_fragment_thuonghieu();
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        sv_findproduct = (SearchView) findViewById(R.id.sv_findproduct);
+
+//        sv_findproduct = (SearchView) findViewById(R.id.sv_findproduct);
         viewPager = (ViewPager) findViewById(R.id.view_pager);
         imgbtn_giohang = (ImageButton) findViewById(R.id.imgbtn_giohang);
+        imgbtn_search = (ImageButton) findViewById(R.id.imgbtn_search);
 //        lnlo_giohang = (LinearLayout) findViewById(R.id.lnlo_cart);
         txtv_tongsoluongsanpham = (TextView) findViewById(R.id.txtv_tongsoluongsanpham);
 
 /*----------------------------------------------------------------------------------------------------------------------------
 -----------------**********************PHẦN TOOLBAR***************---------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------*/
+
         /*------------------------------------------------------------------------------------------
         -----------------------Unfocus để ko hiện Keyboard all time-------------------------------
         ------------------------------------------------------------------------------------------*/
         setupUI(findViewById(R.id.layout_home));
+        /*------------------------------------------------------------------------------------------
+        -----------------------------------Button Search--------------------------------------------
+        ------------------------------------------------------------------------------------------*/
+        imgbtn_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        sv_findproduct.setIconified(false);
+            }
+        });
+
+
+//        sv_findproduct.setIconified(false);
 
 
         /*------------------------------------------------------------------------------------------
@@ -110,6 +126,7 @@ Home_fragment_thuonghieu load_brand = new Home_fragment_thuonghieu();
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
                                     /*DrawerLayout*/
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -121,9 +138,9 @@ Home_fragment_thuonghieu load_brand = new Home_fragment_thuonghieu();
         -----------------------------Bỏ gạch chân trong SearchView----------------------------------
         ------------------------------------------------------------------------------------------*/
         tf1 = Typeface.createFromAsset(getAssets(),"VNF-Futura Regular.ttf");
-        int searchPlateId = sv_findproduct.getContext().getResources().getIdentifier("android:id/search_plate", null, null);
-        View searchPlateView = sv_findproduct.findViewById(searchPlateId);
-        searchPlateView.setBackgroundColor(Color.TRANSPARENT);
+//        int searchPlateId = sv_findproduct.getContext().getResources().getIdentifier("android:id/search_plate", null, null);
+//        View searchPlateView = sv_findproduct.findViewById(searchPlateId);
+//        searchPlateView.setBackgroundColor(Color.TRANSPARENT);
 
 
 
@@ -137,32 +154,37 @@ Home_fragment_thuonghieu load_brand = new Home_fragment_thuonghieu();
           --------------------------------------------------------------------------------------------
         -----------------Set Font cho Hint và sự kiện thi ấn vào SearchView-------------------------
         ------------------------------------------------------------------------------------------*/
-        AutoCompleteTextView searchtext = (AutoCompleteTextView) sv_findproduct.findViewById(sv_findproduct.getContext().getResources().getIdentifier("android:id/search_src_text", null, null));
-        searchtext.setTextSize(20);
-        searchtext.setTypeface(tf1);
-        searchtext.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
-        searchtext.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (CheckOpen(drawer) == true) {
-                    drawer.closeDrawer(GravityCompat.START);
-                }
-                return false;
-            }
-        });
+//        AutoCompleteTextView searchtext = (AutoCompleteTextView) sv_findproduct.findViewById(sv_findproduct.getContext().getResources().getIdentifier("android:id/search_src_text", null, null));
+//        searchtext.setTextSize(20);
+//        searchtext.setTypeface(tf1);
+//        searchtext.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
+//        searchtext.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                if (CheckOpen(drawer) == true) {
+//                    drawer.closeDrawer(GravityCompat.START);
+//                }
+//                return false;
+//            }
+//        });
         /*------------------------------------------------------------------------------------------
         --------------------------------------------------------------------------------------------
         ---------------------------------Click vào Icon SearchView----------------------------------
         ------------------------------------------------------------------------------------------*/
-        sv_findproduct.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (CheckOpen(drawer) == true) {
-                    drawer.closeDrawer(GravityCompat.START);
+//        sv_findproduct.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (CheckOpen(drawer) == true) {
+//                    drawer.closeDrawer(GravityCompat.START);
+//
+//                }
+//            }
+//        });
 
-                }
-            }
-        });
+        /*------------------------------------------------------------------------------------------
+        --------------------------------------------------------------------------------------------
+        -------------------------Sự kiện thay Button Giỏ hàng--------------------------------------
+        ------------------------------------------------------------------------------------------*/
         imgbtn_giohang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -175,22 +197,22 @@ Home_fragment_thuonghieu load_brand = new Home_fragment_thuonghieu();
         --------------------------------------------------------------------------------------------
         -------------------------Sự kiện thay đổi khi Typing SearchView-----------------------------
         ------------------------------------------------------------------------------------------*/
-        sv_findproduct.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            //            Khi sumbit Searchview
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                Toast.makeText(getApplicationContext(), "Đã search", Toast.LENGTH_SHORT).show();
-
-                return false;
-            }
-
-            //            Khi Typing  Searchview
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                Toast.makeText(getApplicationContext(), "Đang gõ", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-        });
+//        sv_findproduct.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            //            Khi sumbit Searchview
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                Toast.makeText(getApplicationContext(), "Đã search", Toast.LENGTH_SHORT).show();
+//
+//                return false;
+//            }
+//
+//            //            Khi Typing  Searchview
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                Toast.makeText(getApplicationContext(), "Đang gõ", Toast.LENGTH_SHORT).show();
+//                return false;
+//            }
+//        });
 /*-------------------------------------------------------------------------------------------------------------------------------
 -----------------**********************PHẦN CONTENT***************---------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------*/
@@ -332,7 +354,7 @@ Home_fragment_thuonghieu load_brand = new Home_fragment_thuonghieu();
             /*-----------Tab1 - Thương HIệu được chọn----------*/
             if (tabhost.getCurrentTab() == 0) {
                //tabhost.getTabWidget().getChildAt(tabhost.getCurrentTab()).setBackgroundColor(Color.parseColor("#e27070"));
-                toolbar.setBackgroundColor(Color.parseColor("#e27070"));
+                toolbar.setBackgroundColor(Color.parseColor("#e91e63"));
 
             }
             /*-----------Tab2 - Loại được chọn----------*/
@@ -362,7 +384,7 @@ Home_fragment_thuonghieu load_brand = new Home_fragment_thuonghieu();
             TextView tv1 = (TextView) tabHost.getCurrentTabView().findViewById(android.R.id.title);
             if (tabhost.getCurrentTab() == 0) {
 
-                tv1.setTextColor(Color.parseColor("#e27070"));
+                tv1.setTextColor(Color.parseColor("#e91e63"));
             }
             else if (tabhost.getCurrentTab() == 1) {
                 tv1.setTextColor(Color.parseColor("#039BE6"));
@@ -395,7 +417,7 @@ Home_fragment_thuonghieu load_brand = new Home_fragment_thuonghieu();
 
                 public boolean onTouch(View v, MotionEvent event) {
                     hideSoftKeyboard(Home.this);
-                    sv_findproduct.setFocusable(false);
+//                    sv_findproduct.setFocusable(false);
                     return false;
                 }
 
@@ -417,7 +439,9 @@ Home_fragment_thuonghieu load_brand = new Home_fragment_thuonghieu();
     //----------------------------------------------------------------------------------------------
     @Override
     protected void onResume() {
+
         super.onResume();
+
         setupUI(findViewById(R.id.layout_home));
         doubleBackToExitPressedOnce = false;
         if(CheckContainShare() == true)

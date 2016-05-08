@@ -2,13 +2,16 @@ package com.hung.ofastapp.Fragment;
 
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,8 +24,10 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.GridLayoutAnimationController;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import com.hung.ofastapp.Adapter.Home_CustomGridviewAdapter;
 import com.hung.ofastapp.CreateConnection.JSONParser;
@@ -30,8 +35,6 @@ import com.hung.ofastapp.CreateConnection.ofastURL;
 import com.hung.ofastapp.Objects.ThuongHieu;
 import com.hung.ofastapp.Product;
 import com.hung.ofastapp.R;
-
-import org.json.JSONArray;
 
 import java.util.ArrayList;
 
@@ -56,14 +59,23 @@ public class Home_fragment_thuonghieu extends Fragment{
     JSONParser parser = new JSONParser();
     String serverData;
     int myLastVisiblePos = 0;
-    int lastTopValue =0;
     LinearLayout main_layout;
+    ProgressBar progressBar;
+    ImageView img_progress;
+    private int height_img = 0;
+    private int width_img = 0;
     @TargetApi(Build.VERSION_CODES.M)
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.home_fragment_thuonghieu, container, false);
         img_banner = (ImageView) rootView.findViewById(R.id.img_thuonghieu);
+//        img_progress = (ImageView) rootView.findViewById(R.id.img_progress) ;
+        progressBar = (ProgressBar) rootView.findViewById(R.id.progress);
+
+
+
+
 
         layout_thuonghieu_progress = (LinearLayout) rootView.findViewById(R.id.layout_thuonghieu_progress);
         main_layout = (LinearLayout) rootView.findViewById(R.id.main_layout);
@@ -187,5 +199,10 @@ public class Home_fragment_thuonghieu extends Fragment{
         super.onResume();
 
     }
+    public static float dipToPixels(Context context, int dipValue) {
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dipValue, metrics);
+    }
+
 }
 
