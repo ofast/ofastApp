@@ -37,6 +37,7 @@ import java.util.ArrayList;
 
 public class Product extends ActionBarActivity implements NavigationView.OnNavigationItemSelectedListener {
     //Phần giao diện
+    ViewStub base_content;
     NavigationView navigationView;
     DrawerLayout drawer;
     Toolbar toolbar;
@@ -60,11 +61,14 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
     public int pPostion = 0;
     String brand_id = "30";
     int cartOrder =0;
-    ViewStub base_content;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
+        /*------------------------------------------------------------------------------------------
+        -------------------------Tạo Content Nội Dung từ product.xml--------------------------------
+        ------------------------------------------------------------------------------------------*/
         base_content = (ViewStub) findViewById(R.id.base_content);
         base_content.setLayoutResource(R.layout.product);
         View stinflated = base_content.inflate();
@@ -77,7 +81,6 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
         progress_loadproduct = (ProgressBar) findViewById(R.id.progress_loadproduct);
         viewPager =(ViewPager)findViewById(R.id.view_pager);
         imgbtn_giohang = (ImageButton) findViewById(R.id.imgbtn_giohang);
-//        imgbtn_search = (ImageButton) findViewById(R.id.imgbtn_search);
         btn_cong = (Button) findViewById(R.id.btn_cong);
         btn_tru = (Button) findViewById(R.id.btn_tru);
         btn_addtocart = (Button) findViewById(R.id.btn_addtocart);
@@ -112,11 +115,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
                 try {
                     Intent intent = new Intent(Product.this, Order.class);
                     startActivity(intent);
-//                    finish();
-                } catch (Exception e){
-
-                }
-
+                } catch (Exception e){}
             }
         });
          /*-----------------------------------------------------------------------------------------|

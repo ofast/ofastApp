@@ -205,6 +205,7 @@ public class Home_fragment_thuonghieu extends Fragment{
     @Override
     public void onResume() {
         super.onResume();
+        Log.d("ArrayListof Thương HIệu",String.valueOf(arrayList.size()));
 
     }
     public static float dipToPixels(Context context, int dipValue) {
@@ -226,5 +227,6 @@ public class Home_fragment_thuonghieu extends Fragment{
         int height = displayMetrics.heightPixels;
         return height;
     }
+
 }
 
