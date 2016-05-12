@@ -3,14 +3,12 @@ package com.hung.ofastapp;
 
 import android.app.AlertDialog;
 import android.app.LoaderManager;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
-import android.content.pm.ApplicationInfo;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -26,17 +24,12 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,8 +42,6 @@ import com.google.gson.reflect.TypeToken;
 import com.hung.ofastapp.Adapter.Product_CustomListviewDetail;
 import com.hung.ofastapp.CreateConnection.JSONParser;
 import com.hung.ofastapp.CreateConnection.ofastURL;
-import com.hung.ofastapp.Listener.SwipeDetector;
-import com.hung.ofastapp.Objects.*;
 import com.hung.ofastapp.Objects.Product;
 
 import org.json.JSONArray;
@@ -59,7 +50,6 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import dmax.dialog.SpotsDialog;
@@ -81,7 +71,6 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
     public float tongtien = 0;
     final Context context = this;
     OrderTask eOrderTask;
-    SwipeDetector swipeDetector = new SwipeDetector();
     private AlertDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

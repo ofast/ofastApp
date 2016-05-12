@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.hung.ofastapp.Fragment.Home_fragment_thuonghieu;
 import com.hung.ofastapp.Home;
 import com.hung.ofastapp.Objects.ThuongHieu;
 import com.hung.ofastapp.R;
@@ -23,24 +24,28 @@ import java.util.ArrayList;
  * Created by Hung on 12/8/2015.
  */
 public class Home_CustomGridviewAdapter extends ArrayAdapter<ThuongHieu> {
+    Home_fragment_thuonghieu home_fragment_thuonghieu;
     Context context;
     int LayoutID;
     ArrayList<ThuongHieu> arrayList;
     ViewHolder holder;
-    int a = 0;
-    int b = 0;
-    public Home_CustomGridviewAdapter(Context context, int LayoutID, ArrayList<ThuongHieu> arrayList) {
+    final int a = 0;
+    final int  b = 0;
+    public Home_CustomGridviewAdapter(Context context, int LayoutID, ArrayList<ThuongHieu> arrayList, Home_fragment_thuonghieu fragment_thuonghieu) {
         super(context, LayoutID, arrayList);
         this.context = context;
         this.LayoutID = LayoutID;
         this.arrayList = arrayList;
+        this.home_fragment_thuonghieu = fragment_thuonghieu;
     }
+
     private class ViewHolder {
         TextView txtv_tenthuonghieu;
         ImageView img_anhthuonghieu;
         TextView txtv_idthuonghieu;
 
     }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         //Declaramos el ImageView
@@ -48,12 +53,14 @@ public class Home_CustomGridviewAdapter extends ArrayAdapter<ThuongHieu> {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (convertView == null) {
+
             convertView = inflater.inflate(R.layout.home_content_custom_gridview,null);
             holder = new ViewHolder();
             holder.img_anhthuonghieu = (ImageView) convertView.findViewById(R.id.img_thuonghieu);
             holder.txtv_tenthuonghieu = (TextView) convertView.findViewById(R.id.txtv_tenthuonghieu);
             holder.txtv_idthuonghieu = (TextView)convertView.findViewById(R.id.txtv_idthuonghieu);
             convertView.setTag(holder);
+
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
@@ -68,7 +75,7 @@ public class Home_CustomGridviewAdapter extends ArrayAdapter<ThuongHieu> {
                 .fitCenter()
                 .centerCrop()
                 .animate(R.anim.flyin_right_to_left)
-                .override(300,200)
+                .override((home_fragment_thuonghieu.getSizeWidthScreen()/2),(home_fragment_thuonghieu.getSizeHeightScreen())/3)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.img_anhthuonghieu);
         //Thư viện Picasso

@@ -105,7 +105,6 @@ public class Product_CustomListviewDetail extends ArrayAdapter<Product>  {
         holder.btn_tru.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 product.subProduct();
                 Log.d(String.valueOf(position),String.valueOf(arrayList.get(position).getNum_order()));
                 holder.txtv_soluong_product.setText(String.valueOf(product.getNum_order()));

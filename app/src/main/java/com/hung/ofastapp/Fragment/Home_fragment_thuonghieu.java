@@ -4,6 +4,7 @@ package com.hung.ofastapp.Fragment;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -12,11 +13,13 @@ import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 
+import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -64,6 +67,8 @@ public class Home_fragment_thuonghieu extends Fragment{
     ImageView img_progress;
     private int height_img = 0;
     private int width_img = 0;
+    private WindowManager windowManager;
+
     @TargetApi(Build.VERSION_CODES.M)
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
@@ -128,7 +133,7 @@ public class Home_fragment_thuonghieu extends Fragment{
                         if(moreList.isEmpty() == false)
                         {
                             arrayList.addAll(moreList);
-                            adapter = new Home_CustomGridviewAdapter(getActivity().getApplicationContext(), R.layout.home_content_custom_gridview, arrayList);
+                            adapter = new Home_CustomGridviewAdapter(getActivity().getApplicationContext(), R.layout.home_content_custom_gridview, arrayList, Home_fragment_thuonghieu.this);
                             grv_thuonghieu.setAdapter(adapter);
                             setMarksGridScrolling(currentFirstVisPos + 2, 0);
                         }
@@ -145,6 +150,9 @@ public class Home_fragment_thuonghieu extends Fragment{
 
         return rootView;
     }
+
+
+
     private class Fetcher extends AsyncTask<String,String,String> {
 
         @Override
@@ -162,7 +170,7 @@ public class Home_fragment_thuonghieu extends Fragment{
         protected void onPostExecute(String s) {
             fetcher = null;
             arrayList = parser.Parse(s);
-            adapter = new Home_CustomGridviewAdapter(getActivity().getApplicationContext(),R.layout.home_content_custom_gridview,arrayList);
+            adapter = new Home_CustomGridviewAdapter(getActivity().getApplicationContext(),R.layout.home_content_custom_gridview,arrayList, Home_fragment_thuonghieu.this);
             grv_thuonghieu.setAdapter(adapter);
             serverData = s;
             showProgress(false);
@@ -204,5 +212,19 @@ public class Home_fragment_thuonghieu extends Fragment{
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dipValue, metrics);
     }
 
+    public int getSizeWidthScreen() {
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        displayMetrics = getContext().getResources().getDisplayMetrics();
+        int width = displayMetrics.widthPixels;
+        return width;
+    }
+    public int getSizeHeightScreen() {
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        displayMetrics = getContext().getResources().getDisplayMetrics();
+        int height = displayMetrics.heightPixels;
+        return height;
+    }
 }
 

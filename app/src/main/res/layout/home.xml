@@ -38,13 +38,13 @@
                     android:layout_weight="72"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"/>
-                <ImageButton
-                    android:id="@+id/imgbtn_search"
-                    android:background="@android:color/transparent"
-                    android:layout_weight="10"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/button_search"/>
+                <!--<ImageButton-->
+                    <!--android:id="@+id/imgbtn_search"-->
+                    <!--android:background="@android:color/transparent"-->
+                    <!--android:layout_weight="10"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:src="@drawable/button_search"/>-->
                 <View
                     android:layout_weight="3"
                     android:layout_width="0dp"

@@ -77,7 +77,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
         progress_loadproduct = (ProgressBar) findViewById(R.id.progress_loadproduct);
         viewPager =(ViewPager)findViewById(R.id.view_pager);
         imgbtn_giohang = (ImageButton) findViewById(R.id.imgbtn_giohang);
-        imgbtn_search = (ImageButton) findViewById(R.id.imgbtn_search);
+//        imgbtn_search = (ImageButton) findViewById(R.id.imgbtn_search);
         btn_cong = (Button) findViewById(R.id.btn_cong);
         btn_tru = (Button) findViewById(R.id.btn_tru);
         btn_addtocart = (Button) findViewById(R.id.btn_addtocart);

@@ -15,12 +15,14 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -65,7 +67,7 @@ public class Home extends ActionBarActivity
     TabHost tabHost;
     ViewStub base_content;
     ImageButton imgbtn_giohang;
-    ImageButton imgbtn_search;
+//    ImageButton imgbtn_search;
 //    LinearLayout lnlo_giohang;
     ArrayList<com.hung.ofastapp.Objects.Product> arrayList = new ArrayList<Product>();
 
@@ -92,7 +94,7 @@ public class Home extends ActionBarActivity
 //        sv_findproduct = (SearchView) findViewById(R.id.sv_findproduct);
         viewPager = (ViewPager) findViewById(R.id.view_pager);
         imgbtn_giohang = (ImageButton) findViewById(R.id.imgbtn_giohang);
-        imgbtn_search = (ImageButton) findViewById(R.id.imgbtn_search);
+//        imgbtn_search = (ImageButton) findViewById(R.id.imgbtn_search);
 //        lnlo_giohang = (LinearLayout) findViewById(R.id.lnlo_cart);
         txtv_tongsoluongsanpham = (TextView) findViewById(R.id.txtv_tongsoluongsanpham);
 
@@ -107,13 +109,13 @@ public class Home extends ActionBarActivity
         /*------------------------------------------------------------------------------------------
         -----------------------------------Button Search--------------------------------------------
         ------------------------------------------------------------------------------------------*/
-        imgbtn_search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Home.this, Search.class);
-                startActivity(intent);
-            }
-        });
+//        imgbtn_search.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(Home.this, Search.class);
+//                startActivity(intent);
+//            }
+//        });
 
 
 //        sv_findproduct.setIconified(false);
@@ -440,9 +442,7 @@ public class Home extends ActionBarActivity
     //----------------------------------------------------------------------------------------------
     @Override
     protected void onResume() {
-
         super.onResume();
-
         setupUI(findViewById(R.id.layout_home));
         doubleBackToExitPressedOnce = false;
         if(CheckContainShare() == true)
@@ -467,7 +467,6 @@ public class Home extends ActionBarActivity
                 txtv_tongsoluongsanpham.setVisibility(View.VISIBLE);
                 txtv_tongsoluongsanpham.setText(String.valueOf(soluongsanpham));
             }
-
         }
         else {
             Toast.makeText(getApplicationContext(),"hihihih", Toast.LENGTH_SHORT).show();
@@ -483,7 +482,7 @@ public class Home extends ActionBarActivity
     @Override
     public void onBackPressed() {
 
-        //-----------------------------------------------------------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------------------
         //------------------------------------------------------------------------------------------
         //-----------------Khi nhấn Back, nếu Navi đang mở thì đóng nó lại--------------------------
         //------------------------------------------------------------------------------------------
@@ -491,11 +490,11 @@ public class Home extends ActionBarActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            //------------------------------------------------------------------------------------------
-            //------------------------------Lấy SharPre từ Login&Register-------------------------------
-            //--------------Khi ấn Back, nếu từ TRYAPP thì sẽ trở về trang trước, xóa SharePre----------
-            //-----------------------Nếu không thì thoát thạm thời khỏi appp----------------------------
-            //==========================================================================================
+            //--------------------------------------------------------------------------------------
+            //------------------------------Lấy SharPre từ Login&Register---------------------------
+            //--------------Khi ấn Back, nếu từ TRYAPP thì sẽ trở về trang trước, xóa SharePre------
+            //-----------------------Nếu không thì thoát thạm thời khỏi appp------------------------
+            //======================================================================================
             SharedPreferences settings = getSharedPreferences(Login_and_Register.TRYAPP, 0);
             boolean HasLoginByTryApp = settings.getBoolean("HasLoginByTryApp",false);
             if(HasLoginByTryApp==true)
@@ -542,7 +541,6 @@ public class Home extends ActionBarActivity
             {
                 soluongsanpham = soluongsanpham + arrayList.get(i).getNum_order();
             }
-            Toast.makeText(getApplicationContext(),String.valueOf(arrayList.size()),Toast.LENGTH_SHORT).show();
             txtv_tongsoluongsanpham.setVisibility(View.VISIBLE);
             txtv_tongsoluongsanpham.setText(String.valueOf(soluongsanpham));
         }
@@ -570,5 +568,33 @@ public class Home extends ActionBarActivity
          height = displaymetrics.heightPixels;
          width = displaymetrics.widthPixels;
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_item_home, menu);
+        MenuItem searchbutton = menu.findItem(R.id.btn_search);
+        ImageButton btn_search = (ImageButton) MenuItemCompat.getActionView(searchbutton);
+
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.btn_search) {
+            Intent intent = new Intent(Home.this, Search.class);
+            startActivity(intent);
+            finish();
+
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    //----------------------------------------------------------------------------------------------
+    //---------------------------------------------ContentView Search-------------------------------
+    //----------------------------------------------------------------------------------------------
+
+
 
 }
