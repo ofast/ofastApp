@@ -1,6 +1,5 @@
 package com.hung.ofastapp;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,19 +19,15 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewStub;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
-import android.widget.SearchView;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.hung.ofastapp.Adapter.MyFragmentPagerAdapter;
+import com.hung.ofastapp.Adapter.Home_Tab_Fragment_Adapter;
 import com.hung.ofastapp.Fragment.Home_fragment_giamgia;
 import com.hung.ofastapp.Fragment.Home_fragment_loai;
 import com.hung.ofastapp.Fragment.Home_fragment_thuonghieu;
@@ -77,8 +72,6 @@ public class Home extends ActionBarActivity
         viewPager = (ViewPager) findViewById(R.id.view_pager);
         imgbtn_giohang = (ImageButton) findViewById(R.id.imgbtn_giohang);
         txtv_tongsoluongsanpham = (TextView) findViewById(R.id.txtv_tongsoluongsanpham);
-                                /*Ẩn Keyboard trên layout */
-        setupUI(findViewById(R.id.layout_home));
                                     /*Toolbar*/
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -144,7 +137,7 @@ public class Home extends ActionBarActivity
         listFragments.add(new Home_fragment_thuonghieu());
         listFragments.add(new Home_fragment_loai());
         listFragments.add(new Home_fragment_giamgia());
-        MyFragmentPagerAdapter myFragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(),listFragments);
+        Home_Tab_Fragment_Adapter myFragmentPagerAdapter = new Home_Tab_Fragment_Adapter(getSupportFragmentManager(),listFragments);
         viewPager.setAdapter(myFragmentPagerAdapter);
         /*OffScreenPageLimit để đảm bảo không bị OnPause khi chuyển lướt qua số tab*/
         viewPager.setOffscreenPageLimit(2);
@@ -191,8 +184,6 @@ public class Home extends ActionBarActivity
     public void onTabChanged(String tabId) {
         int selectedItem = tabHost.getCurrentTab();
         viewPager.setCurrentItem(selectedItem);
-        setupUI(findViewById(android.R.id.tabcontent));
-
     }
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -260,34 +251,6 @@ public class Home extends ActionBarActivity
         }
     }
     /*---------------------------------------------------------------------------------------------|
-    |-------------------------------Hàm ẩn Keyboard cho 1 Activity---------------------------------|
-    |---------------------------------------------------------------------------------------------*/
-    public static void hideSoftKeyboard(Activity activity) {
-        InputMethodManager inputMethodManager = (InputMethodManager)  activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
-    }
-    /*---------------------------------------------------------------------------------------------|
-    |--------------------Hàm ẩn Keyboard khi chạm vào màn hình ------------------------------------|
-    |---------------------------------------------------------------------------------------------*/
-    public void setupUI(View view) {
-        if(!(view instanceof SearchView)) {
-            view.setOnTouchListener(new View.OnTouchListener() {
-
-                public boolean onTouch(View v, MotionEvent event) {
-                    hideSoftKeyboard(Home.this);
-                    return false;
-                }
-
-            });
-        }
-        if (view instanceof ViewGroup) {
-            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
-                View innerView = ((ViewGroup) view).getChildAt(i);
-                setupUI(innerView);
-            }
-        }
-    }
-    /*---------------------------------------------------------------------------------------------|
     |--------------------------Kiểm tra sự tồn tại của SharePreference-----------------------------|
     |---------------------------Đây là một Share chứa ArrayList<Product>----------------------------*/
     private boolean CheckContainShare() {
@@ -332,7 +295,6 @@ public class Home extends ActionBarActivity
     @Override
     protected void onResume() {
         super.onResume();
-        setupUI(findViewById(R.id.layout_home));
         doubleBackToExitPressedOnce = false;
         if(CheckContainShare() == true)
         {
@@ -433,3 +395,34 @@ public class Home extends ActionBarActivity
         }
     }
 }
+
+
+
+     /*---------------------------------------------------------------------------------------------|
+//    |-------------------------------Hàm ẩn Keyboard cho 1 Activity---------------------------------|
+//    |---------------------------------------------------------------------------------------------*/
+//    public static void hideSoftKeyboard(Activity activity) {
+//        InputMethodManager inputMethodManager = (InputMethodManager)  activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+//        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+//    }
+//    /*---------------------------------------------------------------------------------------------|
+//    |--------------------Hàm ẩn Keyboard khi chạm vào màn hình ------------------------------------|
+//    |---------------------------------------------------------------------------------------------*/
+//    public void setupUI(View view) {
+//        if(!(view instanceof SearchView)) {
+//            view.setOnTouchListener(new View.OnTouchListener() {
+//
+//                public boolean onTouch(View v, MotionEvent event) {
+//                    hideSoftKeyboard(Home.this);
+//                    return false;
+//                }
+//
+//            });
+//        }
+//        if (view instanceof ViewGroup) {
+//            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+//                View innerView = ((ViewGroup) view).getChildAt(i);
+//                setupUI(innerView);
+//            }
+//        }
+//    }

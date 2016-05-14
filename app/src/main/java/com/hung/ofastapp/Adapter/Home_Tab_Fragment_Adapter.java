@@ -10,9 +10,9 @@ import java.util.List;
 /**
  * Created by Hung on 12/5/2015.
  */
-public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
+public class Home_Tab_Fragment_Adapter extends FragmentPagerAdapter {
     List<Fragment> listFragments;
-    public MyFragmentPagerAdapter(FragmentManager fm, List<Fragment> listFragments) {
+    public Home_Tab_Fragment_Adapter(FragmentManager fm, List<Fragment> listFragments) {
         super(fm);
         this.listFragments = listFragments;
     }

@@ -16,23 +16,23 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewStub;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.hung.ofastapp.Adapter.Product_Detail_ListView_Adapter;
 import com.hung.ofastapp.Adapter.Product_ViewPagerAdapter;
 import com.hung.ofastapp.CreateConnection.JSONParser;
 import com.hung.ofastapp.CreateConnection.ofastURL;
 import java.lang.reflect.Type;
-import java.nio.DoubleBuffer;
 import java.util.ArrayList;
 
 public class Product extends ActionBarActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -43,7 +43,6 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
     Toolbar toolbar;
     ProgressBar progress_loadproduct;
     ImageButton imgbtn_giohang;
-    ImageButton imgbtn_search;
     Button btn_addtocart;
     Button  btn_tru;
     Button btn_cong;
@@ -55,8 +54,14 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
     Product_ViewPagerAdapter adapter;
     ArrayList<com.hung.ofastapp.Objects.Product> arrayList = new ArrayList<com.hung.ofastapp.Objects.Product>();
     ArrayList<com.hung.ofastapp.Objects.Product> orderList = new ArrayList<com.hung.ofastapp.Objects.Product>();
-    JSONParser image_par = new JSONParser();
-    getInfo getInfo;
+    JSONParser jsonParser = new JSONParser();
+    GetProduct getProduct;
+    //Phần ListView Deitail
+    GetProductDetail getProductDetail;
+    ListView lv_thongtinsanpham;
+    ArrayList<com.hung.ofastapp.Objects.Product> detailList;
+    Product_Detail_ListView_Adapter detail_adapter;
+    TextView txtv_noproduct;
     //Phần biến thêm
     public int pPostion = 0;
     String brand_id = "30";
@@ -86,8 +91,8 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
         btn_addtocart = (Button) findViewById(R.id.btn_addtocart);
         txtv_soluongsanpham = (TextView) findViewById(R.id.txtv_soluongsanpham);
         txtv_tongsoluongsanpham = (TextView) findViewById(R.id.txtv_tongsoluongsanpham);
-                                    /*Ẩn Keyboard trên layout */
-        setupUI(findViewById(R.id.layout_home));
+        lv_thongtinsanpham = (ListView) findViewById(R.id.lv_thongtinsanpham);
+        txtv_noproduct = (TextView) findViewById(R.id.txtv_noproduct);
                                     /*Toolbar*/
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -102,8 +107,8 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
         |---------------------Kết nối tới Server, lấy dữ liệu rồi trả về ViewPager-----------------|
         |-----------------------------------------------------------------------------------------*/
         this.brand_id = getIntent().getStringExtra("brand_id");
-        getInfo = new getInfo();
-        getInfo.execute(ofastURL.brand_product + "id=" + brand_id);
+        getProduct = new GetProduct();
+        getProduct.execute(ofastURL.brand_product + "id=" + brand_id);
         viewPager.setOffscreenPageLimit(arrayList.size() - 1);
         /*-----------------------------------------------------------------------------------------|
         |-----------------------------Sự kiện khi ấn giỏ hàng--------------------------------------|
@@ -239,6 +244,13 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
             @Override
             public void onPageSelected(int position) {
                 Log.d("ID_PRODUCT",String.valueOf(arrayList.get(position).getId_product()));
+                if(arrayList.get(position).getDetail() !=null)
+                {
+                    ShowDetailProduct(true);
+                    detailList = new ArrayList<com.hung.ofastapp.Objects.Product>();
+                    getProductDetail = new GetProductDetail();
+                    getProductDetail.execute(arrayList.get(position).getDetail());
+                }
                 viewPager.getChildAt(position);
                 pPostion = position;
                 if(getProduct(position).isPicked()){
@@ -253,9 +265,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
                 txtv_soluongsanpham.setText(String.valueOf(getProduct(pPostion).getNum_order()));
             }
             @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
+            public void onPageScrollStateChanged(int state) {}
         });
     }
 
@@ -294,85 +304,99 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
     /*---------------------------------------------------------------------------------------------|
    |--------------------AsyncTask đọc file JSON từ Server trả về Arraylist-------------------------|
    |----------------------------------------------------------------------------------------------*/
-    private class getInfo extends AsyncTask<String,String,String> {
+    private class GetProduct extends AsyncTask<String,String,String> {
         @Override
         protected void onPreExecute() {
-            showProgress(true);
+            showProgressforProduct(true);
         }
 
         @Override
         protected String doInBackground(String... params) {
-            String data = JSONParser.getData(params[0]);
+            String data = JSONParser.getDatafromURL(params[0]);
             return data;
         }
 
         @Override
         protected void onPostExecute(String s) {
-            showProgress(false);
-            arrayList = image_par.getImageProduct(s);
+            showProgressforProduct(false);
+            Log.d("SSSSSSSSSSSs",s);
+            arrayList = jsonParser.getProduct(s);
+
             if(CheckContainShare() == true)
             {
                 CheckContainProduct();
-    /* --------------------------------------------------------------------------------------------|
-    |---------------------Kiểm tra phần tử đầu tiên có nằm trong Sharepreference không-------------|
-    |-----------------------------nếu có - nếu không thì chạy hàm bên dưới-------------------------|
-    |---------------------------------------------------------------------------------------------*/
+                /*---------------------------------------------------------------------------------|
+                |---------Kiểm tra phần tử đầu tiên có nằm trong Sharepreference không-------------|
+                |-----------------nếu có - nếu không thì chạy hàm bên dưới-------------------------|
+                |---------------------------------------------------------------------------------*/
                     CheckPicked(getProduct(0));
                     txtv_soluongsanpham.setText(String.valueOf(getProduct(pPostion).getNum_order()));
             }
+            for(int i = 0; i<arrayList.size(); i++)
+            {
+                Log.d("Detail of Arraylist: ",arrayList.get(i).getDetail());
+            }
+
             adapter = new Product_ViewPagerAdapter(getApplicationContext(),arrayList);
             adapter.notifyDataSetChanged();
             adapter.getItemPosition(arrayList.get(0));
             viewPager.setAdapter(adapter);
-            viewPager.setPageTransformer(true, new ZoomOutPageTransformer());
+//            viewPager.setPageTransformer(true, new ZoomOutPageTransformer());
+            if(arrayList.get(0).getDetail()!= null)
+            {
+                detailList = new ArrayList<com.hung.ofastapp.Objects.Product>();
+                getProductDetail = new GetProductDetail();
+                getProductDetail.execute(arrayList.get(0).getDetail());
+            }else {
+
+            }
+        }
+    }
+    /*---------------------------------------------------------------------------------------------|
+   |--------------------AsyncTask đọc file JSON từ Server trả về ArraylistDetail-------------------------|
+   |----------------------------------------------------------------------------------------------*/
+    private class GetProductDetail extends AsyncTask<String,String,String> {
+        @Override
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            return params[0];
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            getProductDetail = null;
+            detailList = jsonParser.getProductDetail(s);
+            if(detailList.size() ==0)
+            {
+                ShowDetailProduct(false);
+            }else {
+                detail_adapter = new Product_Detail_ListView_Adapter(context,R.layout.product_custom_detail,detailList);
+                lv_thongtinsanpham.setAdapter(detail_adapter);
+            }
+
+
 
         }
     }
+
     /*---------------------------------------------------------------------------------------------|
     |--------------------Hàm lấy 1 Product từ một vị trí Position----------------------------------|
     |---------------------------------------------------------------------------------------------*/
     public com.hung.ofastapp.Objects.Product getProduct(int position) {
         return arrayList.get(position);
     }
-
-    /*---------------------------------------------------------------------------------------------|
-    |--------------------Hàm ẩn Keyboard khi chạm vào màn hình ------------------------------------|
-    |---------------------------------------------------------------------------------------------*/
-    public void setupUI(View view) {
-        Log.d("setupUI ","Hide KeyBooard");
-        //Set up touch listener for non-text box views to hide keyboard.
-        if(!(view instanceof SearchView)) {
-            view.setOnTouchListener(new View.OnTouchListener() {
-
-                public boolean onTouch(View v, MotionEvent event) {
-                    hideSoftKeyboard(Product.this);
-                    return false;
-                }
-
-            });
-        }
-        //If a layout container, iterate over children and seed recursion.
-        if (view instanceof ViewGroup) {
-            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
-                View innerView = ((ViewGroup) view).getChildAt(i);
-                setupUI(innerView);
-            }
-        }
-    }
-    /*---------------------------------------------------------------------------------------------|
-    |-------------------------------Hàm ẩn Keyboard cho 1 Activity---------------------------------|
-    |---------------------------------------------------------------------------------------------*/
-    public static void hideSoftKeyboard(Activity activity) {
-        Log.d("hideSoftKeyboard","Hide KeyBooard");
-        InputMethodManager inputMethodManager = (InputMethodManager)  activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
-    }
     /*---------------------------------------------------------------------------------------------|
     |--------------------------Hàm ẩn - hiện Progress cho Product.java-----------------------------|
     |---------------------------------------------------------------------------------------------*/
-    private void showProgress(final boolean show) {
+    private void showProgressforProduct(final boolean show) {
         if (show == true) {
             Log.d("showProgress","TRUE");
+            btn_cong.setEnabled(false);
+            btn_tru.setEnabled(false);
+            btn_addtocart.setEnabled(false);
             progress_loadproduct.setVisibility(View.VISIBLE);
             viewPager.setVisibility(View.GONE);
         }
@@ -381,6 +405,24 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
             Log.d("showProgress","FALSE");
             progress_loadproduct.setVisibility(View.GONE);
             viewPager.setVisibility(View.VISIBLE);
+            btn_cong.setEnabled(true);
+            btn_tru.setEnabled(true);
+            btn_addtocart.setEnabled(true);
+        }
+    }
+    /*---------------------------------------------------------------------------------------------|
+    |--------------------------Hàm ẩn - hiện ListView Detail---------------------------------------|
+    |---------------------------------------------------------------------------------------------*/
+    public void ShowDetailProduct(boolean show)
+    {
+        if(show == true)
+        {
+            lv_thongtinsanpham.setVisibility(View.VISIBLE);
+            txtv_noproduct.setVisibility(View.GONE);
+        }
+        else {
+            txtv_noproduct.setVisibility(View.VISIBLE);
+            lv_thongtinsanpham.setVisibility(View.GONE);
         }
     }
     /*---------------------------------------------------------------------------------------------|
@@ -414,6 +456,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
             {
                 if(orderList.get(i).getId_product() == arrayList.get(h).getId_product())
                 {
+                    orderList.get(i).setDetail(arrayList.get(h).getDetail());
                     Log.d("Change Value Arraylist","BY VALUE IN ORDERLIST");
                     arrayList.set(h,orderList.get(i));
                 }

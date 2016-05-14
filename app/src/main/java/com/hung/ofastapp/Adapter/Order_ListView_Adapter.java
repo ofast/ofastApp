@@ -1,8 +1,6 @@
 package com.hung.ofastapp.Adapter;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -15,9 +13,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.model.StringLoader;
 import com.hung.ofastapp.Objects.Product;
 import com.hung.ofastapp.Order;
 import com.hung.ofastapp.R;
@@ -28,20 +23,20 @@ import java.util.ArrayList;
 /**
  * Created by Hung on 12/14/2015.
  */
-public class Product_CustomListviewDetail extends ArrayAdapter<Product>  {
+public class Order_ListView_Adapter extends ArrayAdapter<Product>  {
 
 
     public static boolean flagadd;
     Order order = new Order();
 
-    Product_CustomListviewDetail adapter;
+    Order_ListView_Adapter adapter;
     Context context;
     int LayoutID;
     ArrayList<Product> arrayList = new ArrayList<Product>();
     ArrayList<Product> brrayList = new ArrayList<Product>();
     ViewHolder holder;
     Typeface tf1;
-    public Product_CustomListviewDetail(Context context, int LayoutID, ArrayList<Product> arrayList) {
+    public Order_ListView_Adapter(Context context, int LayoutID, ArrayList<Product> arrayList) {
         super(context, LayoutID, arrayList);
         this.context = context;
         this.LayoutID = LayoutID;
@@ -69,7 +64,7 @@ public class Product_CustomListviewDetail extends ArrayAdapter<Product>  {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.product_custom_listview_detail,null);
+            convertView = inflater.inflate(R.layout.order_custom_listview,null);
             holder = new ViewHolder();
             holder.img_image_product = (ImageView) convertView.findViewById(R.id.img_image_product);
             holder.txtv_name_product = (TextView) convertView.findViewById(R.id.txtv_name_product);
@@ -98,7 +93,7 @@ public class Product_CustomListviewDetail extends ArrayAdapter<Product>  {
                 Toast.makeText(getContext(),"BTN + of:" +position,Toast.LENGTH_SHORT).show();
                 arrayList.set(position,product);
                 Log.d("AAAAAAA",String.valueOf(arrayList.get(position).getNum_order()));
-                Product_CustomListviewDetail.this.notifyDataSetChanged();
+                Order_ListView_Adapter.this.notifyDataSetChanged();
             }
         });
         //Set sự kiện khi nhấn Button -
@@ -109,7 +104,7 @@ public class Product_CustomListviewDetail extends ArrayAdapter<Product>  {
                 Log.d(String.valueOf(position),String.valueOf(arrayList.get(position).getNum_order()));
                 holder.txtv_soluong_product.setText(String.valueOf(product.getNum_order()));
                 Toast.makeText(getContext(),"BTN - of:" +position,Toast.LENGTH_SHORT).show();
-                Product_CustomListviewDetail.this.notifyDataSetChanged();
+                Order_ListView_Adapter.this.notifyDataSetChanged();
 
             }
         });
@@ -118,13 +113,13 @@ public class Product_CustomListviewDetail extends ArrayAdapter<Product>  {
             holder.btn_tru.setEnabled(false);
 //                    arrayList.remove(product);
 //                    ((Order)context).TinhTong(arrayList);
-            Product_CustomListviewDetail.this.notifyDataSetChanged();
+            Order_ListView_Adapter.this.notifyDataSetChanged();
         }
         //Kiểm tra số lượng sản phẩm lớn hơn 1
         if(product.getNum_order() >1)
         {
             holder.btn_tru.setEnabled(true);
-            Product_CustomListviewDetail.this.notifyDataSetChanged();
+            Order_ListView_Adapter.this.notifyDataSetChanged();
         }
 
         //Chạy lại hàm Tính TỔng từ Home

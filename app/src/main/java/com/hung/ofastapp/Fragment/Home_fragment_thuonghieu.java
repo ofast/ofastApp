@@ -4,8 +4,6 @@ package com.hung.ofastapp.Fragment;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Point;
-import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,26 +11,19 @@ import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 
 import android.view.WindowManager;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.DecelerateInterpolator;
-import android.view.animation.GridLayoutAnimationController;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
-import com.hung.ofastapp.Adapter.Home_CustomGridviewAdapter;
+import com.hung.ofastapp.Adapter.Fragment_ThuongHieu_GridView_Adapter;
 import com.hung.ofastapp.CreateConnection.JSONParser;
 import com.hung.ofastapp.CreateConnection.ofastURL;
 import com.hung.ofastapp.Objects.ThuongHieu;
@@ -58,7 +49,7 @@ public class Home_fragment_thuonghieu extends Fragment{
     GridViewWithHeaderAndFooter grv_thuonghieu;
     ImageView img_banner;
     ArrayList<ThuongHieu>  arrayList ;
-    Home_CustomGridviewAdapter adapter;
+    Fragment_ThuongHieu_GridView_Adapter adapter;
     JSONParser parser = new JSONParser();
     String serverData;
     int myLastVisiblePos = 0;
@@ -133,7 +124,7 @@ public class Home_fragment_thuonghieu extends Fragment{
                         if(moreList.isEmpty() == false)
                         {
                             arrayList.addAll(moreList);
-                            adapter = new Home_CustomGridviewAdapter(getActivity().getApplicationContext(), R.layout.home_content_custom_gridview, arrayList, Home_fragment_thuonghieu.this);
+                            adapter = new Fragment_ThuongHieu_GridView_Adapter(getActivity().getApplicationContext(), R.layout.home_content_custom_gridview, arrayList, Home_fragment_thuonghieu.this);
                             grv_thuonghieu.setAdapter(adapter);
                             setMarksGridScrolling(currentFirstVisPos + 2, 0);
                         }
@@ -162,7 +153,7 @@ public class Home_fragment_thuonghieu extends Fragment{
 
         @Override
         protected String doInBackground(String... params) {
-            String data = JSONParser.getData(params[0]);
+            String data = JSONParser.getDatafromURL(params[0]);
             return data;
         }
 
@@ -170,7 +161,7 @@ public class Home_fragment_thuonghieu extends Fragment{
         protected void onPostExecute(String s) {
             fetcher = null;
             arrayList = parser.Parse(s);
-            adapter = new Home_CustomGridviewAdapter(getActivity().getApplicationContext(),R.layout.home_content_custom_gridview,arrayList, Home_fragment_thuonghieu.this);
+            adapter = new Fragment_ThuongHieu_GridView_Adapter(getActivity().getApplicationContext(),R.layout.home_content_custom_gridview,arrayList, Home_fragment_thuonghieu.this);
             grv_thuonghieu.setAdapter(adapter);
             serverData = s;
             showProgress(false);

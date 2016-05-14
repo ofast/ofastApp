@@ -23,7 +23,7 @@ import java.util.ArrayList;
 /**
  * Created by Hung on 12/8/2015.
  */
-public class Home_CustomGridviewAdapter extends ArrayAdapter<ThuongHieu> {
+public class Fragment_ThuongHieu_GridView_Adapter extends ArrayAdapter<ThuongHieu> {
     Home_fragment_thuonghieu home_fragment_thuonghieu;
     Context context;
     int LayoutID;
@@ -31,7 +31,7 @@ public class Home_CustomGridviewAdapter extends ArrayAdapter<ThuongHieu> {
     ViewHolder holder;
     final int a = 0;
     final int  b = 0;
-    public Home_CustomGridviewAdapter(Context context, int LayoutID, ArrayList<ThuongHieu> arrayList, Home_fragment_thuonghieu fragment_thuonghieu) {
+    public Fragment_ThuongHieu_GridView_Adapter(Context context, int LayoutID, ArrayList<ThuongHieu> arrayList, Home_fragment_thuonghieu fragment_thuonghieu) {
         super(context, LayoutID, arrayList);
         this.context = context;
         this.LayoutID = LayoutID;

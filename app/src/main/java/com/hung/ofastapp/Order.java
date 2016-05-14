@@ -27,7 +27,6 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -39,7 +38,7 @@ import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.hung.ofastapp.Adapter.Product_CustomListviewDetail;
+import com.hung.ofastapp.Adapter.Order_ListView_Adapter;
 import com.hung.ofastapp.CreateConnection.JSONParser;
 import com.hung.ofastapp.CreateConnection.ofastURL;
 import com.hung.ofastapp.Objects.Product;
@@ -62,7 +61,7 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
     Button btn_dathang;
     ArrayList<com.hung.ofastapp.Objects.Product> arrayList = new ArrayList<>();
     ArrayList<com.hung.ofastapp.Objects.Product> brrayList = new ArrayList<>();
-    Product_CustomListviewDetail adapter;
+    Order_ListView_Adapter adapter;
     EditText edt_phone;
     EditText edt_email;
     EditText edt_notes;
@@ -106,7 +105,7 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
             arrayList = gson.fromJson(json, type);
 
         }
-        adapter = new Product_CustomListviewDetail(this, R.layout.product_custom_listview_detail, arrayList);
+        adapter = new Order_ListView_Adapter(this, R.layout.order_custom_listview, arrayList);
         lv_dathang.setAdapter(adapter);
         lv_dathang.invalidate();
         TinhTong(arrayList);

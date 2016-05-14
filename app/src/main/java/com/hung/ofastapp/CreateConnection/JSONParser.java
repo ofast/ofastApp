@@ -41,7 +41,56 @@ public class JSONParser{
     //Biến currentOffset hỗ trợ cho việc Loadmore
     static int currentOffset = 0;
 
+
+    //POST dữ liệu lên, nhận về 1 JSONObject kết quả.
     public JSONObject makeHttpRequest(String url, String method,
+                                      HashMap<String, String> params) {
+        paramsString = makePostObj(params);
+        if (method.equals("POST")) {
+            doPost(url);
+        } else if (method.equals("GET")) {
+            doGet(url);
+        }else if(method.equals("JSONPOST")){
+            doPostJson(url);
+        }
+
+        try {
+            //Receive the response from the server
+            int httpResult = urlConnection.getResponseCode();
+            Log.d("JSON Parser", "HTTP Code: " + httpResult + " " );
+            if(httpResult == HttpURLConnection.HTTP_OK) {
+
+                InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+                BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    result.append(line);
+                }
+
+                Log.d("JSON Parser", "result: " + result.toString());
+                reader.close();
+            }
+
+            urlConnection.disconnect();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // try parse the string to a JSON object
+        try {
+            jObj = new JSONObject(result.toString());
+        } catch (JSONException e) {
+            Log.e("JSON Parser", "Error parsing data " + e.toString());
+        }
+
+        // return JSON Object
+        return jObj;
+    }
+
+
+    //POST dữ liệu lên, nhận về 1 JSONARRAY kết quả.
+    public JSONArray makeHttpRequests(String url, String method,
                                       HashMap<String, String> params) {
         paramsString = makePostObj(params);
         if (method.equals("POST")) {
@@ -80,20 +129,19 @@ public class JSONParser{
 
         // try parse the string to a JSON object
         try {
-            jObj = new JSONObject(result.toString());
+            jArr = new JSONArray(result.toString());
         } catch (JSONException e) {
             Log.e("JSON Parser", "Error parsing data " + e.toString());
         }
 
-        // return JSON Object
-        return jObj;
+        // return JSON Array
+        return jArr;
     }
 
     /* =================================================================================
        ======================== Make Http Request to Post Json =========================
        ========================== Add by Khang-va 21-04-2016 ===========================
        =================================================================================*/
-
     public JSONObject makeJsonHttpRequest(String url, JSONObject data) {
 
         try {
@@ -138,16 +186,12 @@ public class JSONParser{
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-
         // try parse the string to a JSON object
         try {
             jObj = new JSONObject(result.toString());
         } catch (JSONException e) {
             Log.e("JSON Parser", "Error parsing data " + e.toString());
         }
-
         // return JSON Object
         return jObj;
     }
@@ -271,16 +315,6 @@ public class JSONParser{
         return null;
     }
 
-
-
-
-
-
-
-
-
-
-
     //Hàm đọc file Js để get Thương HIệu
     public ArrayList<ThuongHieu> Parse(String json){
 
@@ -334,13 +368,8 @@ public class JSONParser{
 
     }
 
-
-
-
-
-
     // Hàm đọc JSON để get Product
-    public ArrayList<Product> getImageProduct(String json){
+    public ArrayList<Product> getProduct(String json){
 
         try {
             Product product;
@@ -350,9 +379,55 @@ public class JSONParser{
             List<String> images = new ArrayList<String>();
             List<String> name = new ArrayList<String>();
             List<String> price = new ArrayList<String>();
+            List<String> detail = new ArrayList<String>();
             JSONArray jsonArray = new JSONArray(json);
-
+            Log.d("JSON TỪ WEB:::", json);
             //Get Link ảnh
+            for(int i=0; i<jsonArray.length();i++)
+            {
+                JSONObject jb = jsonArray.getJSONObject(i);
+                jb.getString("id");
+                id.add(jb.getInt("id"));
+                jb.getString("images");
+                link_images.add(jb.getString("images"));
+                jb.getString("title");
+                name.add(jb.getString("title"));
+                jb.getString("price");
+                price.add(jb.getString("price"));
+                jb.getString("detail");
+                detail.add(jb.getString("detail"));
+            }
+
+            //Get product
+            for(int i = 0; i<link_images.size(); i++)
+            {
+                String a = (ofastURL.frontend_Web_image + link_images.get(i));
+                images.add(a);
+                product = new Product(id.get(i),images.get(i),name.get(i),price.get(i), detail.get(i));
+                arrayList.add(product);
+
+            }
+            Log.d("aaaaaaaaaaaaaaaaaaaa", String.valueOf(arrayList.size()));
+
+            return arrayList;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    // Hàm đọc JSON để get Product Detail
+    public ArrayList<Product> getProductDetail(String json){
+
+        try {
+            Product product;
+            ArrayList<Product> arrayList= new ArrayList<Product>();
+            List<Integer> id = new ArrayList<Integer>();
+            List<String> link_images = new ArrayList<String>();
+            List<String> images = new ArrayList<String>();
+            List<String> name = new ArrayList<String>();
+            List<String> price = new ArrayList<String>();
+
+            JSONArray jsonArray = new JSONArray(json);
             for(int i=0; i<jsonArray.length();i++)
             {
                 JSONObject jb = jsonArray.getJSONObject(i);
@@ -373,7 +448,6 @@ public class JSONParser{
                 images.add(a);
                 product = new Product(id.get(i),images.get(i),name.get(i),price.get(i));
                 arrayList.add(product);
-                Log.d("aaaaaaaaaaaaaaaaaaaa", price.toString());
             }
             return arrayList;
         } catch (JSONException e) {
@@ -382,54 +456,9 @@ public class JSONParser{
         }
     }
 
-    //Đọc JSON để lấy Product khi Search
-//    public ArrayList<Product> getProductSearch(JSONObject json){
-//        json = new JSONObject();
-//        String result = json.toString().substring(1, json.toString().length() - 1);
-//        try {
-//            Product product;
-//            ArrayList<Product> arrayList= new ArrayList<Product>();
-//            List<Integer> id = new ArrayList<Integer>();
-//            List<Integer> category_id = new ArrayList<Integer>();
-//            List<String> link_images = new ArrayList<String>();
-//            List<String> images = new ArrayList<String>();
-//            List<String> name = new ArrayList<String>();
-//            List<String> price = new ArrayList<String>();
-//            JSONArray jsonArray = new JSONArray(result);
-//
-//            //Get Link ảnh
-//            for(int i=0; i<jsonArray.length();i++)
-//            {
-//                JSONObject jb = jsonArray.getJSONObject(i);
-//                jb.getString("id");
-//                id.add(jb.getInt("id"));
-//                jb.getString("category_id");
-//                category_id.add(jb.getInt("category_id"));
-//                jb.getString("images");
-//                link_images.add(jb.getString("images"));
-//                jb.getString("title");
-//                name.add(jb.getString("title"));
-//                jb.getString("price");
-//                price.add(jb.getString("price"));
-//            }
-//
-//            //Get product
-//            for(int i = 0; i<link_images.size(); i++)
-//            {
-//                String a = (ofastURL.frontend_Web_image + link_images.get(i));
-//                images.add(a);
-//                product = new Product(id.get(i),category_id.get(i),images.get(i),name.get(i),price.get(i));
-//                arrayList.add(product);
-//            }
-//            return arrayList;
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//            return null;
-//        }
-//    }
 
-//Lấy dữ liệu từ trên Server trả về
-    public static String getData(String stringUrl) {
+    //Đọc JSON từ WEB với Địa chỉ có sẳn
+    public static String getDatafromURL(String stringUrl) {
         BufferedReader reader = null;
         try {
             URL url = new URL(stringUrl);
@@ -445,7 +474,7 @@ public class JSONParser{
             while ((line = reader.readLine()) != null) {
                 sb.append(line).append("\n");
             }
-
+            Log.d("SBBBBBBB STRING:", sb.toString());
             return sb.toString();
         } catch (Exception e) {
             e.printStackTrace();
@@ -457,14 +486,7 @@ public class JSONParser{
                 e.printStackTrace();
             }
         }
-
     }
-
-
-
-
-
-
     //Hàm lấy từ vị trí offset tới vị trí number + offset!
     public List<String> loadImageName(JSONArray jsonArray, int offset, int number) throws JSONException {
         List<String> linkImage = new ArrayList<String>();
@@ -473,67 +495,12 @@ public class JSONParser{
                 JSONObject jb = jsonArray.getJSONObject(i);
                 jb.getString("image");
                 linkImage.add(jb.getString("image"));
-
             } else break;
         }
         return linkImage;
 
     }
 
-
-
-
-
-
-
-
-    public JSONArray makeHttpRequests(String url, String method,
-                                      HashMap<String, String> params) {
-        paramsString = makePostObj(params);
-        if (method.equals("POST")) {
-            doPost(url);
-        } else if (method.equals("GET")) {
-            doGet(url);
-        }else if(method.equals("JSONPOST")){
-            doPostJson(url);
-        }
-
-        try {
-            //Receive the response from the server
-            int httpResult = urlConnection.getResponseCode();
-            Log.d("JSON Parser", "HTTP Code: " + httpResult + " " );
-            if(httpResult == HttpURLConnection.HTTP_OK) {
-
-                InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-                BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    result.append(line);
-                }
-
-                Log.d("JSON Parser", "result: " + result.toString());
-                reader.close();
-            }
-
-            urlConnection.disconnect();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-
-        // try parse the string to a JSON object
-        try {
-            jArr = new JSONArray(result.toString());
-        } catch (JSONException e) {
-            Log.e("JSON Parser", "Error parsing data " + e.toString());
-        }
-
-        // return JSON Array
-        return jArr;
-    }
 
 }
 

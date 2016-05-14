@@ -1,52 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
 
-    android:gravity="center"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <ImageButton
-
+    <LinearLayout
+        android:weightSum="100"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/nav_cart"
-        android:layout_alignParentBottom="true"
-        android:id="@+id/imgbtn_giohang" />
+        android:layout_height="?attr/actionBarSize">
+        <View
+            android:layout_weight="85"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"/>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignTop="@+id/imgbtn_giohang"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
-        <LinearLayout
-            android:weightSum="100"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_weight="15"
+            android:layout_height="match_parent"
+            android:layout_alignTop="@+id/imgbtn_giohang"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/nav_cart"
+                android:id="@+id/imgbtn_giohang" />
+            <LinearLayout
+                android:weightSum="100"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="50"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="40"
-                android:text="10"
-                android:id="@+id/txtv_tongsoluongsanpham"
-                android:gravity="center"
-                android:visibility="gone"
-                android:textColor="@color/colorPrimary"
-                android:background="@drawable/custom_product_giohang_textview"
-                android:layout_gravity="center_horizontal|bottom" />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="10"/>
-        </LinearLayout>
+                android:layout_weight="60"/>
 
-        />
-    </FrameLayout>
-
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="35"
+                    android:layout_gravity="center"
+                    android:text="10"
+                    android:id="@+id/txtv_tongsoluongsanpham"
+                    android:gravity="center"
+                    android:visibility="visible"
+                    android:textColor="@color/colorPrimary"
+                    android:background="@drawable/custom_product_giohang_textview" />
+            </LinearLayout>
+        </FrameLayout>
+    </LinearLayout>
 </RelativeLayout>

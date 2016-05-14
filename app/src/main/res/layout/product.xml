@@ -6,9 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.hung.ofastapp.Product">
-
     <LinearLayout
         android:weightSum="100"
         android:orientation="vertical"
@@ -48,7 +46,18 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#9E9E9E"/>
+        <TextView
+            android:id="@+id/txtv_noproduct"
+            android:text="Không có chi tiết!"
+            android:gravity="center"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="30" />
         <ListView
+            android:listSelector="@android:color/transparent"
+            android:cacheColorHint="@android:color/transparent"
+            android:layout_marginTop="2dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="7dp"
             android:id="@+id/lv_thongtinsanpham"

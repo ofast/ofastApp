@@ -52,8 +52,6 @@ public class Login extends Activity implements LoaderManager.LoaderCallbacks<Cur
 
 
     private UserLoginTask eLoginTask = null;
-    private View mProgressView;
-    private View mLoginFormView;
     //Typeface kiểu font
     Typeface tf1, tf2;
     TextView txtv_title;

@@ -15,6 +15,7 @@ public class Product implements Serializable {
     public String price_product;
     public boolean picked = false;
     public int num_order = 1;
+    public String detail;
     public boolean checked = false;
 
 
@@ -38,8 +39,15 @@ public class Product implements Serializable {
         this.price_product = price_product;
         this.num_order = num_order;
     }
-
-    //For ViewPager in Product.java
+    //For Product
+    public Product(int id_product, String img_product, String name_product, String price_product, String detail) {
+        this.id_product = id_product;
+        this.img_product = img_product;
+        this.name_product = name_product;
+        this.price_product = price_product;
+        this.detail = detail;
+    }
+    //For detail of Product
     public Product(int id_product, String img_product, String name_product, String price_product) {
         this.id_product = id_product;
         this.img_product = img_product;
@@ -130,5 +138,13 @@ public class Product implements Serializable {
 
     public void setChecked(boolean checked) {
         this.checked = checked;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 }

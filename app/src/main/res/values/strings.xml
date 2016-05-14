@@ -7,7 +7,7 @@
     <string name="error_lenght">Yêu cầu trên 6 ký tự</string>
     <string name="error_input_type">Type Input: a-z,0-9</string>
     <string name="title_activity_home">Home</string>
-
+    <string name="loadding">Loading</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Settings</string>

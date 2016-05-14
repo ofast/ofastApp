@@ -2,6 +2,7 @@ package com.hung.ofastapp;
 
 import android.app.Activity;
 import android.app.LoaderManager;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -18,17 +19,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.hung.ofastapp.Adapter.Search_CustomListView;
 import com.hung.ofastapp.CreateConnection.JSONParser;
 import com.hung.ofastapp.CreateConnection.ofastURL;
@@ -37,6 +40,7 @@ import com.hung.ofastapp.Objects.Product;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,13 +49,14 @@ public class Search extends ActionBarActivity implements LoaderManager.LoaderCal
     SearchTask eSearchTask = null;
     ArrayList<com.hung.ofastapp.Objects.Product>  arrayList;
     ArrayList<com.hung.ofastapp.Objects.Product>  FavoriteList = new ArrayList<Product>();
+    ArrayList<com.hung.ofastapp.Objects.Product>  tempFavoriteList = new ArrayList<Product>();
     Product product;
     Search_CustomListView adapter;
     ListView lv_search;
     LinearLayout lnlo_kq;
     TextView txtv_kq;
     TextView txtv_noproduct;
-
+    Context context = this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,8 +69,16 @@ public class Search extends ActionBarActivity implements LoaderManager.LoaderCal
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        if(CheckContainShare()==true)
+        {
+            SharedPreferences aaa = PreferenceManager.getDefaultSharedPreferences(context);
+            Gson gson = new Gson();
+            String json = aaa.getString("ListProduct", null);
+            Type type = new TypeToken<ArrayList<Product>>() {
+            }.getType();
+            //Lưu vào brraylist
+            FavoriteList = gson.fromJson(json, type);
+        }
 
 
 
@@ -86,28 +99,22 @@ public class Search extends ActionBarActivity implements LoaderManager.LoaderCal
         });
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Log.d("onQueryTextSubmit","ON");
                 Log.d("String INPUT", query);
-
+                String searchOutput  = getResources().getString(R.string.result) + " \"" + "<b>" + query +"</b>"+ "\":";
+                lnlo_kq.setVisibility(View.VISIBLE);
+                txtv_kq.setText(Html.fromHtml(searchOutput ));
+                arrayList = new ArrayList<Product>();
+                eSearchTask = new SearchTask(query,"");
+                eSearchTask.execute();
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String searchQuery) {
                 Log.d("onQueryTextChange","ON");
-                lnlo_kq.setVisibility(View.VISIBLE);
-                txtv_kq.setText(getResources().getString(R.string.result) + " \"" + searchQuery + "\":");
-                arrayList = new ArrayList<Product>();
-                if (eSearchTask == null) {
-                    eSearchTask = new SearchTask(searchQuery,"");
-                    eSearchTask.execute();
-                }
-
-
-
                 return true;
             }
         });
@@ -306,20 +313,6 @@ public class Search extends ActionBarActivity implements LoaderManager.LoaderCal
     }
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        Intent intent = new Intent(getApplicationContext(), Home.class);
-        startActivity(intent);
-    }
-    public void CheckAndAddFavorite(Product product)
-    {
-
-            if(product.isChecked())
-            {
-                FavoriteList.add(product);
-            }else {
-                FavoriteList.remove(product);
-            }
-
         SharedPreferences favoriteList = PreferenceManager
                 .getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor prefsEditor = favoriteList.edit();
@@ -327,6 +320,65 @@ public class Search extends ActionBarActivity implements LoaderManager.LoaderCal
         String json = gson.toJson(FavoriteList);
         prefsEditor.putString("FavoriteList", json);
         prefsEditor.commit();
+        super.onBackPressed();
+        Intent intent = new Intent(getApplicationContext(), Home.class);
+        hideSoftKeyboard(Search.this);
+        startActivity(intent);
+    }
+    public void CheckAndAddFavorite(Product product)
+    {
+            if(product.isChecked())
+            {
+                FavoriteList.add(product);
+            }else {
+                FavoriteList.remove(product);
+            }
+        if(CheckContainShare() == false)
+        {
+            SharedPreferences favoriteList = PreferenceManager
+                    .getDefaultSharedPreferences(getApplicationContext());
+            SharedPreferences.Editor prefsEditor = favoriteList.edit();
+            Gson gson = new Gson();
+            String json = gson.toJson(FavoriteList);
+            prefsEditor.putString("FavoriteList", json);
+            prefsEditor.commit();
+
+        }
         Log.d("SIZE FAVORITE",String.valueOf(FavoriteList.size()));
+    }
+    private boolean CheckContainShare() {
+        SharedPreferences appSharedPrefs = PreferenceManager
+                .getDefaultSharedPreferences(this.getApplicationContext());
+        Gson gson = new Gson();
+        String json = appSharedPrefs.getString("FavoriteList", "");
+        if(json.isEmpty() == false)
+        {
+            return true;
+        }
+        else return false;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("OnResume",":::TRUE");
+        if(CheckContainShare()==true)
+        {
+            SharedPreferences aaa = PreferenceManager.getDefaultSharedPreferences(context);
+            Gson gson = new Gson();
+            String json = aaa.getString("ListProduct", null);
+            Type type = new TypeToken<ArrayList<Product>>() {
+            }.getType();
+            //Lưu vào brraylist
+            FavoriteList = gson.fromJson(json, type);
+        }
+    }
+
+    /*---------------------------------------------------------------------------------------------|
+    |-------------------------------Hàm ẩn Keyboard cho 1 Activity---------------------------------|
+    |---------------------------------------------------------------------------------------------*/
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager = (InputMethodManager)  activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
 }
