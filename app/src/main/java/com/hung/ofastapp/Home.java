@@ -51,6 +51,7 @@ public class Home extends ActionBarActivity
     ArrayList<com.hung.ofastapp.Objects.Product> arrayList = new ArrayList<Product>();
     //Phần xử lý
     Typeface tf1;
+
     public boolean doubleBackToExitPressedOnce = false;
 
     @Override
@@ -295,6 +296,7 @@ public class Home extends ActionBarActivity
     @Override
     protected void onResume() {
         super.onResume();
+
         doubleBackToExitPressedOnce = false;
         if(CheckContainShare() == true)
         {
