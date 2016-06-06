@@ -17,6 +17,7 @@
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
+        <!-- Title  -->
         <item name="windowNoTitle">true</item>
         <!-- Thay đổi màu sắc của Hambuger icon  -->
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
@@ -24,6 +25,9 @@
     <style name="DrawerArrowStyle" parent="@style/Widget.AppCompat.DrawerArrowToggle">
         <item name="spinBars">true</item>
         <item name="color">@android:color/white</item>
+    </style>
+    <style name="AppTheme.NoActionBarWithTitle">
+        <item name="windowActionBar">false</item>
     </style>
 
 
@@ -37,6 +41,12 @@
     <style name="progress_register" parent="android:Theme.DeviceDefault.Dialog">
         <item name="DialogTitleAppearance">@android:style/TextAppearance.Medium</item>
         <item name="DialogTitleText">Đang đăng kí, vui lòng chờ</item>
+        <item name="DialogSpotColor">@android:color/holo_orange_dark</item>
+        <item name="DialogSpotCount">8</item>
+    </style>
+    <style name="progress_login" parent="android:Theme.DeviceDefault.Dialog">
+        <item name="DialogTitleAppearance">@android:style/TextAppearance.Medium</item>
+        <item name="DialogTitleText">Đang đăng nhập, vui lòng chờ!</item>
         <item name="DialogSpotColor">@android:color/holo_orange_dark</item>
         <item name="DialogSpotCount">8</item>
     </style>
@@ -56,29 +66,17 @@
     </style>
 
 
-
-
-
-
-        <style name="ToolBar" parent="AppTheme.Base" >
-        <!-- Base application theme.
-             Defining this lets values-v21/styles.xml reuse it with changes. -->
-    </style>
+    <style name="ToolBar" parent="AppTheme.Base" ></style>
     <style name="AppTheme.Base" parent="Theme.AppCompat.NoActionBar">
-    <!-- colorPrimary is used, for instance, for the default ActionBar
-         (but not Toolbar) background.
-          We specify the same color for the toolbar background in
-          toolbar.xml.. -->
-    <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+    <style name="PopupTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+    </style>
 
-    <!-- colorPrimaryDark is used for the status bar (with the
-         battery, clock, etc). -->
-    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-
-<!-- colorAccent is used as the default value for
-     colorControlActivated which is used to tint widgets. -->
-<item name="colorAccent">@color/colorAccent</item>
-</style>
 
 
 

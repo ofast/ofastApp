@@ -37,8 +37,11 @@ dependencies {
     compile 'com.github.d-max:spots-dialog:0.4@aar'
     //Swipe ListView in Product
     compile 'com.baoyz.swipemenulistview:library:1.3.0'
+    //recycleView
+    compile 'com.android.support:recyclerview-v7:23.1.1'
     //compile 'com.android.support:support-v4:22.0.0'
     compile 'com.android.support:support-v4:23.0.0'
+
 
 
 }

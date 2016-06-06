@@ -211,10 +211,8 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
 //Khi sử dụng .setPositiveButton("OK",null) thì phải sử dụng hàm ở dưới để không bị ẩn dialog khi ấn vào nút OK,
 // vì trong quá trình ấn OK, chúng ta phải kiểm tra nhập có hợp lệ hay không, nếu không hợp lệ thì focus vào phần
 // nhập không hợp lệ đó đồng thời không được tắt dialog. sử dụng dialog.dimiss để tắt dilag lúc cần thiết.
-//
                                 Button button = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
                                 button.setOnClickListener(new View.OnClickListener() {
-
                                     @Override
                                     public void onClick(View view) {
                                         Log.d("Dialog ", "OK");
@@ -230,7 +228,6 @@ public class Order extends ActionBarActivity implements LoaderManager.LoaderCall
                                         } else {
                                             focusView.requestFocus();
                                         }
-
                                     }
                                 });
                             }

@@ -23,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -30,6 +31,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hung.ofastapp.Adapter.Search_CustomListView;
+import com.hung.ofastapp.Child.Detail_Product;
 import com.hung.ofastapp.CreateConnection.JSONParser;
 import com.hung.ofastapp.CreateConnection.ofastURL;
 import com.hung.ofastapp.Objects.Product;
@@ -84,8 +86,6 @@ public class Search extends ActionBarActivity implements LoaderManager.LoaderCal
             favoriteList = gson.fromJson(json, type);
             Log.d("AAAAAA", String.valueOf(favoriteList.size()));
         }
-
-
     }
     /*---------------------------------------------------------------------------------------------|
     |---------Hàm set nội dung có trên thanh Toobar, được lấy từ menu_searchview-------------------|
@@ -214,11 +214,20 @@ public class Search extends ActionBarActivity implements LoaderManager.LoaderCal
                     }
                     if (arrayList.size() != 0) {
                         ShowList(true);
-                        adapter = new Search_CustomListView(getApplicationContext(), R.layout.search_item, arrayList, Search.this);
+                        adapter = new Search_CustomListView(getApplicationContext(), R.layout.search_item_test, arrayList, Search.this);
                         lv_search.setAdapter(adapter);
                         CheckContainProduct();
                         lv_search.invalidate();
                         adapter.notifyDataSetChanged();
+                        lv_search.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                Log.d("FUCKING","DUCK DUCK");
+                                Intent intent = new Intent(Search.this, Detail_Product.class);
+                                intent.putExtra("item", arrayList.get(position));
+                                startActivity(intent);
+                            }
+                        });
                     } else {
                         ShowList(false);
                     }

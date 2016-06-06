@@ -1,8 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ofastApp</string>
+    <string name="login">Đăng nhập</string>
+    <string name="Login">ĐĂNG NHẬP</string>
+    <string name="register">Đăng ký</string>
+    <string name="Register">ĐĂNG KÝ</string>
     <string name="password">Mật khẩu</string>
     <string name="username">Tài khoản</string>
     <string name="numberphone">Số điện thoại</string>
+    <string name="connect_with"> or Connect with</string>
+    <string name="showpassword">Hiện password</string>
+    <string name="forgot_password">Quên mật khẩu</string>
     <string name="error_field_required">Vui Lòng Nhập Thông Tin</string>
     <string name="error_lenght">Yêu cầu trên 6 ký tự</string>
     <string name="error_input_type">Type Input: a-z,0-9</string>
@@ -16,6 +24,11 @@
     <string name="search">Tìm kiếm</string>
     <string name="result">Kết quả tìm kiếm cho từ khóa </string>
     <string name="search_noproduct">Không có sản phẩm nào phù hợp với từ khóa trên!</string>
-
+    <string name="comment">Bình luận</string>
+    <string name="send">Send</string>
+    <string name="nocomment">Không có bình luận nào!</string>
+    <string name="detail">Chi tiết sản phẩm</string>
+    <string name="getcomment">Để lại đánh giá của bạn tại đây: </string>
+    <string name="addtocart">Thêm vào giỏ hàng</string>
 
 </resources>

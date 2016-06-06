@@ -71,7 +71,7 @@
                 android:layout_weight="40"
                 android:layout_height="match_parent" />
             <Button
-                android:background="@drawable/custom_order_button"
+                android:background="@drawable/custom_button_order"
                 android:id="@+id/btn_dathang"
                 android:layout_width="0dp"
                 android:textColor="#FFFFFF"

@@ -27,7 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.hung.ofastapp.Adapter.Home_Tab_Fragment_Adapter;
+import com.hung.ofastapp.Adapter.Fragment_Adapter;
 import com.hung.ofastapp.Fragment.Home_fragment_giamgia;
 import com.hung.ofastapp.Fragment.Home_fragment_loai;
 import com.hung.ofastapp.Fragment.Home_fragment_thuonghieu;
@@ -77,7 +77,7 @@ public class Home extends ActionBarActivity
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
                                     /*DrawerLayout*/
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -138,7 +138,7 @@ public class Home extends ActionBarActivity
         listFragments.add(new Home_fragment_thuonghieu());
         listFragments.add(new Home_fragment_loai());
         listFragments.add(new Home_fragment_giamgia());
-        Home_Tab_Fragment_Adapter myFragmentPagerAdapter = new Home_Tab_Fragment_Adapter(getSupportFragmentManager(),listFragments);
+        Fragment_Adapter myFragmentPagerAdapter = new Fragment_Adapter(getSupportFragmentManager(),listFragments);
         viewPager.setAdapter(myFragmentPagerAdapter);
         /*OffScreenPageLimit để đảm bảo không bị OnPause khi chuyển lướt qua số tab*/
         viewPager.setOffscreenPageLimit(2);
@@ -170,7 +170,7 @@ public class Home extends ActionBarActivity
             ---------------------------------------------------------------------------------------*/
             context.getSharedPreferences("ListProduct",context.MODE_PRIVATE).edit().clear().commit();
             getSharedPreferences("LoginOneTimes",0).edit().clear().commit();
-            Intent intent = new Intent(Home.this, Login_and_Register.class);
+            Intent intent = new Intent(Home.this, Welcome.class);
             startActivity(intent);
         }
         //Đóng Navi khi chọn xong một Item, có thể set đóng lúc nào, mở lúc nào tùy vào item chọn
@@ -366,12 +366,12 @@ public class Home extends ActionBarActivity
             --------------Khi ấn Back, nếu từ TRYAPP thì sẽ trở về trang trước, xóa SharePre------
             -----------------------Nếu không thì thoát tạm thời khỏi appp------------------------
             ======================================================================================*/
-            SharedPreferences settings = getSharedPreferences(Login_and_Register.TRYAPP, 0);
+            SharedPreferences settings = getSharedPreferences(Welcome.TRYAPP, 0);
             boolean HasLoginByTryApp = settings.getBoolean("HasLoginByTryApp",false);
             if(HasLoginByTryApp==true)
             {
                 getSharedPreferences("LoginByTryApp",0).edit().clear().commit();
-                Intent intent = new Intent(Home.this, Login_and_Register.class);
+                Intent intent = new Intent(Home.this, Welcome.class);
                 startActivity(intent);
             }
             else

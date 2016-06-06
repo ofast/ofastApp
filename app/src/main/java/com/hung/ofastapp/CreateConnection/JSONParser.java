@@ -2,6 +2,7 @@ package com.hung.ofastapp.CreateConnection;
 
 import android.util.Log;
 
+import com.hung.ofastapp.Objects.Comment;
 import com.hung.ofastapp.Objects.Product;
 import com.hung.ofastapp.Objects.ThuongHieu;
 
@@ -451,6 +452,50 @@ public class JSONParser{
             }
             return arrayList;
         } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    // Hàm đọc JSON để get Comment
+    public ArrayList<Comment> getComment(String json){
+
+        try {
+            Comment mComment;
+            ArrayList<Comment> arrayList= new ArrayList<Comment>();
+            List<Integer> author_id = new ArrayList<Integer>();
+            List<String> comment = new ArrayList<String>();
+            List<String> subComment = new ArrayList<String>();
+
+            JSONArray jsonArray = new JSONArray(json);
+            Log.d("JSON TỪ WEB:::", json);
+            if(jsonArray == null)
+            {
+                arrayList = null;
+            }
+            else {
+                for(int i=0; i<jsonArray.length();i++)
+                {
+                    JSONObject jb = jsonArray.getJSONObject(i);
+                    jb.getString("author_id");
+                    author_id.add(jb.getInt("author_id"));
+                    jb.getString("comment");
+                    comment.add(jb.getString("comment"));
+                    jb.getString("subComment");
+                    subComment.add(jb.getString("subComment"));
+                }
+
+                //Get product
+                for(int i = 0; i<comment.size(); i++)
+                {
+                    mComment = new Comment(comment.get(i), author_id.get(i),subComment.get(i));
+                    arrayList.add(mComment);
+                }
+            }
+            //Get Link ảnh
+
+            return arrayList;
+        } catch (JSONException e) {
+            Log.d("Lỗi rồi con à","Thì thôi vậy!");
             e.printStackTrace();
             return null;
         }

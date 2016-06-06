@@ -12,4 +12,5 @@ public class ofastURL {
     public static String frontend_Web_image ="http://ofast.esy.es/frontend/web/images/";
     public static String order = "http://ofast.esy.es/cart/app";
     public static String search ="http://ofast.esy.es/app/search";
+    public static String comment = "http://ofast.esy.es/product/appcmtlist?";
 }

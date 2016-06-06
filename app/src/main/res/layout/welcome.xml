@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:weightSum="100"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+   android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Welcome"
+    android:orientation="vertical"
+    android:background="@drawable/background_for_welcom_with_logo">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="75">
+    </LinearLayout>
+    <LinearLayout
+        android:layout_weight="10"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:weightSum="100"
+        android:layout_height="0dp">
+        <View
+            android:layout_weight="20"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"/>
+        <Button
+            android:layout_weight="60"
+            android:layout_gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/login"
+            android:textColor="@drawable/custom_button_welcome_textcolor"
+            android:background="@drawable/custom_button_welcome"
+            android:id="@+id/btn_login" />
+
+        <View
+            android:layout_weight="20"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+    <View
+        android:layout_weight="2.5"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"/>
+    <LinearLayout
+        android:layout_weight="10"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:weightSum="100"
+        android:layout_height="0dp">
+        <View
+            android:layout_weight="20"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"/>
+        <Button
+            android:layout_weight="60"
+            android:layout_gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/register"
+            android:textColor="@drawable/custom_button_welcome_textcolor"
+            android:background="@drawable/custom_button_welcome"
+            android:id="@+id/btn_register" />
+        <View
+            android:layout_weight="20"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+    <View
+        android:layout_weight="2.5"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"/>
+</LinearLayout>

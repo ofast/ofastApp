@@ -25,15 +25,10 @@ import java.util.ArrayList;
  */
 public class Order_ListView_Adapter extends ArrayAdapter<Product>  {
 
-
-    public static boolean flagadd;
-    Order order = new Order();
-
     Order_ListView_Adapter adapter;
     Context context;
     int LayoutID;
     ArrayList<Product> arrayList = new ArrayList<Product>();
-    ArrayList<Product> brrayList = new ArrayList<Product>();
     ViewHolder holder;
     Typeface tf1;
     public Order_ListView_Adapter(Context context, int LayoutID, ArrayList<Product> arrayList) {

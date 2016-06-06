@@ -1,6 +1,5 @@
 package com.hung.ofastapp;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,14 +21,13 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hung.ofastapp.Adapter.Product_Detail_ListView_Adapter;
 import com.hung.ofastapp.Adapter.Product_ViewPagerAdapter;
+import com.hung.ofastapp.Child.Comment;
 import com.hung.ofastapp.CreateConnection.JSONParser;
 import com.hung.ofastapp.CreateConnection.ofastURL;
 import java.lang.reflect.Type;
@@ -46,6 +44,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
     Button btn_addtocart;
     Button  btn_tru;
     Button btn_cong;
+    Button btn_comment;
     TextView txtv_soluongsanpham;
     TextView txtv_tongsoluongsanpham;
     //Phần ViewPager
@@ -89,6 +88,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
         btn_cong = (Button) findViewById(R.id.btn_cong);
         btn_tru = (Button) findViewById(R.id.btn_tru);
         btn_addtocart = (Button) findViewById(R.id.btn_addtocart);
+        btn_comment = (Button) findViewById(R.id.btn_comment);
         txtv_soluongsanpham = (TextView) findViewById(R.id.txtv_soluongsanpham);
         txtv_tongsoluongsanpham = (TextView) findViewById(R.id.txtv_tongsoluongsanpham);
         lv_thongtinsanpham = (ListView) findViewById(R.id.lv_thongtinsanpham);
@@ -151,7 +151,17 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
                 }
             }
         });
-
+        /*-----------------------------------------------------------------------------------------|
+        |-----------Sự kiện khi nhấn vào Button Comment để xem bình luận về sản phẩm---------------|
+        |-----------------------------------------------------------------------------------------*/
+        btn_comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Product.this, Comment.class);
+                intent.putExtra("product_id", arrayList.get(pPostion).getId_product());
+                startActivity(intent);
+            }
+        });
         /*Kiểm tra có tồn tại cái SharePreference nào được lưu hay không, nếu có thì tạo 1 braylist chứa tất cả nội dung có trong
         * SharePreference, sau đó, add chúng vào mảng orderlist chứa nhưng Object đã được chọn từ lúc trước, rồi xóa brraylisr đi
         *  đồng thời, xóa luôn những gì có trong SharePreference*/
@@ -293,7 +303,7 @@ public class Product extends ActionBarActivity implements NavigationView.OnNavig
     |--------------Khi chọnn Logout, thì Clear hết SharePreference của USERNAME + PASSWORD --------|
     |------------------------rồi trở về trang Login & Register------------------------------------*/
             getSharedPreferences("LoginOneTimes",0).edit().clear().commit();
-            Intent intent = new Intent(Product.this, Login_and_Register.class);
+            Intent intent = new Intent(Product.this, Welcome.class);
             startActivity(intent);
         }
         //Đóng Navi khi chọn xong một Item, có thể set đóng lúc nào, mở lúc nào tùy vào item chọn

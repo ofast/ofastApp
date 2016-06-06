@@ -34,18 +34,53 @@
             android:layout_weight="60"
             android:id="@+id/view_pager"
             />
-        <TextView
-            android:layout_marginRight="5dp"
-            android:layout_marginLeft="10dp"
+        <LinearLayout
+            android:weightSum="100"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Chi tiết"/>
-        <View
-            android:layout_marginRight="5dp"
-            android:layout_marginLeft="10dp"
+            android:layout_weight="7"
+            android:orientation="horizontal"
+            android:layout_height="0dp">
+            <TextView
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:gravity="bottom"
+                android:layout_weight="20"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="Chi tiết"/>
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="50"
+                android:layout_height="match_parent"/>
+            <Button
+                android:id="@+id/btn_comment"
+                android:background="@drawable/custom_button_product_comment"
+                android:textColor="@drawable/custom_button_product_comment_textcolor"
+                android:text="@string/comment"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:layout_weight="30"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:weightSum="100"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#9E9E9E"/>
+            android:layout_height="1dp">
+            <View
+                android:layout_marginRight="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="70"
+                android:background="#9E9E9E"/>
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="30"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+
         <TextView
             android:id="@+id/txtv_noproduct"
             android:text="Không có chi tiết!"
@@ -53,9 +88,9 @@
             android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="30" />
+            android:layout_weight="23" />
         <ListView
-            android:listSelector="@android:color/transparent"
+
             android:cacheColorHint="@android:color/transparent"
             android:layout_marginTop="2dp"
             android:layout_marginLeft="5dp"
@@ -63,7 +98,7 @@
             android:id="@+id/lv_thongtinsanpham"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="30">
+            android:layout_weight="23">
         </ListView>
         <LinearLayout
             android:background="#E0E0E0"
@@ -76,7 +111,7 @@
             android:weightSum="100">
 
             <Button
-                android:background="@drawable/custom_button_sub"
+                android:background="@drawable/custom_button_product_sub"
                 android:text="-"
                 android:textSize="30sp"
                 android:id="@+id/btn_tru"
@@ -94,7 +129,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent" />
             <Button
-                android:background="@drawable/custom_button_add"
+                android:background="@drawable/custom_button_product_add"
                 android:text="+"
                 android:textSize="30sp"
                 android:layout_weight="15"
@@ -107,7 +142,7 @@
                 android:layout_weight="15"
                 android:layout_height="match_parent"/>
             <Button
-                android:background="@drawable/custom_order_button"
+                android:background="@drawable/custom_button_order"
                 android:textColor="#FFFFFF"
                 android:id="@+id/btn_addtocart"
                 android:layout_width="0dp"
